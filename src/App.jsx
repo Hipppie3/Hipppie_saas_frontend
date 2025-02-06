@@ -1,30 +1,21 @@
-import { useEffect, useState } from 'react';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar.jsx';
+import Login from './pages/Login.jsx';
+import Users from './pages/Users.jsx'
 
 function App() {
-  const [message, setMessage] = useState('');
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/api'); // ✅ Vite proxies this to http://localhost:5122/api/test
-        if (!response.ok) throw new Error('Network response was not ok');
-
-        const data = await response.json();
-        setMessage(data.message);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   return (
     <div>
-      <h1>🏀 Basketball SaaS Dashboard</h1>
-      <p>{message}</p>
+      <Navbar />
+      <div>
+        <Routes>
+          <Route path='/login' element={<Login />} />
+          <Route path='/users' element={<Users />} />
+        </Routes>
+      </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
