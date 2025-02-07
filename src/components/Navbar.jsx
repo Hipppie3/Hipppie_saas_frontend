@@ -1,31 +1,37 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useAuth } from '../context/AuthContext'; // ✅ Use Auth Context
+import { useAuth } from  '../context/AuthContext'
+
 
 function Navbar() {
   const navigate = useNavigate();
-  const { isAuthenticated, setIsAuthenticated } = useAuth(); // ✅ Use context
+  const { isAuthenticated, logout, loading, user } = useAuth();
+
 
   // ✅ Logout Function
   const handleLogout = async () => {
-    try {
-      await axios.post('/api/users/logout', {}, { withCredentials: true });
-      setIsAuthenticated(false); // ✅ Update state immediately
-      navigate('/login');
-    } catch (error) {
-      console.error('Logout failed', error);
-    }
+    logout();
+    navigate('/login');
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  console.log(user)
 
   return (
     <div>
-      {isAuthenticated ? (
+      {isAuthenticated ? 
+      (
         <div>
-          <NavLink to='/users'>USERS</NavLink>
+          <NavLink to='/homedashboard'>DASHBOARD</NavLink>
+          {user?.role === 'super_admin' && (<NavLink to='/users'>USERS</NavLink>)}
           <button onClick={handleLogout}>LOGOUT</button>
         </div>
-      ) : (
+      ) 
+      : 
+      (
         <div>
           <NavLink to='/login'>LOGIN</NavLink>
         </div>

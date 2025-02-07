@@ -1,8 +1,10 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
+import { useAuth } from '../context/AuthContext'
 
 
 function Users() {
+const { user, deleteUser } = useAuth();
 const [users, setUsers] = useState([]);
 
 useEffect(() => {
@@ -18,19 +20,38 @@ useEffect(() => {
   getUser()
 },[])
 
+  const handleDelete = async (userId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+    if (!confirmDelete) return;
+
+    const response = await deleteUser(userId);
+    if (response.success) {
+      setUsers(users.filter(user => user.id !== userId));  // ✅ Remove user from state
+    } else {
+      alert(response.message);
+    }
+  };
+
 
 
 
   return (
     <div>
-        {users.map((user) => (
-          <div key={user.id}>
-            <h2>{user.username}</h2>
-            <h3>{user.email}</h3>
-          </div>
-        ))}
+      <h2>All Users</h2>
+      {users.length === 0 ? <p>No users found.</p> : (
+        <ul>
+          {users.map((userItem) => (
+            <li key={userItem.id}>
+              {userItem.username} ({userItem.role})
+              {user?.role === "super_admin" && (  // ✅ Only super_admin can see delete button
+                <button onClick={() => handleDelete(userItem.id)}>Delete</button>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
-  )
+  );
 }
 
 export default Users
