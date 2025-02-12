@@ -1,0 +1,26 @@
+/* You can target your button with a class */
+.nav-button {
+ background: none;
+ border: none;
+ color: #007bff;
+ /* Same as NavLink default color */
+ font-size: 1rem;
+ /* Match the font size */
+ cursor: pointer;
+ text-decoration: none;
+ /* Remove any underline */
+ padding: 0.5rem 1rem;
+ /* Match padding to NavLink */
+}
+
+.nav-button:hover {
+ text-decoration: underline;
+ /* Add underline effect on hover, like NavLink */
+ color: #0056b3;
+ /* Darker shade of blue for hover */
+}
+
+.nav-button:focus {
+ outline: none;
+ /* Remove default focus outline */
+}

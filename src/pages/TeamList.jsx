@@ -22,12 +22,12 @@ useEffect(() => {
     <div>
       {leagues.map((league) => (
         <div key={league.id}>
-          <h5>{league.name} League</h5>
-          <h7>{league.teams.map((team) => (
+          <h3>{league.name} League</h3>
+          <h5>{league.teams.map((team) => (
             <ul>
               <li>{team.name}</li>
             </ul>
-          ))}</h7>
+          ))}</h5>
         </div>
       ) )}
     </div>
