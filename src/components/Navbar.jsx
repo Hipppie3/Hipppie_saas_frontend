@@ -1,6 +1,5 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from  '../context/AuthContext'
 
 
@@ -25,8 +24,10 @@ function Navbar() {
       {isAuthenticated ? 
       (
         <div>
-          <NavLink to='/homedashboard'>DASHBOARD</NavLink>
-          {user?.role === 'super_admin' && (<NavLink to='/users'>USERS</NavLink>)}
+          <NavLink to='/dashboard'>DASHBOARD</NavLink>
+          <NavLink to='/leagueList'>LEAGUES</NavLink>
+          <NavLink to='/teamList'>TEAMS</NavLink>
+          {user?.role === 'super_admin' && (<NavLink to='/userList'>USERS</NavLink>)}
           <button onClick={handleLogout}>LOGOUT</button>
         </div>
       ) 

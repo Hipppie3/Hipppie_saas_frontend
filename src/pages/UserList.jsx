@@ -3,14 +3,15 @@ import axios from 'axios'
 import { useAuth } from '../context/AuthContext'
 
 
-function Users() {
+function UserList() {
 const { user, deleteUser } = useAuth();
 const [users, setUsers] = useState([]);
+const [message, setMessage] = useState('');
 
 useEffect(() => {
   const getUser = async () => {
   try {
-    const response = await axios.get('/api/users');
+    const response = await axios.get('/api/users', { withCredentials: true});
     setUsers(response.data.users);
 
   } catch (error) {
@@ -20,6 +21,7 @@ useEffect(() => {
   getUser()
 },[])
 
+console.log(users)
   const handleDelete = async (userId) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this user?");
     if (!confirmDelete) return;
@@ -27,6 +29,8 @@ useEffect(() => {
     const response = await deleteUser(userId);
     if (response.success) {
       setUsers(users.filter(user => user.id !== userId));  // ✅ Remove user from state
+      setMessage(`User ${userId} deleted successfully`)
+      setTimeout(() => setMessage(''), 3000)
     } else {
       alert(response.message);
     }
@@ -50,8 +54,9 @@ useEffect(() => {
           ))}
         </ul>
       )}
+      {message && <p>{message}</p>}
     </div>
   );
 }
 
-export default Users
+export default UserList

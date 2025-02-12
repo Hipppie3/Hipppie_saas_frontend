@@ -36,7 +36,7 @@ const handleLogin = async (e) => {
   const response = await login(formData);  // ✅ Get response from `login()`
 
   if (response.success) {
-    navigate('/homedashboard', { replace: true });  // ✅ Redirect if successful
+    navigate('/dashboard', { replace: true });  // ✅ Redirect if successful
   } else {
     setErrorMessage(response.message);  // ✅ Show error message in UI
   }
@@ -53,7 +53,7 @@ const handleRegister = async (e) => {
   const response = await register(registerData);  // ✅ Get response from `register()`
 
   if (response.success) {
-    navigate('/homedashboard', { replace: true });  // ✅ Redirect if successful
+    navigate('/dashboard', { replace: true });  // ✅ Redirect if successful
   } else {
     setErrorMessage(response.message);  // ✅ Show error message in UI
 

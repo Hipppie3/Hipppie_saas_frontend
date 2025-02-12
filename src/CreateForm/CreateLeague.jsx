@@ -5,8 +5,10 @@ function CreateLeague({ onLeagueCreated }) {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
 
+
   const handleCreateLeague = async (e) => {
     e.preventDefault(); // ✅ Prevent full page reload on form submit
+
 
     if (!name) {
       setError('League name is required');

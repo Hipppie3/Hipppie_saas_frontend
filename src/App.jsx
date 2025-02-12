@@ -2,8 +2,12 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
 import Login from './pages/Login.jsx';
-import Users from './pages/Users.jsx';
-import HomeDashboard from './pages/HomeDashboard.jsx';
+import UserList from './pages/UserList.jsx';
+import User from './pages/User.jsx';
+import Dashboard from './pages/Dashboard.jsx';
+import LeagueList from './pages/LeagueList.jsx';
+import League from './pages/League.jsx';
+import TeamList from './pages/TeamList.jsx';
 
 
 function App() {
@@ -14,8 +18,12 @@ function App() {
       <div>
         <Routes>
           <Route path='/login' element={<Login />} />
-          <Route path='/users' element={<Users />} />
-          <Route path='/homedashboard' element={<HomeDashboard />} />
+          <Route path='/userList' element={<UserList />} />
+          <Route path='/user/:id' element={<User />} />
+          <Route path='/leagueList' element={<LeagueList />} />
+          <Route path='/league/:id' element={<League />} />
+          <Route path='/teamList' element={<TeamList />} />
+          <Route path='/dashboard' element={<Dashboard />} />
         </Routes>
       </div>
     </div>

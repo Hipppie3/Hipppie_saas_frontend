@@ -27,7 +27,8 @@ export const AuthProvider = ({ children }) => {
 const login = async (formData) => {
   setLoading(true);
   try {
-    await axios.post('/api/users/login', formData, { withCredentials: true });
+    const response = await axios.post('/api/users/login', formData, { withCredentials: true });
+    console.log(response.data)
     await checkAuth();
     setLoading(false);
     return { success: true };  // ✅ Return success so `Login.jsx` knows it's successful
@@ -50,11 +51,6 @@ const register = async (registerData) => {
   }
 };
 
-
-  useEffect(() => {
-    console.log("User state updated:", user);
-  }, [user]);  // ✅ Runs every time `user` changes
-
   // Logout Function
   const logout = async () => {
     try {
@@ -75,6 +71,7 @@ const register = async (registerData) => {
       return { success: false, message: 'Failed to delete user'};
     }
   };
+
 
 
   // ✅ Check Auth on First Render
