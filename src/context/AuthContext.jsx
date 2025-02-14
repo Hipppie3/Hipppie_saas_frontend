@@ -63,6 +63,7 @@ const register = async (registerData) => {
   };
 
   const deleteUser = async (userId) => {
+    console.log(userId)
     try {
       await axios.delete(`/api/users/${userId}`, { withCredentials: true });
       return { success: true};

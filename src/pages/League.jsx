@@ -1,12 +1,13 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, NavLink } from 'react-router-dom';
 
 function League() {
   const [leagueInfo, setLeagueInfo] = useState({});
   const [teamForm, setTeamForm] = useState({name: ''})
   const [teams, setTeams] = useState([]);
   const { id } = useParams();
+  const [message, setMessage] = useState("");
 
   const getLeague = async () => {
     try {
@@ -23,11 +24,19 @@ const getTeams = async () => {
   try {
     console.log("Fetching teams for league ID:", id);
     const teamResponse = await axios.get(`/api/leagues/${id}/teams`, { withCredentials: true });
-    setTeams(teamResponse.data.teams);
+
+    if (!teamResponse.data.teams || teamResponse.data.teams.length === 0) {
+      console.log("No teams found.")
+      setTeams([]);
+      return;
+    }
+    
     console.log("Teams:", teamResponse.data);
+    setTeams(teamResponse.data.teams);
+
   } catch (error) {
     if (error.response && error.response.status === 404) {
-      console.warn("No teams found, but that's okay!");
+      console.warn("No teams exist yet");
       setTeams([]); // Ensure teams state is empty instead of undefined
     } else {
       console.error("Unexpected error fetching teams:", error);
@@ -35,11 +44,10 @@ const getTeams = async () => {
   }
 };
 
-
   useEffect(() => {
     getLeague();
     getTeams();
-  }, [id]); // ✅ Now updates if `id` changes
+}, [id]); // ✅ Now updates if `id` changes
 
 
   const handleTeamForm = (e) => {
@@ -55,6 +63,26 @@ const submitTeam = async (e) => {
     setTeamForm({name: ''})
   } catch (error) {
     console.error('Error creating team:', error);
+  }
+};
+
+const handleDeleteTeam = async (id) => {
+  const confirmDelete = window.confirm("Are you sure you want to delete this league?");
+  if (!confirmDelete) return;
+
+  try {
+    const response = await axios.delete(`/api/teams/${id}`, {withCredentials: true})
+
+    if (response.data.success) {
+      setTeams((prevTeams) => prevTeams.filter(team => team.id !== id));
+      setMessage(`League ${id} deleted successfully`);
+      setTimeout(() => setMessage(''), 3000);
+    } else {
+      alert(response.data.message)
+    }
+  } catch (error) {
+    console.error('Error deleting team:', error);
+    alert("Failed to delete team. Please try again")
   }
 };
 
@@ -83,7 +111,8 @@ const submitTeam = async (e) => {
       ) : ( 
       teams.map((team) => (
         <div key={team.id}> {/* ✅ Added key */}
-          <h5>{team.name}</h5>
+          <NavLink to={`/teams/${team.id}`}>{team.name} </NavLink>
+          <button onClick={() => handleDeleteTeam(team.id)}>Delete</button>
         </div>
       ))
     )}

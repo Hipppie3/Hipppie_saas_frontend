@@ -1,10 +1,56 @@
 /* You can target your button with a class */
+.navbar_container {
+ height: 80px;
+ width: 100%;
+ background-color: rgb(243, 160, 7);
+ padding: 0;
+ margin: 0;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ border-bottom: 7px solid orangered;
+
+}
+
+.nav_list {
+ width: 100%;
+ list-style: none;
+ display: flex;
+ justify-content: space-around;
+ align-items: center;
+ gap: 1rem;
+ padding: 0;
+ margin: 0;
+}
+
+.nav_list li {
+ display: inline;
+}
+
+.nav_list a {
+ text-decoration: none;;
+ color: white;
+ padding: 0.5rem 1rem;
+ font-size: 18px;
+}
+
+.nav_list a.active-class {
+ font-weight: bold;
+ text-decoration: none;
+ color: orangered;
+}
+
+.nav_list a:hover {
+ text-decoration: underline;
+}
+
+
 .nav-button {
  background: none;
  border: none;
- color: #007bff;
+ color: white;
  /* Same as NavLink default color */
- font-size: 1rem;
+ font-size: 18px;
  /* Match the font size */
  cursor: pointer;
  text-decoration: none;
@@ -14,10 +60,8 @@
 }
 
 .nav-button:hover {
+ font-weight: bold;
  text-decoration: underline;
- /* Add underline effect on hover, like NavLink */
- color: #0056b3;
- /* Darker shade of blue for hover */
 }
 
 .nav-button:focus {

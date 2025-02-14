@@ -1,9 +1,10 @@
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Navbar.css'; // Import the CSS file
 
 function Navbar() {
+  const { search } = useLocation();
   const navigate = useNavigate();
   const { isAuthenticated, logout, loading, user } = useAuth();
 
@@ -13,35 +14,33 @@ function Navbar() {
     navigate('/login');
   };
 
-const handleHomeClick = () => {
-  if (user) {
-    // Redirect to homepage with domain as query parameter
-    navigate(`/user?domain=${encodeURIComponent(user.domain)}`);
-  } 
-};
-
-
   if (loading) {
     return <div>Loading...</div>;
   }
   console.log(user);
 
   return (
-    <div>
+    <div className="navbar_container"> 
+
       {isAuthenticated ? (
-        <div>
-          <button className="nav-button" onClick={handleHomeClick}>HOME</button>
-          <NavLink to="/dashboard">DASHBOARD</NavLink>
-          <NavLink to="/leagueList">LEAGUES</NavLink>
-          <NavLink to="/teamList">TEAMS</NavLink>
-          {user?.role === 'super_admin' && <NavLink to="/userList">USERS</NavLink>}
-          <button className="nav-button" onClick={handleLogout}>LOGOUT</button>
-        </div>
-      ) : (
-        <div>
-          <NavLink to="/login">LOGIN</NavLink>
-        </div>
+
+        <ul className="nav_list">
+          <li><NavLink to="/dashboard" className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>DASHBOARD</NavLink></li>
+          <li><NavLink to="/leagueList" className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>LEAGUES</NavLink></li>
+          <li><NavLink to="/teamList" className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>TEAMS</NavLink></li>
+          <li><NavLink to="/playerList" className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>PLAYERS</NavLink></li>
+          {user?.role === 'super_admin' && (
+          <li><NavLink to="/userList">USERS</NavLink></li>
+          )}
+          <li><button className="nav-button" onClick={handleLogout}>LOGOUT</button></li>
+        </ul>
+        ) : (
+        <ul className="nav_list">
+          <li><NavLink to='/' className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>HOME</NavLink></li>
+          <li><NavLink to="/login" className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>LOGIN</NavLink></li>
+        </ul>
       )}
+
     </div>
   );
 }
