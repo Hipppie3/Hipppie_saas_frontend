@@ -1,24 +1,62 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useSearchParams } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext'
 
 
 function TeamList() {
-  const [teams, setTeams] = useState([])
-  const [message, setMessage] = useState("")
+  const { isAuthenticated, loading, user } = useAuth(); // ✅ Add `loading` to track auth state
+  const [teams, setTeams] = useState([]);
+  const [teamForm, setTeamForm] = useState({ name: "" });
+  const [searchParams] = useSearchParams();
+  const domain = searchParams.get("domain"); // ✅ Extract domain from query params
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
+    if (loading) return;
+
     const fetchTeams = async() => {
       try {
-        const response = await axios.get('/api/teams', { withCredentials: true })
-        console.log(response.data)
-        setTeams(response.data.teams);
+      let response;
+      if (isAuthenticated) {
+        if (user?.role === "super_admin") {
+          response = await axios.get('/api/teams', { withCredentials: true });
+        } else {
+          response = await axios.get('/api/teams', { withCredentails: true });
+        }
+      } else if (domain) {
+        response = await axios.get(`/api/teams?domain=${domain}`);
+      } else {
+        return;
+      }
+      setTeams(response.data.teams || [])
       } catch (error) {
-        console.error("Error fetching teams:", error);
+        console.error("Error fetching teams:", error.response?.data || error.message);
       }
     }
-    fetchTeams()
-  },[])
+    fetchTeams();
+  },[domain, isAuthenticated, loading])
+
+  // ✅ Handle Form Input for Creating League
+  const handleTeam = (e) => {
+    const { name, value } = e.target;
+    setTeamForm((prevForm) => ({ ...prevForm, [name]: value }));
+  };
+
+  // ✅ Create League (Only for Logged-in Users)
+  const handleCreateTeam = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('/api/teams', teamForm, { withCredentials: true });
+      setTeams((prevTeams) => [...prevTeams, response.data.team]);
+      setTeamForm({ name: "" });
+      setMessage(`${response.data.team.name} created successfully`)
+      setTimeout(() => setMessage(''), 3000)
+    } catch (error) {
+      console.error('Error creating team:', error);
+    }
+  };
+
 
 const handleDeleteTeam = async (id) => {
   const confirmDelete = window.confirm("Are you sure you want to delete this league?");
@@ -41,22 +79,41 @@ const handleDeleteTeam = async (id) => {
 };
 
   return (
-    <div>
+    <div className="teamList_container">
+      {isAuthenticated && (
+        <form onSubmit={handleCreateTeam}>
+          <label>
+            Create Team
+            <input 
+              type="text"
+              name="name"
+              value={teamForm.name}
+              onChange={handleTeam}
+            />
+          </label>
+          <button type="submit">Submit</button>
+        </form>
+      )}
+      {console.log(message)}
+      {message && <p>{message}</p>}
       {teams.length === 0 ? (
-        <p>No teams</p>
+        <p>No teams available</p>
       ) : (
-        <div>
-          <h3>Teams</h3>
-          {teams.map((team) => (
-            <div key={team.id}>
-              <NavLink to={`/teams/${team.id}`}>{team.name}</NavLink>
-              <button onClick={() => handleDeleteTeam(team.id)}>Delete Team</button>
-            </div>
-          ))}
-        </div>
+        teams.map((team) => (
+          <div key={team.id}>
+            <h2>
+            <NavLink to={`/site/team/${team.id}${domain ? `?domain=${domain}` : ""}`}>
+              {team.name}
+            </NavLink>
+            </h2>
+            {isAuthenticated && (
+              <button onClick={() => handleDeleteTeam(team.id)}>Delete</button>
+            )}
+          </div>
+        ))
       )}
     </div>
-  )
+  );
 }
 
 export default TeamList

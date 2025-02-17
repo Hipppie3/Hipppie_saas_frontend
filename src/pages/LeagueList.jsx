@@ -1,112 +1,124 @@
-import React, {useState, useEffect} from 'react'
-import { NavLink } from 'react-router-dom';
-import axios from 'axios'
-import './LeagueList.css'
+import React, { useState, useEffect } from 'react';
+import { NavLink, useSearchParams } from 'react-router-dom';
+import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
-
-function League() {
-  const [leagueForm, setLeagueForm] = useState({
-    name: ""
-  })
+function LeagueList() {
+  const { isAuthenticated, loading, user } = useAuth(); // ✅ Add `loading` to track auth state
   const [leagues, setLeagues] = useState([]);
-  const [message, setMessage] = useState("")
+  const [leagueForm, setLeagueForm] = useState({ name: "" });
+  const [searchParams] = useSearchParams();
+  const domain = searchParams.get("domain"); // ✅ Extract domain from query params
+  const [message, setMessage] = useState("");
+
 
 useEffect(() => {
-  const fetchLeague = async () => {
+  if (loading) return; // ✅ Wait for auth state to resolve
+
+  const fetchLeagues = async () => {
     try {
-      const response = await axios.get('/api/leagues', { withCredentials: true });
-
-      if (!response.data.leagues || response.data.leagues.length === 0) {
-        console.log("No leagues found.");
-        setLeagues([]); // ✅ Explicitly set leagues to an empty array
-        return;
-      }
-
-      console.log("Leagues:", response.data.leagues);
-      setLeagues(response.data.leagues);
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        console.log("No leagues exist yet."); // ✅ This is fine, no leagues exist
-        setLeagues([]); // ✅ Handle as empty instead of error
+      let response;
+      if (isAuthenticated) {
+        if (user?.role === "super_admin") {
+          response = await axios.get('/api/leagues', { withCredentials: true }); // ✅ Fetch all leagues
+        } else {
+          response = await axios.get('/api/leagues', { withCredentials: true }); // ✅ Fetch user-specific leagues
+        }
+      } else if (domain) {
+        response = await axios.get(`/api/leagues?domain=${domain}`); // ✅ Fetch leagues by domain for public users
       } else {
-        console.error("Error fetching leagues:", error);
+        return; // ✅ No unnecessary API call if no conditions match
       }
-    }
-  };
-
-  fetchLeague();
-}, []);
-
-
-  const handleLeague = (e) => {
-    const {name, value} = e.target;
-    setLeagueForm((prevForm) => ({...prevForm, [name]: value}))
-  }
-  const handleCreateLeague = async (e) => {
-    e.preventDefault()
-    try {
-      const response = await axios.post('api/leagues', leagueForm, {withCredentials: true})
-      console.log(response.data)
-      setLeagues((prevLeagues) => [...prevLeagues, response.data.league])
+      setLeagues(response.data.leagues || []);
     } catch (error) {
-      console.error('Error creating league:', error)
+      console.error("Error fetching leagues:", error.response?.data || error.message);
     }
   };
 
-const handleDeleteLeague = async (id) => {
-  const confirmDelete = window.confirm("Are you sure you want to delete this league?");
-  if (!confirmDelete) return;
+  fetchLeagues();
+}, [domain, isAuthenticated, loading]); // ✅ Add dependencies
 
-  try {
-    const response = await axios.delete(`/api/leagues/${id}`, { withCredentials: true });
 
-    if (response.data.success) {
-      setLeagues((prevLeagues) => prevLeagues.filter(league => league.id !== id)); // ✅ Filter out deleted league
-      setMessage(`League ${id} deleted successfully`); // ✅ Set success message
+  // ✅ Handle Form Input for Creating League
+  const handleLeague = (e) => {
+    const { name, value } = e.target;
+    setLeagueForm((prevForm) => ({ ...prevForm, [name]: value }));
+  };
 
-      setTimeout(() => setMessage(''), 3000); // ✅ Clear message after 3 seconds
-    } else {
-      alert(response.data.message); // ✅ Show error message if deletion fails
+  // ✅ Create League (Only for Logged-in Users)
+  const handleCreateLeague = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('/api/leagues', leagueForm, { withCredentials: true });
+      setLeagues((prevLeagues) => [...prevLeagues, response.data.league]);
+      setLeagueForm({ name: "" });
+      setMessage(`${response.data.league.name} created successfully`)
+      setTimeout(() => setMessage(''), 3000)
+    } catch (error) {
+      console.error('Error creating league:', error);
     }
-  } catch (error) {
-    console.error('Error deleting league:', error);
-    alert("Failed to delete league. Please try again.");
-  }
-};
+  };
 
+  // ✅ Delete League (Only for Logged-in Users)
+  const handleDeleteLeague = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this league?");
+    if (!confirmDelete) return;
+    try {
+      const response = await axios.delete(`/api/leagues/${id}`, { withCredentials: true });
+      if (response.data.success) {
+        setLeagues((prevLeagues) => prevLeagues.filter(league => league.id !== id));
+        setMessage(`League ${id} deleted successfully`);
+        setTimeout(() => setMessage(''), 3000);
+      } else {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error deleting league:', error);
+      alert("Failed to delete league. Please try again.");
+    }
+  };
+
+  // ✅ Ensure UI updates after login/logout
+  if (loading) {
+    return <p>Loading leagues...</p>;
+  }
 
   return (
     <div className="leagueList_container">
-      <form onSubmit={handleCreateLeague}>
-        <label>
-          Create League
-          <input 
-          type="text"
-          name="name"
-          value={leagueForm.name}
-          onChange={handleLeague}
-          />
-        </label>
-        <button type="submit">Submit</button>
-      </form>
-    {leagues.length === 0 ? (
-      <div>
-        <p>You don't have any leagues yet</p>
-      </div>
-    ) : (
-      leagues.map((league) => (
-        <div key={league.id}>
-        <h2>
-          <NavLink to={`/league/${league.id}`}>
-          {league.name}
-          </NavLink>
-        </h2>
-        <button onClick={()=> handleDeleteLeague(league.id)}>Delete</button>
-        </div>
-      ))
-    )}
+      {isAuthenticated && (
+        <form onSubmit={handleCreateLeague}>
+          <label>
+            Create League
+            <input 
+              type="text"
+              name="name"
+              value={leagueForm.name}
+              onChange={handleLeague}
+            />
+          </label>
+          <button type="submit">Submit</button>
+        </form>
+      )}
+      {console.log(message)}
+      {message && <p>{message}</p>}
+      {leagues.length === 0 ? (
+        <p>No leagues available</p>
+      ) : (
+        leagues.map((league) => (
+          <div key={league.id}>
+            <h2>
+            <NavLink to={`/site/league/${league.id}${domain ? `?domain=${domain}` : ""}`}>
+              {league.name}
+            </NavLink>
+            </h2>
+            {isAuthenticated && (
+              <button onClick={() => handleDeleteLeague(league.id)}>Delete</button>
+            )}
+          </div>
+        ))
+      )}
     </div>
-  )
+  );
 }
 
-export default League
+export default LeagueList;

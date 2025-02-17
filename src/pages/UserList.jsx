@@ -11,7 +11,7 @@ const [message, setMessage] = useState('');
 useEffect(() => {
   const getUser = async () => {
   try {
-    const response = await axios.get('/api/users', { withCredentials: true});
+    const response = await axios.get('/api/users/userList', { withCredentials: true});
     setUsers(response.data.users);
 
   } catch (error) {

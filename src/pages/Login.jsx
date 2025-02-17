@@ -7,7 +7,7 @@ import './Login.css'
 
 function Login() {
   const [formData, setFormData] = useState({ username: "", password: "" });
-  const [registerData, setRegisterData] = useState({ username: "", password: "", email: "" })
+  const [registerData, setRegisterData] = useState({ username: "", password: "", email: "", domain: "" })
   const [localLoading, setLocalLoading] = useState(false)
   const [toggleLogin, setToggleLogin] = useState(true)
   const [errorMessage, setErrorMessage] = useState("")
@@ -24,6 +24,7 @@ function Login() {
 
   const handleRegisterInput = (e) => {
     const { name, value } = e.target;
+
     setRegisterData((prevForm) => ({
       ...prevForm,
       [name]: value
@@ -53,6 +54,14 @@ const handleRegister = async (e) => {
   e.preventDefault();
   setLocalLoading(true);
   setErrorMessage("");  // ✅ Reset error message before submitting
+
+  const domainPattern = /^[a-zA-Z0-9.-]+\.(com|net|org)$/;
+  if (!domainPattern.test(registerData.domain)) {
+    setErrorMessage("Domain must end in .com, .net, or .org");
+    setLocalLoading(false);
+    return;
+  }
+  
   const response = await register(registerData);  // ✅ Get response from `register()`
   if (response.success) {
     navigate('/dashboard', { replace: true });  // ✅ Redirect if successful
@@ -137,6 +146,17 @@ const handleRegister = async (e) => {
             value={registerData.email}
             onChange={handleRegisterInput}
             placeholder="📧   Type in your email"
+            className="register_form_input"
+          />
+        </label>
+                <label className="register_form_label">
+          Domain
+          <input
+            type='text'
+            name='domain'
+            value={registerData.domain}
+            onChange={handleRegisterInput}
+            placeholder="🌍   Type in your Domain"
             className="register_form_input"
           />
         </label>

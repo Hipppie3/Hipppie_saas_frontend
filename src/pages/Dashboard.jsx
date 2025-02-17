@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import CreateLeague from '../CreateForm/CreateLeague';
 import axios from 'axios';
 import './Dashboard.css'
 
