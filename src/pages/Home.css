@@ -1,0 +1,15 @@
+.home_container {
+ height: 100vh;
+ width: 100%;
+ padding-top: 80px;
+ padding-left: 0;
+}
+
+@media (max-width: 768px) {
+ .home_container {
+  min-height: calc(100vh - 80px);
+  width: 100vw;
+  padding-left: 0;
+  padding-top: 80px;
+ }
+}

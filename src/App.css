@@ -16,8 +16,17 @@ body,
 }
 
 .app_container {
- margin: 0;
- padding: 0;
- width: 100%;
+ display: flex;
+ /* ✅ Makes Sidebar and content sit side by side */
+ width: 100vw;
+ /* ✅ Ensure full width */
  min-height: 100vh;
+}
+
+.content_wrapper {
+ flex: 1;
+ /* ✅ Ensures the content takes up the remaining space */
+ display: flex;
+ justify-content: center;
+ align-items: center;
 }

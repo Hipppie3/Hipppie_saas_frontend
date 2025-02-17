@@ -1,0 +1,230 @@
+.leagueList_auth {
+ height: 100vh;
+ width: calc(100vw - 150px);
+ padding-left: 100px;
+ padding-top: 20px;
+}
+
+.league-table {
+ width: 100%;
+ border-collapse: collapse;
+}
+
+.league-table th,
+.league-table td {
+ border: 1px solid #ddd;
+ padding: 10px;
+ text-align: left;
+}
+
+  .league-table td a {
+   text-decoration: none;
+   color: black;
+  }
+ 
+  .league-table td a:hover {
+   text-shadow: 0 0 1px rgba(0, 0, 0, 1)
+  }
+
+  .update-btn,
+  .delete-btn {
+   width: 30%;
+   padding: 10px;
+   font-size: 10px;
+   border-radius: 10px;
+   border: 1px solid #ddd;
+  }
+
+.add-league-btn {
+ background-color: white;
+ padding: 10px;
+ border: 1px solid #ddd;
+ cursor: pointer;
+ margin-bottom: 10px;
+}
+
+.update-btn {
+ background-color: #ffcc00;
+ padding: 5px;
+}
+
+.delete-btn {
+ background-color: #ff3333;
+ padding: 5px;
+ margin-left: 2px;
+ color: white;
+}
+
+/* ✅ Modal Styling */
+.modal-overlay {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: rgba(0, 0, 0, 0.5);
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+
+.modal-content {
+ background: white;
+ padding: 20px;
+ border-radius: 10px;
+ width: 300px;
+ text-align: center;
+}
+
+.modal-content input {
+ width: 100%;
+ padding: 10px;
+ margin: 10px 0;
+ border: 1px solid #ddd;
+ border-radius: 5px;
+}
+
+.modal-content button {
+ padding: 10px;
+ margin: 5px;
+ cursor: pointer;
+ border-radius: 5px;
+}
+
+.modal-content button[type="submit"] {
+ background-color: #007bff;
+ color: white;
+ border: none;
+}
+
+.modal-content button[type="submit"]:hover {
+ background-color: #0056b3;
+}
+
+.modal-content button[type="button"] {
+ background-color: #ccc;
+ border: none;
+}
+
+.modal-content button[type="button"]:hover {
+ background-color: #999;
+}
+
+@media (max-width: 768px) {
+ .leagueList_auth {
+  width: 100vw;
+  padding-left: 0;
+  padding-top: 80px;
+ }
+
+ /* ✅ Responsive Table - Turns into a Card Layout */
+ .league-table {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+ }
+
+ /* Hide table headers on mobile */
+ .league-table thead {
+  display: none;
+ }
+
+ /* Convert rows into block elements */
+ .league-table tbody,
+ .league-table tr {
+  display: block;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+ }
+
+ .league-table tr {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+ }
+
+ /* Style individual league items */
+ .league-table td {
+  flex: 1;
+  /* Ensures equal space */
+  display: flex;
+  justify-content: flex-start;
+  /* Center content */
+  padding: 12px;
+  font-size: 15px;
+  border: none;
+ }
+
+ .league-table td a {
+  text-decoration: none;
+  color: black;
+ }
+
+ .league-table td a:hover {
+   text-shadow: 0 0 1px rgba(0, 0, 0, 1)
+ }
+
+ /* Add labels before each field */
+ .league-table td::before {
+  content: attr(data-label);
+  font-weight: bold;
+  text-transform: capitalize;
+  color: #555;
+ }
+
+ /* Last row in the card should not have a border */
+ .league-table td:last-child {
+  border-bottom: none;
+ }
+
+ /* Buttons - Full Width on Mobile */
+ .update-btn,
+ .delete-btn {
+  width: 80%;
+  padding: 10px;
+  font-size: 10px;
+  border-radius: 10px;
+ }
+
+ .update-btn {
+  background-color: #ffcc00;
+  color: black;
+ }
+
+ .delete-btn {
+  background-color: #ff3333;
+  color: white;
+ }
+
+ .update-btn:hover,
+ .delete-btn:hover {
+  opacity: 0.8;
+ }
+
+ /* ✅ Modal Styling for Mobile */
+ .modal-content {
+  width: 90%;
+  max-width: 400px;
+  padding: 20px;
+  border-radius: 10px;
+ }
+
+ .modal-content input {
+  width: 100%;
+  font-size: 16px;
+  padding: 12px;
+  border-radius: 5px;
+ }
+
+ .modal-content button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 5px;
+ }
+}

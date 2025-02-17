@@ -1,4 +1,4 @@
-.teamList_auth {
+.team_auth {
  height: 100vh;
  width: calc(100vw - 150px);
  /* Subtract sidebar width */
@@ -6,7 +6,7 @@
  /* Push content right */
 }
 
-.teamList_public {
+.team_public {
  height: calc(100vh - 80px);
  width: 100%;
  padding-top: 70px;
@@ -14,7 +14,7 @@
 
 /* ✅ Fix mobile view */
 @media (max-width: 768px) {
- .teamList_auth {
+ .team_auth {
   width: 100vw;
   /* Full width when sidebar is hidden */
   padding-left: 0;

@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import axios from 'axios';
 import { NavLink, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'
+import "./TeamList.css"
 
 
 function TeamList() {
@@ -67,7 +68,8 @@ const handleDeleteTeam = async (id) => {
 
     if (response.data.success) {
       setTeams((prevTeams) => prevTeams.filter(team => team.id !== id));
-      setMessage(`League ${id} deleted successfully`);
+      console.log(response.data)
+      setMessage(`Team deleted successfully`);
       setTimeout(() => setMessage(''), 3000);
     } else {
       alert(response.data.message)
@@ -79,7 +81,7 @@ const handleDeleteTeam = async (id) => {
 };
 
   return (
-    <div className="teamList_container">
+    <div className={isAuthenticated ? "teamList_auth" : "teamList_public"}>
       {isAuthenticated && (
         <form onSubmit={handleCreateTeam}>
           <label>
@@ -102,7 +104,7 @@ const handleDeleteTeam = async (id) => {
         teams.map((team) => (
           <div key={team.id}>
             <h2>
-            <NavLink to={`/site/team/${team.id}${domain ? `?domain=${domain}` : ""}`}>
+            <NavLink to={`/teams/${team.id}${domain ? `?domain=${domain}` : ""}`}>
               {team.name}
             </NavLink>
             </h2>

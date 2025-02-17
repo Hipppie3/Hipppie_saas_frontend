@@ -1,155 +1,150 @@
+/* ✅ Full-page container */
 .login_container {
- height: calc(100vh - 80px);
- min-width: 100%;
- display: flex;
- justify-content: center;
+  min-height: calc(100vh - 80px);
+  min-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* ✅ Center form vertically */
+  padding-top: 100px;
+  padding-bottom: 20px;
+  /* ✅ Prevent cut-off on small screens */
 }
 
-
-.login_form_container {
- min-height: 450px;
- max-height: 70%;
- width: 30%;
- border: 1px solid black; 
- background-color: white;
- margin-top: 4rem;
- display: flex;
- flex-direction: column;
- padding-top: 3rem;
- align-items: center;
- border-radius: 10px;
-}
-
-
+/* ✅ Common styles for both login & register boxes */
+.login_form_container,
 .register_form_container {
-  min-height: 550px;
-  max-height: 80%;
+  min-height: 450px;
   width: 30%;
   border: 1px solid black;
   background-color: white;
-  margin-top: 4rem;
   display: flex;
   flex-direction: column;
-  padding-top: 3rem;
   align-items: center;
+  padding: 3rem 2rem;
   border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  /* ✅ Ensure it's positioned correctly inside its parent */
+  z-index: 2;
+  /* ✅ Keeps it above the background */
 }
 
+/* ✅ Make Register form slightly bigger */
+.register_form_container {
+  min-height: 550px;
+}
+
+/* ✅ Title styles */
 .login_form_container_title,
 .register_form_title {
- font-size: 24px;
- margin-bottom: 2rem;
+  font-size: 24px;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
+/* ✅ Forms */
 .login_form,
 .register_form {
-display: flex;
-flex-direction: column;
-justify-content: flex-start;
-align-items: center;
-width: 100%;
-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
+/* ✅ Labels */
 .login_form_label,
-.register_form_label{
- font-size: 16px;
- display: flex;
- flex-direction: column;
- justify-content: flex-start;
- width: 80%;
- align-items: flex-start;
- margin-top: 1rem;
- 
+.register_form_label {
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 1rem;
 }
 
+/* ✅ Inputs */
 .login_form input,
 .register_form input {
   width: 100%;
-   height: 40px;
-   border: none;
-   /* Removes all borders */
-   border-bottom: 2px solid #ccc;
-   /* Adds only bottom border */
-   background-color: transparent;
-   /* Makes background blend */
-   box-shadow: none;
-   /* Removes any default shadows */
-   padding: 7px;
-   outline: none;
-   /* Removes focus outline */
-   transition: border-bottom 0.3s ease-in-out;
+  height: 40px;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  background-color: transparent;
+  padding: 7px;
+  outline: none;
+  transition: border-bottom 0.3s ease-in-out;
 }
 
-.login_form input:focus
+.login_form input:focus,
 .register_form input:focus {
- border-bottom: 2px solid #ff8c00;
- /* Highlights bottom border on focus */
+  border-bottom: 2px solid #ff8c00;
+  /* ✅ Highlights on focus */
 }
 
+/* ✅ Buttons */
 .login_form_btn,
 .register_form_btn {
- height: 30px;
- width: 70%;
- margin-top: 2rem;
- border-radius: 20px;
- border: none
+  height: 40px;
+  width: 80%;
+  margin-top: 2rem;
+  border-radius: 20px;
+  border: none;
+  background-color: orange;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
 .login_form_btn:hover,
 .register_form_btn:hover {
- color: white;
- background-color: orange;
- cursor: pointer;
+  background-color: darkorange;
 }
 
+/* ✅ Toggle Register/Login Button */
 .login_form_register_btn,
 .register_form_login_btn {
- background: none;
- border: none;
- padding-bottom: 1rem;
- cursor: pointer;
+  background: none;
+  border: none;
+  color: #1E3A8A;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .login_form_register_btn:hover,
 .register_form_login_btn:hover {
- color: orange;
- /* ✅ Slightly change color on hover */
+  color: orange;
 }
 
-@media (max-height: 700px) {
-
- .login_form_container,
- .register_form_container {
-  height: auto;
-  /* ✅ Prevent it from being too tall */
-  max-height: 75vh;
-  /* ✅ Keeps it within view */
- }
+/* ✅ Error message */
+.error_message {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
 }
+
+/* ✅ Responsive Styles */
 @media (max-width: 1024px) {
 
- .login_form_container,
- .register_form_container {
-  width: 35%;
-  max-height: 85%;
- }
+  .login_form_container,
+  .register_form_container {
+    width: 40%;
+  }
 }
 
 @media (max-width: 768px) {
 
- .login_form_container,
- .register_form_container {
-  width: 45%;
-  max-height: 80%;
- }
+  .login_form_container,
+  .register_form_container {
+    width: 50%;
+  }
 }
 
 @media (max-width: 480px) {
 
- .login_form_container,
- .register_form_container {
-  width: 60%;
-  max-height: 85%;
- }
+  .login_form_container,
+  .register_form_container {
+    width: 75%;
+  }
 }

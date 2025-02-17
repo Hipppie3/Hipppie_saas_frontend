@@ -1,0 +1,111 @@
+/* ✅ Sidebar is hidden by default */
+.sidebar_container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 150px;
+  height: 100vh;
+  background-color: #1E3A8A;
+  color: white;
+  display: block; /* Hides sidebar initially */
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ✅ Only show the sidebar when toggled */
+.sidebar_container.open {
+  display: flex; /* Shows sidebar */
+  transform: translateX(0);
+  transition: transform 0.3s ease-in-out;
+}
+/* ✅ Remove bullet points & add spacing */
+.sidebar_list {
+ list-style: none;
+ /* Remove dots */
+ padding: 0;
+ margin: 0;
+ width: 100%;
+}
+
+.sidebar_list li {
+ width: 100%;
+ text-align: center;
+ /* Add spacing */
+}
+
+/* ✅ Ensure links take full width */
+.sidebar_list a {
+ display: block;
+ padding: 15px;
+ text-decoration: none;
+ color: white;
+ font-size: 18px;
+ transition: 0.3s;
+ width: 100%;
+}
+
+/* ✅ Ensure buttons match styling */
+.sidebar-button {
+ background: none;
+ border: none;
+ color: white;
+ font-size: 18px;
+ cursor: pointer;
+ padding: 15px;
+ width: 100%;
+ text-align: center;
+}
+
+.sidebar-button:hover,
+.sidebar_list a:hover,
+.sidebar_list a.active-class {
+ background-color: #2563EB;
+ font-weight: bold;
+}
+/* ✅ Sidebar on mobile (Hidden by default) */
+@media (max-width: 768px) {
+  .sidebar_container {
+    width: 100%;
+    transform: translateX(-100%);
+    display: flex; /* Keep sidebar structure ready but hidden */
+    transition: none; /* No transition when resizing */
+  }
+
+  /* ✅ When opened via state, transition smoothly */
+  .sidebar_container.open {
+    transform: translateX(0);
+    transition: transform 0.3s ease-in-out;
+  }
+}
+
+/* ✅ Hamburger Menu */
+.hamburger {
+  display: block;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: black;
+  cursor: pointer;
+}
+
+/* ✅ Close Button */
+.close_sidebar {
+  display: none;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: black;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .close_sidebar {
+    display: block;
+  }
+}

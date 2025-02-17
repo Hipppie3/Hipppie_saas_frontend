@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useParams, NavLink, useSearchParams } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 
 function League() {
   const { isAuthenticated, loading, user } = useAuth(); // ✅ Add auth state
@@ -125,7 +125,7 @@ useEffect(() => {
           ) : ( 
             teams.map((team) => (
               <div key={team.id}>
-                <NavLink to={`/teams/${team.id}`}>{team.name}</NavLink>
+                <NavLink to={`/teams/${team.id}${domain ? `?domain=${domain}` : ""}`}>{team.name}</NavLink>
                 {isAuthenticated && <button onClick={() => handleDeleteTeam(team.id)}>Delete</button>}
               </div>
             ))

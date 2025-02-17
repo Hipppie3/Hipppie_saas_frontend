@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import { NavLink } from 'react-router-dom'
+import './Home.css'
 
 function Home() {
   const [websites, setWebsites] = useState([])
@@ -20,7 +21,7 @@ const fetchWebsites = async () => {
 
 
   return (
-    <div>
+    <div className="home_container">
       {websites.map((website) => (
         <div key={website.id}> 
         <NavLink to={`/site?domain=${website.domain}`}>{website.domain}</NavLink>

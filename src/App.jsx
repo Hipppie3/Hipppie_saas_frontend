@@ -1,13 +1,13 @@
 import React from 'react';
 import { Routes, Route, useSearchParams } from 'react-router-dom';
-import Navbar from './components/Navbar.jsx';  // ✅ Default navbar
-import UserNavbar from './components/UserNavbar.jsx';  // ✅ League-specific navbar
+import Sidebar from './components/Sidebar.jsx';  // ✅ Default navbar
+import Navbar from './components/Navbar.jsx';  // ✅ League-specific navbar
 import Login from './pages/Login.jsx';
 import UserList from './pages/UserList.jsx';
 import User from './pages/User.jsx';
 import Dashboard from './pages/Dashboard.jsx';
-import LeagueList from './pages/LeagueList.jsx';
-import League from './pages/League.jsx';
+import LeagueList from './pages/League/LeagueList.jsx';
+import League from './pages/League/League.jsx';
 import TeamList from './pages/TeamList.jsx';
 import Team from './pages/Team.jsx';
 import UserHomepage from './pages/UserHomepage.jsx';
@@ -19,10 +19,12 @@ import './App.css';
 function App() {
   const [searchParams] = useSearchParams();
   const domain = searchParams.get("domain");  
+  const isPublicView = domain || window.location.pathname === "/"; // ✅ Also use UserNavbar for Home
+  const isLoginPage = location.pathname === "/login"
   return (
     <div className="app_container">
-  {domain ? <UserNavbar /> : <Navbar />}
-      <div>
+  {isPublicView || isLoginPage ? <Navbar /> : <Sidebar />}
+      <div className="content_wrapper">
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/site' element={<UserHomepage />} />
@@ -31,13 +33,9 @@ function App() {
           <Route path='/userList' element={<UserList />} />
           <Route path='/user/:id' element={<User />} />
           <Route path='/leagueList' element={<LeagueList />} />
-          <Route path='/site/leagueList' element={<LeagueList />} />
           <Route path='/league/:id' element={<League />} />
-          <Route path='/site/league/:id' element={<League />} />
           <Route path='/teamList' element={<TeamList />} />
-          <Route path='/site/teamList' element={<TeamList />} />
           <Route path='/teams/:id' element={<Team />} />
-          <Route path='/site/team/:id' element={<Team />} />
           <Route path='/playerList' element={<PlayerList />} />
         </Routes>
     </div>

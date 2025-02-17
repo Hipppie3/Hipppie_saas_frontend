@@ -1,70 +1,81 @@
-/* You can target your button with a class */
 .navbar_container {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
  height: 80px;
- width: 100%;
- background-color: rgb(243, 160, 7);
- padding: 0;
- margin: 0;
+ /* Adjust as needed */
+ background-color: #1E3A8A;
  display: flex;
+ align-items: center;
  justify-content: space-between;
- align-items: center;
- border-bottom: 7px solid orangered;
-
+ padding: 0 20px;
+ z-index: 1000;
 }
 
-.nav_list {
- width: 100%;
- list-style: none;
+.navbar_list {
  display: flex;
- justify-content: space-around;
- align-items: center;
- gap: 1rem;
- padding: 0;
+ list-style: none;
+ gap: 20px;
  margin: 0;
+ padding: 0;
 }
 
-.nav_list li {
- display: inline;
+.navbar_list li {
+ display: inline-block;
 }
 
-.nav_list a {
- text-decoration: none;;
- color: white;
- padding: 0.5rem 1rem;
- font-size: 18px;
-}
-
-.nav_list a.active-class {
- font-weight: bold;
+.navbar_list a {
  text-decoration: none;
- color: orangered;
+ color: white;
+ font-size: 18px;
+ padding: 10px 15px;
 }
 
-.nav_list a:hover {
- text-decoration: underline;
+.navbar_list a:hover,
+.navbar_list a.active-class {
+ background-color: #2563EB;
+ border-radius: 5px;
 }
 
-
-.nav-button {
+.hamburger {
+ display: none;
  background: none;
  border: none;
- color: white;
- /* Same as NavLink default color */
- font-size: 18px;
- /* Match the font size */
+ color: black;
+ font-size: 24px;
  cursor: pointer;
- text-decoration: none;
- /* Remove any underline */
- padding: 0.5rem 1rem;
- /* Match padding to NavLink */
 }
 
-.nav-button:hover {
- font-weight: bold;
- text-decoration: underline;
-}
+/* Mobile Styles */
+@media (max-width: 768px) {
+ .hamburger {
+  display: block;
+  padding-top: 10px;
+ }
 
-.nav-button:focus {
- outline: none;
- /* Remove default focus outline */
+ .navbar_list {
+  position: absolute;
+  top: 80px;
+  /* Below the navbar */
+  left: 0;
+  width: 100%;
+  background-color: #1E3A8A;
+  flex-direction: column;
+  text-align: center;
+  display: none;
+ }
+
+ .navbar_list.open {
+  display: flex;
+ }
+
+ .navbar_list li {
+  width: 100%;
+ }
+
+ .navbar_list a {
+  display: block;
+  padding: 15px;
+ }
 }
