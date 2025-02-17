@@ -8,10 +8,10 @@ import User from './pages/User.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import LeagueList from './pages/League/LeagueList.jsx';
 import League from './pages/League/League.jsx';
-import TeamList from './pages/TeamList.jsx';
-import Team from './pages/Team.jsx';
+import TeamList from './pages/Team/TeamList.jsx';
+import Team from './pages/Team/Team.jsx';
 import UserHomepage from './pages/UserHomepage.jsx';
-import PlayerList from './pages/PlayerList.jsx';
+import PlayerList from './pages/Player/PlayerList.jsx';
 import Home from './pages/Home.jsx';
 import './App.css';
 

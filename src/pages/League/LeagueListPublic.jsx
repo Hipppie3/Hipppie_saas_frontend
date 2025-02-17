@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { NavLink, useSearchParams } from 'react-router-dom';
-import './LeaguePublic.css';
+import './LeagueListPublic.css';
 
-function LeaguePublic() {
+function LeagueListPublic() {
   const [leagues, setLeagues] = useState([]);
   const [searchParams] = useSearchParams();
-  const domain = searchParams.get("domain")
+  const domain = searchParams.get("domain");
 
   useEffect(() => {
     const fetchLeagues = async () => {
       try {
         const response = await axios.get(`/api/leagues?domain=${domain}`);
         setLeagues(response.data.leagues || []);
+        console.log(response.data.leagues)
       } catch (error) {
         console.error("Error fetching leagues:", error);
       }
     };
-
     fetchLeagues();
   }, []);
 
@@ -38,4 +38,4 @@ function LeaguePublic() {
   );
 }
 
-export default LeaguePublic;
+export default LeagueListPublic;

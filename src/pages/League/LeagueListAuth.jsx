@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
-import './LeagueAuth.css';
+import './LeagueListAuth.css';
 
-function LeagueAuth() {
+function LeagueListAuth() {
   const [leagues, setLeagues] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
@@ -20,7 +20,6 @@ function LeagueAuth() {
         console.error("Error fetching leagues:", error);
       }
     };
-
     fetchLeagues();
   }, []);
 
@@ -150,4 +149,4 @@ function LeagueAuth() {
   );
 }
 
-export default LeagueAuth;
+export default LeagueListAuth;
