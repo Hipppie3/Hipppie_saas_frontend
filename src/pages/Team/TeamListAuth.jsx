@@ -8,8 +8,15 @@ function TeamListAuth() {
   const [leagues, setLeagues] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [teamForm, setTeamForm] = useState({ name: "", leagueId: "" });
-  const [updateForm, setUpdateForm] = useState({ id: null, name: "", leagueId: "" });
+  const [teamForm, setTeamForm] = useState({ 
+    name: "", 
+    leagueId: "" 
+  });
+  const [updateForm, setUpdateForm] = useState({ 
+    id: null, 
+    name: "", 
+    leagueId: "" 
+  });
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -17,6 +24,7 @@ function TeamListAuth() {
       try {
         const response = await axios.get('/api/teams', { withCredentials: true });
         setTeams(response.data.teams || []);
+        console.log(response.data.teams)
       } catch (error) {
         console.error("Error fetching teams:", error);
       }
@@ -62,7 +70,7 @@ function TeamListAuth() {
     try {
       const response = await axios.delete(`/api/teams/${id}`, { withCredentials: true });
       if (response.data.success) {
-        setTeams(teams.filter(teams => teams.id !== id));
+        setTeams(teams.filter(team => team.id !== id));
         setMessage("Team deleted successfully");
         setTimeout(() => setMessage(''), 3000);
       }
@@ -84,6 +92,7 @@ function TeamListAuth() {
       const response = await axios.put(`/api/teams/${updateForm.id}`, { name: updateForm.name, leagueId: updateForm.leagueId }, { withCredentials: true });
       setTeams(teams.map(team => team.id === updateForm.id ? response.data.team : team));
       setMessage(`${response.data.team.name} updated successfully`);
+      console.log(response.data)
       setIsUpdateModalOpen(false);
       setTimeout(() => setMessage(''), 3000);
     } catch (error) {
@@ -165,6 +174,7 @@ function TeamListAuth() {
           <thead>
             <tr>
               <th>Teams</th>
+              <th># Players</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -176,6 +186,9 @@ function TeamListAuth() {
                 <tr key={team.id}>
                   <td>
                     <NavLink to={`/teams/${team.id}`}>{team.name}</NavLink>
+                  </td>
+                  <td>
+                    {team.players.length}
                   </td>
                   <td>
                     <button className="update-btn" onClick={() => openUpdateModal(team)}>Update</button>

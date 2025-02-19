@@ -12,6 +12,7 @@ import TeamList from './pages/Team/TeamList.jsx';
 import Team from './pages/Team/Team.jsx';
 import UserHomepage from './pages/UserHomepage.jsx';
 import PlayerList from './pages/Player/PlayerList.jsx';
+import Player from './pages/Player/Player.jsx';
 import Home from './pages/Home.jsx';
 import './App.css';
 
@@ -21,6 +22,7 @@ function App() {
   const domain = searchParams.get("domain");  
   const isPublicView = domain || window.location.pathname === "/"; // ✅ Also use UserNavbar for Home
   const isLoginPage = location.pathname === "/login"
+  
   return (
     <div className="app_container">
   {isPublicView || isLoginPage ? <Navbar /> : <Sidebar />}
@@ -37,6 +39,7 @@ function App() {
           <Route path='/teamList' element={<TeamList />} />
           <Route path='/teams/:id' element={<Team />} />
           <Route path='/playerList' element={<PlayerList />} />
+          <Route path='/players/:id' element={<Player />} />
         </Routes>
     </div>
     </div>

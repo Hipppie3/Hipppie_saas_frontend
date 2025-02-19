@@ -1,42 +1,41 @@
-.leagueList_auth {
-height: 100vh;
-width: calc(100vw - 150px);
-padding-left: 150px;
-padding-top: 20px;
-background-color: aliceblue;
+.playerList_auth {
+ height: 100vh;
+ width: calc(100vw - 150px);
+ padding-left: 100px;
+ padding-top: 20px;
 }
 
-.league-table {
+.player-table {
  width: 100%;
  border-collapse: collapse;
 }
 
-.league-table th,
-.league-table td {
+.player-table th,
+.player-table td {
  border: 1px solid #ddd;
  padding: 10px;
  text-align: left;
 }
 
-  .league-table td a {
-   text-decoration: none;
-   color: black;
-  }
- 
-  .league-table td a:hover {
-   text-shadow: 0 0 1px rgba(0, 0, 0, 1)
-  }
+.player-table td a {
+ text-decoration: none;
+ color: black;
+}
 
-  .update-btn,
-  .delete-btn {
-   width: 30%;
-   padding: 10px;
-   font-size: 10px;
-   border-radius: 10px;
-   border: 1px solid #ddd;
-  }
+.player-table td a:hover {
+ text-shadow: 0 0 1px rgba(0, 0, 0, 1)
+}
 
-.add-league-btn {
+.update-btn,
+.delete-btn {
+ width: 30%;
+ padding: 10px;
+ font-size: 10px;
+ border-radius: 10px;
+ border: 1px solid #ddd;
+}
+
+.add-player-btn {
  background-color: white;
  padding: 10px;
  border: 1px solid #ddd;
@@ -112,27 +111,27 @@ background-color: aliceblue;
 }
 
 @media (max-width: 768px) {
- .leagueList_auth {
+ .playerList_auth {
   width: 100vw;
   padding-left: 0;
   padding-top: 80px;
  }
 
  /* ✅ Responsive Table - Turns into a Card Layout */
- .league-table {
+ .player-table {
   width: 100%;
   display: flex;
   flex-direction: column;
  }
 
  /* Hide table headers on mobile */
- .league-table thead {
+ .player-table thead {
   display: none;
  }
 
  /* Convert rows into block elements */
- .league-table tbody,
- .league-table tr {
+ .player-table tbody,
+ .player-table tr {
   display: block;
   width: 100%;
   border-radius: 8px;
@@ -141,7 +140,7 @@ background-color: aliceblue;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
  }
 
- .league-table tr {
+ .player-table tr {
   display: flex;
   width: 100%;
   align-items: center;
@@ -149,8 +148,8 @@ background-color: aliceblue;
   gap: 0;
  }
 
- /* Style individual league items */
- .league-table td {
+ /* Style individual player items */
+ .player-table td {
   flex: 1;
   /* Ensures equal space */
   display: flex;
@@ -161,17 +160,17 @@ background-color: aliceblue;
   border: none;
  }
 
- .league-table td a {
+ .player-table td a {
   text-decoration: none;
   color: black;
  }
 
- .league-table td a:hover {
-   text-shadow: 0 0 1px rgba(0, 0, 0, 1)
+ .player-table td a:hover {
+  text-shadow: 0 0 1px rgba(0, 0, 0, 1)
  }
 
  /* Add labels before each field */
- .league-table td::before {
+ .player-table td::before {
   content: attr(data-label);
   font-weight: bold;
   text-transform: capitalize;
@@ -179,7 +178,7 @@ background-color: aliceblue;
  }
 
  /* Last row in the card should not have a border */
- .league-table td:last-child {
+ .player-table td:last-child {
   border-bottom: none;
  }
 

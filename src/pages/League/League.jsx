@@ -80,7 +80,7 @@ useEffect(() => {
     const confirmDelete = window.confirm("Are you sure you want to delete this team?");
     if (!confirmDelete) return;
     try {
-      const response = await axios.delete(`/api/leagues/${id}/teams/${teamId}`, { withCredentials: true });
+      const response = await axios.delete(`/api/teams/${teamId}`, { withCredentials: true });
       if (response.data.success) {
         setTeams((prevTeams) => prevTeams.filter(team => team.id !== teamId));
         setMessage("Team deleted successfully");

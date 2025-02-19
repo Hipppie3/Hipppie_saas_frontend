@@ -1,8 +1,9 @@
 .dashboard_container {
- height: 100vh;
-  width: calc(100vw - 150px);
-  /* Subtract sidebar width */
-  padding-left: 150px;
-  display: flex;
-  justify-content: center;
+height: 100vh;
+width: 100%;
+/* Subtract sidebar width */
+padding-left: 150px;
+display: flex;
+justify-content: center;
+background-color: aliceblue;
 }

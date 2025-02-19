@@ -73,6 +73,7 @@ function LeagueListAuth() {
     }
   };
 
+
   return (
     <div className="leagueList_auth">
       <button className="add-league-btn" onClick={() => setIsModalOpen(true)}>Add League</button>
@@ -124,6 +125,7 @@ function LeagueListAuth() {
         <thead>
           <tr>
             <th>Leagues</th>
+            <th># Teams</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -135,6 +137,9 @@ function LeagueListAuth() {
               <tr key={league.id}>
                 <td>
                   <NavLink to={`/league/${league.id}`}>{league.name}</NavLink>
+                </td>
+                <td>
+                {league.teams.length}
                 </td>
                 <td>
                   <button className="update-btn" onClick={() => openUpdateModal(league)}>Update</button>

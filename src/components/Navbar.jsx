@@ -25,7 +25,7 @@ function Navbar() {
         <li><NavLink to={`/site?domain=${domain}`} className={({ isActive }) => isActive ? "active-class" : "inactive-class"} onClick={closeMenu}>HOME</NavLink></li>
         <li><NavLink to={`/leagueList?domain=${domain}`} className={({ isActive }) => isActive ? "active-class" : "inactive-class"} onClick={closeMenu}>LEAGUES</NavLink></li>
         <li><NavLink to={`/teamList?domain=${domain}`} className={({ isActive }) => isActive ? "active-class" : "inactive-class"} onClick={closeMenu}>TEAMS</NavLink></li>
-        <li><NavLink to="/playerList" className={({ isActive }) => isActive ? "active-class" : "inactive-class"} onClick={closeMenu}>PLAYERS</NavLink></li>
+        <li><NavLink to={`/playerList?domain=${domain}`} className={({ isActive }) => isActive ? "active-class" : "inactive-class"} onClick={closeMenu}>PLAYERS</NavLink></li>
       </ul>
       ) : (
         <ul className={`navbar_list ${isOpen ? 'open' : ''}`}>
