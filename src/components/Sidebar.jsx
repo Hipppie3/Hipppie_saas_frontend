@@ -16,37 +16,26 @@ function Sidebar() {
   // ✅ Logout Function
   const handleLogout = async () => {
     try {
+      
       const response = await logout();
-      console.log("Logout Response:", response);
+      console.log("Logout Response:", response); // Debugging Step
 
-      if (response?.domain) {
-        console.log(`Navigating to: /login?domain=${response.domain}`);
+      // ✅ Directly access domain from response
+      const domain = response?.domain;
 
-        setTimeout(() => {
-          navigate(`/login?domain=${response.domain}`, { replace: true });
-
-          // ✅ Clear the entire session history so "Back" doesn't work
-          window.history.pushState(null, null, `/login?domain=${response.domain}`);
-          window.history.pushState(null, null, `/login?domain=${response.domain}`);
-          window.addEventListener("popstate", () => {
-            navigate(`/login?domain=${response.domain}`, { replace: true });
-          });
-        }, 100);
-      } else {
-        console.warn("No domain found in logout response, redirecting to home");
-        navigate("/", { replace: true });
-
-        // ✅ Prevent back navigation after logout
-        window.history.pushState(null, null, "/");
-        window.history.pushState(null, null, "/");
-        window.addEventListener("popstate", () => {
-          navigate("/", { replace: true });
-        });
+      if (!domain) {
+        console.warn("Domain not found in logout response");
+        navigate("/"); // Default fallback
+        return;
       }
+
+      navigate(`/login?domain=${domain}`);
     } catch (error) {
       console.error("Logout Error:", error);
     }
   };
+
+
 
 
 

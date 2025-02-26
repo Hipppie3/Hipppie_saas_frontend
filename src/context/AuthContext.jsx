@@ -57,8 +57,9 @@ const register = async (registerData) => {
       const response = await axios.post('/api/users/logout', {}, { withCredentials: true });
       setIsAuthenticated(false);
       setUser(null);
-
-      return response.data; // ✅ Ensure the response is returned
+      console.log(response.data)
+      return response.data; 
+// ✅ Ensure the response is returned
     } catch (error) {
       console.error('Logout failed:', error);
       return null; // ✅ Prevent `undefined`

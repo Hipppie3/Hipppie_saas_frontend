@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './PlayerListAuth.css';
+import { useNavigate } from 'react-router-dom'; // ✅ Import navigation hook
 import { NavLink, useParams } from 'react-router-dom';
+import { useAuth } from '../../../context/AuthContext';
 
 function PlayerListAuth() {
   const [players, setPlayers] = useState([]);
@@ -13,7 +15,17 @@ function PlayerListAuth() {
   const [message, setMessage] = useState("");
   const [selectedPlayers, setSelectedPlayers] = useState([]); // ✅ Track selected players for bulk delete
   const {id} = useParams();
-  
+  const {isAuthenticated, domain} = useAuth()
+  const navigate = useNavigate();
+    
+    useEffect(() => {
+      if (!isAuthenticated) {
+        const redirectUrl = domain ? `/login?domain=${domain}` : "/login";
+        navigate(redirectUrl, { replace: true }); // ✅ Redirect if not authenticated
+      }
+    }, [isAuthenticated, navigate, domain]);
+
+
   // Fetch Players
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -52,15 +64,18 @@ function PlayerListAuth() {
     formData.append("firstName", playerForm.firstName);
     formData.append("lastName", playerForm.lastName);
     formData.append("age", playerForm.age ? Number(playerForm.age) : "");
-    formData.append("teamId", id); // Ensure the correct teamId is used
+    formData.append("teamId", Number(playerForm.teamId));
     if (playerForm.image) formData.append("image", playerForm.image);
     try {
-      await axios.post(`/api/players`, formData, {
+      const response = await axios.post(`/api/players`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true
       });
-      const response = await axios.get('/api/players', { withCredentials: true });
-      setPlayers(response.data.player || []);
+      // ✅ Ensure API returns the newly created player
+      const newPlayer = response.data.player; // Adjust this if API returns differently
+      // ✅ Append new player to state without refetching all players
+      setPlayers((prevPlayers) => [...prevPlayers, newPlayer]);
+      // Reset Form & Close Modal
       setPlayerForm({ firstName: "", lastName: "", age: "", teamId: "", image: null });
       setMessage("Player created successfully");
       setIsModalOpen(false);
@@ -87,9 +102,9 @@ function PlayerListAuth() {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true
     });
-console.log(id)
-      const response = await axios.get(`/api/players/${id}`, { withCredentials: true });
-      setPlayers(response.data.player || []);
+
+      const response = await axios.get(`/api/players`, { withCredentials: true });
+      setPlayers(response.data.players || []);
       setMessage("Player updated successfully");
       setIsUpdateModalOpen(false);
       setTimeout(() => setMessage(''), 3000);
@@ -118,12 +133,13 @@ console.log(id)
 
   // Open Update Modal
   const openUpdateModal = (player) => {
+    console.log(player)
     setUpdateForm({ 
       id: player.id || "",
       firstName: player.firstName ?? "", 
       lastName: player.lastName ?? "", 
       age: player.age != null ? Number(player.age) : "",
-      teamId: player.team?.id != null ? Number(player.team?.id) : "",
+      teamId: player.teamId != null ? Number(player.teamId) : "",
       image: player.image || null 
     });
     setIsUpdateModalOpen(true);
@@ -164,10 +180,15 @@ console.log(id)
               <input
                 type="file"
                 accept="image/*"
-                onChange={(e) => setPlayerForm({ ...updateForm, image: e.target.files[0] })} />
-              <select value={playerForm.teamId} onChange={(e) => setPlayerForm({ ...playerForm, teamId: e.target.value })} >
+                onChange={(e) => setPlayerForm({ ...playerForm, image: e.target.files[0] })} />
+              <select
+                value={playerForm.teamId}
+                onChange={(e) => setPlayerForm({ ...playerForm, teamId: Number(e.target.value) })}
+              >
                 <option value="" disabled>Select a team</option>
-                {teams.map((team) => <option key={team.id} value={team.id}>{team.name}</option>)}
+                {teams.map((team) => (
+                  <option key={team.id} value={team.id}>{team.name}</option>
+                ))}
               </select>
               <button type="submit">Create</button>
               <button type="button" onClick={() => setIsModalOpen(false)}>Cancel</button>
