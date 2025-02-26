@@ -1,16 +1,11 @@
-import React from 'react'
-import './PlayerList.css'
-import PlayerListAuth from './PlayerListAuth'
-import PlayerListPublic from './PlayerListPublic'
+import PlayerListAuth from './Auth/PlayerListAuth'
+import PlayerListPublic from './Public/PlayerListPublic'
 import { useAuth } from '../../context/AuthContext';
 
 function PlayerList() {
 const { isAuthenticated } = useAuth();
-  return (
-    <div className="playerList_container">
-      {isAuthenticated ? <PlayerListAuth /> : <PlayerListPublic/ >}
-    </div>
-  )
+
+return isAuthenticated ? <PlayerListAuth /> : <PlayerListPublic />
 }
 
 export default PlayerList

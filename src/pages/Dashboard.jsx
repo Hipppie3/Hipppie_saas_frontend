@@ -13,14 +13,17 @@ function Dashboard() {
   // Redirect to login if user is not authenticated
   useEffect(() => {
     if (!loading && !user) {
-    navigate('/login'); // ✅ Redirect only after checking auth
+      const currentUrl = new URL(window.location.href);
+      const domain = currentUrl.searchParams.get("domain");
+
+      if (domain) {
+        navigate(`/site?domain=${domain}`, { replace: true }); // ✅ Redirect to public site instead of login
+      } else {
+        navigate("/", { replace: true }); // ✅ Default to home if no domain exists
+      }
     }
   }, [user, loading, navigate]);
-  
-    useEffect(() => {
-    if (user) {
-    }
-  }, [user]);
+
 
   // ✅ Prevent error by showing loading state before rendering
   if (loading) {

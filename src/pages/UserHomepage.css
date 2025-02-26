@@ -1,0 +1,59 @@
+.user_homepage {
+ color: black;
+ width: 100%;
+ border: 2px solid green;
+ 
+}
+
+.user_homepage_banner {
+height: 290px;
+width: 100%;
+background-color: rgba(0, 0, 0, 0.5);
+/* ✅ Adds a dark overlay */
+background-blend-mode: multiply;
+/* ✅ Blends color with the image */
+background-image: url('/src/images/santa_ana.png');
+background-size: cover;
+background-position: center 30%;
+/* ✅ Centers the image */
+background-repeat: no-repeat;
+/* ✅ Prevents tiling */
+}
+
+.user_homepage_main {
+ height: auto;
+}
+
+.user_homepage_welcome {
+ height: 80px;
+ font-size: 20px;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ background-color: rgb(3, 3, 140);
+ color: white;
+}
+.user_homepage_footer {
+ height: 100px;
+ background-color: blue;
+}
+
+.user_sports_section {
+ display: flex;
+ flex-wrap: wrap;
+ justify-content: center;
+ gap: 10px;
+ padding-top: 4rem;
+}
+
+.user_sports_boxes {
+ height: 300px;
+ width: 200px;
+ border: 2px solid brown
+}
+
+
+.user_homepage_question {
+ height: 200px;
+ border: 2px solid orange;
+}

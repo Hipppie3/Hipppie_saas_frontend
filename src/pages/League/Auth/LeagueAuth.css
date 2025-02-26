@@ -1,0 +1,138 @@
+.league_auth {
+min-height: calc(100vh - 80px);
+width: 100%;
+margin-left: 150px;
+padding-bottom: 20px;
+display: flex;
+flex-direction: column;
+align-items: center;
+border: 1px solid red;
+color: black;
+padding-top: 2rem
+}
+
+.leagueAuth-team-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid blue
+}
+
+.leagueAuth-team-table th,
+.leagueAuth-team-table td {
+  border: 1px solid green;
+  border-left: none;
+  border-right: none;
+  padding: 10px;
+  text-align: left;
+}
+
+.leagueAuth-btn-container {
+  width: 100%;
+  display: flex;
+  border: 1px solid red;
+  justify-content: space-between;
+}
+
+.no_team {
+  border-bottom: none;
+}
+
+.leagueAuth-team-table td a {
+  text-decoration: none;
+  color: black;
+}
+
+.leagueAuth-team-table td a:hover {
+  text-shadow: 0 0 1px rgba(0, 0, 0, 1)
+}
+
+.league-update-btn {
+  width: 30%;
+  font-size: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: auto;
+  color: rgb(20, 122, 231)
+}
+
+
+
+.league-btn-container {
+  display: flex;
+  justify-content: space-between;
+}
+.league-btn-container button {
+  border: 1px solid yellow
+}
+.league-update-btn span {
+  margin-right: 3px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.modal-content button {
+  padding: 10px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.modal-content button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+  border: none;
+}
+
+.modal-content button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+.modal-content button[type="button"] {
+  background-color: #ccc;
+  border: none;
+}
+
+.modal-content button[type="button"]:hover {
+  background-color: #999;
+}
+
+@media (max-width: 768px) {
+  .league_auth {
+      width: 100%;
+      margin-left: 0;
+      padding-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 1px solid rgb(28, 51, 220);
+      color: black;
+      padding-top: 4rem
+    }
+}

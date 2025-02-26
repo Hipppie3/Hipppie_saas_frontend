@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+.league_public {
+ width: 100%;
+ padding-bottom: 20px;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ color: white;
+ background-color: black;
+ border: 1px solid red;
+}
+
+
+.league_title_container {
+ margin-top: 4rem;
+ height: 40px;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ width: 95%;
+ background-color: rgb(31, 119, 233);
+}
+
+.league_title {
+ font-size: 17px;
+ font-family: 'Bebas Neue', san-serif;
+ letter-spacing: 2px;
+}
+
+.league_standings {
+ width: 100%;
+ display: flex;
+ justify-content: center;
+}
+.league_standings table {
+ width: 95%;
+ border-collapse: collapse;
+}
+.league_standings th {
+ padding: 10px 0;
+ background-color: black;
+ font-size: 13px;
+ border: 1px solid green
+}
+
+.league_standings td {
+ padding: 7px;
+ text-align: center;
+ border: 1px solid yellow
+}
+
+.league_standings td:first-child{
+ width: 10%;
+}
+
+.league_standings th:nth-child(2) {
+ display: flex;
+ justify-content: flex-start;
+ padding-left: 15px;
+}
+.league_standings td:nth-child(2) a {
+ text-decoration: none;
+ color: rgb(32, 152, 243);
+ display: flex;
+ justify-content: flex-start;
+ padding-left: 10px;
+}
+
+.league_standings tr:nth-child(even) {
+ background-color: rgba(62, 104, 153, 0.613);
+}
+
+.league_standings tr:nth-child(odd) {
+ background-color: rgba(52, 70, 91, 0.613);
+}

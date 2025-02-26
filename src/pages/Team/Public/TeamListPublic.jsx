@@ -19,17 +19,18 @@ function TeamListPublic() {
     }
     };
     fetchTeams();
-  }, [])
+  }, [domain])
 
   return (
     <div className="teamList_public">
+
       {teams.length === 0 ? (
         <p>No teams available</p>
       ) : (
         <div className="public-team-list">
         {teams.map((team) => (
           <div key={team.id} className="team-item">
-          <NavLink to={`/teams/${team.id}${domain ? `?domain=${domain}` : ""}`}>{team.name}</NavLink>
+          <NavLink to={`/teams/${team.id}${domain ? `?domain=${domain}` : ""}`}>{team.name}</NavLink> 
         </div>
         ))}
         </div>

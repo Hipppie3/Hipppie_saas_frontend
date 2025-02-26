@@ -1,0 +1,50 @@
+.player_auth {
+ margin-top: 4rem;
+ margin-left: 10rem;
+}
+.player_auth {
+ max-width: 600px;
+ margin: auto;
+ text-align: center;
+ padding: 20px;
+}
+
+.loading-message,
+.error-message {
+ font-size: 18px;
+ color: red;
+}
+
+.player-image {
+ width: 150px;
+ height: 150px;
+ object-fit: cover;
+ border-radius: 50%;
+ margin: 10px 0;
+ border: 2px solid #ddd;
+}
+
+.placeholder-image {
+ width: 150px;
+ height: 150px;
+ background: #ddd;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ border-radius: 50%;
+ margin: 10px 0;
+ font-size: 14px;
+ color: #777;
+}
+
+.team-link,
+.league-link {
+ color: #007bff;
+ text-decoration: none;
+ font-weight: bold;
+}
+
+.team-link:hover,
+.league-link:hover {
+ text-decoration: underline;
+}

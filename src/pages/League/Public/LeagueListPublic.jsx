@@ -19,17 +19,18 @@ function LeagueListPublic() {
       }
     };
     fetchLeagues();
-  }, []);
+  }, [domain]);
 
   return (
     <div className="leagueList_public">
+
       {leagues.length === 0 ? (
         <p>No leagues available</p>
       ) : (
         <div className="public-league-list">
           {leagues.map((league) => (
             <div key={league.id} className="league-item">
-              <NavLink to={`/league/${league.id}${domain ? `?domain=${domain}` : ""}`}>{league.name}</NavLink>
+              <NavLink to={`/leagues/${league.id}${domain ? `?domain=${domain}` : ""}`}>{league.name}</NavLink>
             </div>
           ))}
         </div>

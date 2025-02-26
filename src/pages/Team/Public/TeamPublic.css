@@ -1,0 +1,9 @@
+.team_public {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  background-color: black;
+  border: 1px solid red;
+}

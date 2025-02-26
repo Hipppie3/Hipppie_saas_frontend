@@ -54,13 +54,17 @@ const register = async (registerData) => {
   // Logout Function
   const logout = async () => {
     try {
-      await axios.post('/api/users/logout', {}, { withCredentials: true });
+      const response = await axios.post('/api/users/logout', {}, { withCredentials: true });
       setIsAuthenticated(false);
       setUser(null);
+
+      return response.data; // ✅ Ensure the response is returned
     } catch (error) {
       console.error('Logout failed:', error);
+      return null; // ✅ Prevent `undefined`
     }
   };
+
 
   const deleteUser = async (userId) => {
     console.log(userId)

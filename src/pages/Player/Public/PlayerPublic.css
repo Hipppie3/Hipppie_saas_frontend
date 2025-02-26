@@ -1,0 +1,9 @@
+.player_auth {
+height: 100vh;
+ width: calc(100vw - 150px);
+ margin-left: 150px;
+ padding-top: 20px;
+ background-color: aliceblue;
+ padding-left: 20px;
+ padding-right: 20px;
+}

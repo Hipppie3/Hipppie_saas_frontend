@@ -1,0 +1,147 @@
+.team_auth {
+ height: calc(100vh - 150px);
+ width: calc(100vw - 150px);
+ padding-top: 20px;
+ background-color: rgb(254, 255, 255);
+}
+
+.team_auth h2 {
+ width: 100%;
+ text-align: center;
+ border: 1px solid green;
+}
+
+.team-table {
+ width: 100%;
+ border-collapse: collapse;
+}
+
+.team-table th,
+.team-table td {
+ border: 1px solid #ddd;
+ border-left: none;
+ border-right: none;
+ padding: 10px;
+ text-align: left;
+}
+
+
+.team-table td:nth-child(4) {
+ padding-left: 15px;
+}
+
+.team-table td:last-child {
+ justify-content: center;
+ border-top: none;
+}
+
+.no_team {
+ border-bottom: none !important;
+}
+
+.team-table td a {
+ text-decoration: none;
+ color: black;
+}
+
+.team-table td a:hover {
+ text-shadow: 0 0 1px rgba(0, 0, 0, 1)
+}
+
+.team-update-btn {
+ width: 30%;
+ font-size: 12px;
+ background: none;
+ border: none;
+ cursor: pointer;
+ width: auto;
+ color: rgb(20, 122, 231)
+}
+
+.team-update-btn span {
+ margin-right: 3px;
+}
+
+.teamAuth-btn-container {
+ width: 100%;
+ display: flex;
+ justify-content: space-between;
+ border: 1px solid brown;
+}
+
+.add-team-btn,
+.delete-teams-btn {
+ background-color: white;
+ border: none;
+ padding: 10px;
+ cursor: pointer;
+}
+
+.modal-overlay {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: rgba(0, 0, 0, 0.5);
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+
+.modal-content {
+ background: white;
+ padding: 20px;
+ border-radius: 10px;
+ width: 300px;
+ text-align: center;
+}
+
+.modal-content input {
+ width: 100%;
+ padding: 10px;
+ margin: 10px 0;
+ border: 1px solid #ddd;
+ border-radius: 5px;
+}
+
+.modal-content button {
+ padding: 10px;
+ margin: 5px;
+ cursor: pointer;
+ border-radius: 5px;
+}
+
+.modal-content button[type="submit"] {
+ background-color: #007bff;
+ color: white;
+ border: none;
+}
+
+.modal-content button[type="submit"]:hover {
+ background-color: #0056b3;
+}
+
+.modal-content button[type="button"] {
+ background-color: #ccc;
+ border: none;
+}
+
+.modal-content button[type="button"]:hover {
+ background-color: #999;
+}
+
+@media (max-width: 768px) {
+ .team_auth {  
+  width: 100%;
+   margin-left: 0;
+   padding-bottom: 20px;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   border: 1px solid rgb(28, 51, 220);
+   color: black;
+   padding-top: 4rem
+ }
+
+}

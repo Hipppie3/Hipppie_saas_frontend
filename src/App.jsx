@@ -35,7 +35,7 @@ function App() {
           <Route path='/userList' element={<UserList />} />
           <Route path='/user/:id' element={<User />} />
           <Route path='/leagueList' element={<LeagueList />} />
-          <Route path='/league/:id' element={<League />} />
+          <Route path='/leagues/:id' element={<League />} />
           <Route path='/teamList' element={<TeamList />} />
           <Route path='/teams/:id' element={<Team />} />
           <Route path='/playerList' element={<PlayerList />} />

@@ -20,19 +20,15 @@ function Navbar() {
       <button className="hamburger" onClick={toggleMenu}>
         {isOpen ? <FaTimes /> : <FaBars />}
       </button>
-      {domain ? (
+      {domain && 
       <ul className={`navbar_list ${isOpen ? 'open' : ''}`}>
         <li><NavLink to={`/site?domain=${domain}`} className={({ isActive }) => isActive ? "active-class" : "inactive-class"} onClick={closeMenu}>HOME</NavLink></li>
         <li><NavLink to={`/leagueList?domain=${domain}`} className={({ isActive }) => isActive ? "active-class" : "inactive-class"} onClick={closeMenu}>LEAGUES</NavLink></li>
         <li><NavLink to={`/teamList?domain=${domain}`} className={({ isActive }) => isActive ? "active-class" : "inactive-class"} onClick={closeMenu}>TEAMS</NavLink></li>
         <li><NavLink to={`/playerList?domain=${domain}`} className={({ isActive }) => isActive ? "active-class" : "inactive-class"} onClick={closeMenu}>PLAYERS</NavLink></li>
+        <li><NavLink to={`/login?domain=${domain}`} className={({ isActive }) => isActive ? "active-class" : "inactive-class"} onClick={closeMenu}>LOGIN</NavLink></li>
       </ul>
-      ) : (
-        <ul className={`navbar_list ${isOpen ? 'open' : ''}`}>
-          <li><NavLink to='/' className={({ isActive }) => isActive ? "active-class" : "inactive-class"} onClick={closeMenu}>HOME</NavLink></li>
-          <li><NavLink to='/login' className={({ isActive }) => isActive ? "active-class" : "inactive-class"} onClick={closeMenu}>LOGIN</NavLink></li>
-        </ul>
-      )}
+}
     </nav>
   );
 }

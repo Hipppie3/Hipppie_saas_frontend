@@ -10,7 +10,9 @@ function LeagueListAuth() {
   const [leagueForm, setLeagueForm] = useState({ name: "" });
   const [updateForm, setUpdateForm] = useState({ id: null, name: "" });
   const [message, setMessage] = useState("");
+  const [selectedLeagues, setSelectedLeagues] = useState([]); // ✅ Track selected leagues for bulk delete
 
+  // Fetch Leagues
   useEffect(() => {
     const fetchLeagues = async () => {
       try {
@@ -23,12 +25,13 @@ function LeagueListAuth() {
     fetchLeagues();
   }, []);
 
-  // ✅ Create League
+  // Create League
   const handleCreateLeague = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('/api/leagues', leagueForm, { withCredentials: true });
-      setLeagues([...leagues, response.data.league]);
+      const newLeague = await axios.get('/api/leagues', { withCredentials: true });
+      setLeagues(newLeague.data.leagues || []);
       setLeagueForm({ name: "" });
       setMessage(`${response.data.league.name} created successfully`);
       setIsModalOpen(false);
@@ -38,33 +41,13 @@ function LeagueListAuth() {
     }
   };
 
-  // ✅ Delete League
-  const handleDeleteLeague = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this league?")) return;
-    try {
-      const response = await axios.delete(`/api/leagues/${id}`, { withCredentials: true });
-      if (response.data.success) {
-        setLeagues(leagues.filter(league => league.id !== id));
-        setMessage("League deleted successfully");
-        setTimeout(() => setMessage(''), 3000);
-      }
-    } catch (error) {
-      console.error('Error deleting league:', error);
-    }
-  };
-
-  // ✅ Open Update Modal
-  const openUpdateModal = (league) => {
-    setUpdateForm({ id: league.id, name: league.name });
-    setIsUpdateModalOpen(true);
-  };
-
-  // ✅ Handle Update League
+  // Update League
   const handleUpdateLeague = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.put(`/api/leagues/${updateForm.id}`, { name: updateForm.name }, { withCredentials: true });
-      setLeagues(leagues.map(league => league.id === updateForm.id ? response.data.league : league));
+      const updatedLeagues = await axios.get('/api/leagues', { withCredentials: true });
+      setLeagues(updatedLeagues.data.leagues || []);
       setMessage(`${response.data.league.name} updated successfully`);
       setIsUpdateModalOpen(false);
       setTimeout(() => setMessage(''), 3000);
@@ -73,18 +56,59 @@ function LeagueListAuth() {
     }
   };
 
+  // Bulk Delete Leagues
+  const handleDeleteLeagues = async () => {
+    if (!selectedLeagues.length) {
+      return alert("Please select at least one league to delete.");
+    }
+    if (!window.confirm("Are you sure you want to delete the selected leagues?")) return;
+    try {
+      await Promise.all(selectedLeagues.map(id => axios.delete(`/api/leagues/${id}`, { withCredentials: true })));
+      setLeagues((prevLeagues) => prevLeagues.filter(league => !selectedLeagues.includes(league.id)));
+      setSelectedLeagues([]); // Clear selection after deletion
+      setMessage("Leagues deleted successfully");
+      setTimeout(() => setMessage(""), 3000);
+    } catch (error) {
+      console.error("Error deleting leagues:", error);
+    }
+  };
+
+  // Open Update Modal
+  const openUpdateModal = (league) => {
+    setUpdateForm({ id: league.id, name: league.name });
+    setIsUpdateModalOpen(true);
+  };
+
+  // Handle Checkbox Selection
+  const handleCheckboxChange = (id) => {
+    setSelectedLeagues(prevSelected =>
+      prevSelected.includes(id) ? prevSelected.filter(item => item !== id) : [...prevSelected, id]
+    );
+  };
+
+  // Select All Leagues
+  const handleSelectAll = () => {
+    if (selectedLeagues.length === leagues.length) {
+      setSelectedLeagues([]); // Unselect all if already selected
+    } else {
+      setSelectedLeagues(leagues.map(league => league.id)); // Select all leagues
+    }
+  };
 
   return (
     <div className="leagueList_auth">
-      <button className="add-league-btn" onClick={() => setIsModalOpen(true)}>Add League</button>
+      <div className="leagueList-btn-container">
+        <button className="delete-leagues-btn" onClick={handleDeleteLeagues}>🗑️</button>
+        <button className="add-league-btn" onClick={() => setIsModalOpen(true)}> + Add League</button>
+      </div>
 
-      {/* ✅ Create League Modal */}
+      {/* Create League Modal */}
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
             <h3>Create League</h3>
             <form onSubmit={handleCreateLeague}>
-              <input 
+              <input
                 type="text"
                 name="name"
                 value={leagueForm.name}
@@ -99,13 +123,13 @@ function LeagueListAuth() {
         </div>
       )}
 
-      {/* ✅ Update League Modal */}
+      {/* Update League Modal */}
       {isUpdateModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
             <h3>Update League</h3>
             <form onSubmit={handleUpdateLeague}>
-              <input 
+              <input
                 type="text"
                 name="name"
                 value={updateForm.name}
@@ -124,26 +148,41 @@ function LeagueListAuth() {
       <table className="league-table">
         <thead>
           <tr>
+            <th>
+              <input
+                type="checkbox"
+                checked={selectedLeagues.length === leagues.length}
+                onChange={handleSelectAll}
+              />
+            </th>
+            <th>ID</th>
             <th>Leagues</th>
             <th># Teams</th>
-            <th>Action</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {leagues.length === 0 ? (
-            <tr><td colSpan="2">No leagues available</td></tr>
+            <tr><td colSpan="5">No leagues available</td></tr>
           ) : (
-            leagues.map((league) => (
+            leagues.map((league, index) => (
               <tr key={league.id}>
                 <td>
-                  <NavLink to={`/league/${league.id}`}>{league.name}</NavLink>
+                  <input
+                    type="checkbox"
+                    checked={selectedLeagues.includes(league.id)}
+                    onChange={() => handleCheckboxChange(league.id)}
+                  />
                 </td>
+                <td>{index + 1}</td>
                 <td>
-                {league.teams.length}
+                  <NavLink to={`/leagues/${league.id}`}>{league.name}</NavLink>
                 </td>
+                <td>{league.teams?.length || 0}</td>
                 <td>
-                  <button className="update-btn" onClick={() => openUpdateModal(league)}>Update</button>
-                  <button className="delete-btn" onClick={() => handleDeleteLeague(league.id)}>Delete</button>
+                  <button className="league-update-btn" onClick={() => openUpdateModal(league)}>
+                    <span>🖊</span> EDIT
+                  </button>
                 </td>
               </tr>
             ))

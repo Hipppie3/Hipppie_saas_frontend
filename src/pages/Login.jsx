@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { FaUser, FaLock } from "react-icons/fa";  // ✅ Import icons
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';  // ✅ Import useAuth
 import './Login.css'
 
 function Login() {
   const [formData, setFormData] = useState({ username: "", password: "" });
-  const [registerData, setRegisterData] = useState({ username: "", password: "", email: "", domain: "" })
+  // const [registerData, setRegisterData] = useState({ username: "", password: "", email: "", domain: "" })
   const [localLoading, setLocalLoading] = useState(false)
   const [toggleLogin, setToggleLogin] = useState(true)
+  const [searchParams] = useSearchParams();
+  const domain = searchParams.get("domain");
   const [errorMessage, setErrorMessage] = useState("")
   const { login, register } = useAuth();  
   const navigate = useNavigate()
@@ -22,21 +24,21 @@ function Login() {
     }));
   };
 
-  const handleRegisterInput = (e) => {
-    const { name, value } = e.target;
+  // const handleRegisterInput = (e) => {
+  //   const { name, value } = e.target;
 
-    setRegisterData((prevForm) => ({
-      ...prevForm,
-      [name]: value
-    }));
-  };
+  //   setRegisterData((prevForm) => ({
+  //     ...prevForm,
+  //     [name]: value
+  //   }));
+  // };
 
 const handleLogin = async (e) => {
   e.preventDefault();
   setLocalLoading(true);
   setErrorMessage("");  // ✅ Reset error message before submitting
 
-  const response = await login(formData);  // ✅ Get response from `login()`
+  const response = await login({...formData, domain});  // ✅ Get response from `login()`
 
   if (response.success) {
     navigate('/dashboard', { replace: true });  // ✅ Redirect if successful
@@ -50,38 +52,38 @@ const handleLogin = async (e) => {
 };
 
 
-const handleRegister = async (e) => {
-  e.preventDefault();
-  setLocalLoading(true);
-  setErrorMessage("");  // ✅ Reset error message before submitting
+// const handleRegister = async (e) => {
+//   e.preventDefault();
+//   setLocalLoading(true);
+//   setErrorMessage("");  // ✅ Reset error message before submitting
 
-  const domainPattern = /^[a-zA-Z0-9.-]+\.(com|net|org)$/;
-  if (!domainPattern.test(registerData.domain)) {
-    setErrorMessage("Domain must end in .com, .net, or .org");
-    setLocalLoading(false);
-    return;
-  }
+//   const domainPattern = /^[a-zA-Z0-9.-]+\.(com|net|org)$/;
+//   if (!domainPattern.test(registerData.domain)) {
+//     setErrorMessage("Domain must end in .com, .net, or .org");
+//     setLocalLoading(false);
+//     return;
+//   }
   
-  const response = await register(registerData);  // ✅ Get response from `register()`
-  if (response.success) {
-    navigate('/dashboard', { replace: true });  // ✅ Redirect if successful
-  } else {
-    setErrorMessage(response.message); 
-    setTimeout(() => {
-      setErrorMessage("")
-    }, 3000);
-  }
-  setLocalLoading(false);
-};
+//   const response = await register(registerData);  // ✅ Get response from `register()`
+//   if (response.success) {
+//     navigate('/dashboard', { replace: true });  // ✅ Redirect if successful
+//   } else {
+//     setErrorMessage(response.message); 
+//     setTimeout(() => {
+//       setErrorMessage("")
+//     }, 3000);
+//   }
+//   setLocalLoading(false);
+// };
 
-  const toggleSignup = () => {
-    setToggleLogin((prev) => !prev)
-  }
+//   const toggleSignup = () => {
+//     setToggleLogin((prev) => !prev)
+//   }
 
   return (
     <div className='login_container'>
 
-    {toggleLogin ? (
+    {/* {toggleLogin ? ( */}
       <div className="login_form_container">
         <h3 className="login_form_container_title">Login</h3>
       <form onSubmit={handleLogin} className="login_form">
@@ -108,7 +110,7 @@ const handleRegister = async (e) => {
         <button className="login_form_btn" type='submit' disabled={localLoading}>{localLoading ? "Loggin in..." : "LOGIN"}</button>
       </form>
       {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-      <p>Don't have an account? <button className="login_form_register_btn" onClick={toggleSignup}>Register</button></p>
+      {/* <p>Don't have an account? <button className="login_form_register_btn" onClick={toggleSignup}>Register</button></p>
       </div>
         )
         :
@@ -166,7 +168,8 @@ const handleRegister = async (e) => {
       <p>Already have an account? <button className="register_form_login_btn" onClick={toggleSignup}>Login</button></p>
       </div>
       )
-}
+} */}
+</div>
     </div>
   );
 }

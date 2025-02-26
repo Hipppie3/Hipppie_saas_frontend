@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Sidebar.css';
 import { FaBars, FaTimes } from 'react-icons/fa';
@@ -9,14 +9,48 @@ function Sidebar() {
   const { isAuthenticated, logout, loading, user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
+
   // ✅ Toggle Sidebar
   const toggleSidebar = () => setIsOpen(!isOpen);
 
   // ✅ Logout Function
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      const response = await logout();
+      console.log("Logout Response:", response);
+
+      if (response?.domain) {
+        console.log(`Navigating to: /login?domain=${response.domain}`);
+
+        setTimeout(() => {
+          navigate(`/login?domain=${response.domain}`, { replace: true });
+
+          // ✅ Clear the entire session history so "Back" doesn't work
+          window.history.pushState(null, null, `/login?domain=${response.domain}`);
+          window.history.pushState(null, null, `/login?domain=${response.domain}`);
+          window.addEventListener("popstate", () => {
+            navigate(`/login?domain=${response.domain}`, { replace: true });
+          });
+        }, 100);
+      } else {
+        console.warn("No domain found in logout response, redirecting to home");
+        navigate("/", { replace: true });
+
+        // ✅ Prevent back navigation after logout
+        window.history.pushState(null, null, "/");
+        window.history.pushState(null, null, "/");
+        window.addEventListener("popstate", () => {
+          navigate("/", { replace: true });
+        });
+      }
+    } catch (error) {
+      console.error("Logout Error:", error);
+    }
   };
+
+
+
+
 
   if (loading) return <div>Loading...</div>;
 
