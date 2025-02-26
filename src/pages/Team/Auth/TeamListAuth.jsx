@@ -116,8 +116,8 @@ function TeamListAuth() {
   return (
     <div className="teamList_auth">
       <div className="teamList-btn-container">
-        <button className="delete-teams-btn" onClick={handleDeleteTeams}>🗑️</button>
-        <button className="add-team-btn" onClick={() => setIsModalOpen(true)}> + Add Team</button>
+        <button className="delete-teamList-btn" onClick={handleDeleteTeams}>🗑️</button>
+        <button className="add-teamList-btn" onClick={() => setIsModalOpen(true)}> + Add Team</button>
       </div>
 
       {/* Create Team Modal */}
@@ -183,7 +183,7 @@ function TeamListAuth() {
 
       {message && <p className="message">{message}</p>}
 
-      <table className="team-table">
+      <table className="teamList-table">
         <thead>
           <tr>
             <th>
@@ -196,7 +196,7 @@ function TeamListAuth() {
             <th>ID</th>
             <th>Teams</th>
             <th># Players</th>
-            <th>Actions</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -218,7 +218,7 @@ function TeamListAuth() {
                 </td>
                 <td>{team.players?.length || 0}</td>
                 <td>
-                  <button className="team-update-btn" onClick={() => openUpdateModal(team)}>
+                  <button className="teamList-update-btn" onClick={() => openUpdateModal(team)}>
                     <span>🖊</span> EDIT
                   </button>
                 </td>

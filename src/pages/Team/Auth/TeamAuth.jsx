@@ -159,11 +159,11 @@ function TeamAuth() {
 
   return (
     <div className="team_auth">
-      <h2>Team: {team.name}</h2>
+      <h2 className="team_auth_title">Team {team.name}</h2>
       <div className="teamAuth-btn-container">
-        <button className="delete-teams-btn" onClick={handleDeletePlayer}
+        <button className="delete-teamAuth-btn" onClick={handleDeletePlayer}
         >🗑️</button>
-        <button className="add-team-btn" onClick={() => setIsModalOpen(true)}> + Add Player</button>
+        <button className="add-teamAuth-btn" onClick={() => setIsModalOpen(true)}> + Add Player</button>
       </div>
 
       {isModalOpen && (
@@ -245,7 +245,7 @@ function TeamAuth() {
 
       {message && <p className="message">{message}</p>}
 
-    <table className="team-table">
+    <table className="teamAuthPlayer-table">
       <thead>
         <tr>
           <th>
@@ -284,7 +284,7 @@ function TeamAuth() {
                 {player.age}
               </td>
               <td>
-                <button className="player-update-btn" onClick={() => openUpdateModal(player)}><span>🖊</span>  EDIT</button>
+                <button className="teamAuthPlayer-update-btn" onClick={() => openUpdateModal(player)}><span>🖊</span>  EDIT</button>
               </td>
             </tr>
           ))

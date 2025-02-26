@@ -98,8 +98,8 @@ function LeagueListAuth() {
   return (
     <div className="leagueList_auth">
       <div className="leagueList-btn-container">
-        <button className="delete-leagues-btn" onClick={handleDeleteLeagues}>🗑️</button>
-        <button className="add-league-btn" onClick={() => setIsModalOpen(true)}> + Add League</button>
+        <button className="delete-leagueList-btn" onClick={handleDeleteLeagues}>🗑️</button>
+        <button className="add-leagueList-btn" onClick={() => setIsModalOpen(true)}> + Add League</button>
       </div>
 
       {/* Create League Modal */}
@@ -145,7 +145,7 @@ function LeagueListAuth() {
 
       {message && <p className="message">{message}</p>}
 
-      <table className="league-table">
+      <table className="leagueList-table">
         <thead>
           <tr>
             <th>
@@ -158,7 +158,7 @@ function LeagueListAuth() {
             <th>ID</th>
             <th>Leagues</th>
             <th># Teams</th>
-            <th>Actions</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -180,7 +180,7 @@ function LeagueListAuth() {
                 </td>
                 <td>{league.teams?.length || 0}</td>
                 <td>
-                  <button className="league-update-btn" onClick={() => openUpdateModal(league)}>
+                  <button className="leagueList-update-btn" onClick={() => openUpdateModal(league)}>
                     <span>🖊</span> EDIT
                   </button>
                 </td>

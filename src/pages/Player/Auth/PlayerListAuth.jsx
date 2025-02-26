@@ -164,8 +164,8 @@ function PlayerListAuth() {
   return (
     <div className="playerList_auth">
       <div className="playerList-btn-container">
-        <button className="delete-players-btn" onClick={handleDeletePlayers}>🗑️</button>
-        <button className="add-player-btn" onClick={() => setIsModalOpen(true)}> + Add Player</button>
+        <button className="delete-playerList-btn" onClick={handleDeletePlayers}>🗑️</button>
+        <button className="add-playerList-btn" onClick={() => setIsModalOpen(true)}> + Add Player</button>
       </div>
 
       {/* Create Player Modal */}
@@ -223,24 +223,26 @@ function PlayerListAuth() {
 
       {message && <p className="message">{message}</p>}
 
-      <table className="player-table">
+      <table className="playerList-table">
         <thead>
           <tr>
             <th><input type="checkbox" checked={selectedPlayers.length === players.length} onChange={handleSelectAll} /></th>
+            <th>ID</th>
             <th>Name</th>
             <th>Age</th>
             <th>Team</th>
-            <th>Actions</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          {players.map((player) => (
+          {players.map((player, index) => (
             <tr key={player.id}>
               <td><input type="checkbox" checked={selectedPlayers.includes(player.id)} onChange={() => handleCheckboxChange(player.id)} /></td>
-              <td>{player.firstName} {player.lastName}</td>
+              <td>{index + 1}</td>
+              <td><NavLink to={`/players/${player.id}`}>{player.firstName} {player.lastName}</NavLink></td>
               <td>{player.age || "N/A"}</td>
-              <td>{player.teams?.name || "No Team"}</td>
-              <td><button className="league-update-btn" onClick={() => openUpdateModal(player)}> <span>🖊</span> EDIT</button></td>
+              <td><NavLink to={`/teams/${player.teams?.id}`}>{player.teams?.name || "No Team"}</NavLink></td>
+              <td><button className="playerList-update-btn" onClick={() => openUpdateModal(player)}> <span>🖊</span> EDIT</button></td>
             </tr>
           ))}
         </tbody>

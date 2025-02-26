@@ -1,52 +1,50 @@
 .league_auth {
-min-height: calc(100vh - 80px);
-width: 100%;
-margin-left: 150px;
-padding-bottom: 20px;
-display: flex;
-flex-direction: column;
-align-items: center;
-border: 1px solid red;
-color: black;
-padding-top: 2rem
+  height: 100vh;
+  width: calc(100vw - 150px);
+  margin-left: 150px;
+  padding-top: 40px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
-
-.leagueAuth-team-table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1px solid blue
-}
-
-.leagueAuth-team-table th,
-.leagueAuth-team-table td {
-  border: 1px solid green;
-  border-left: none;
-  border-right: none;
-  padding: 10px;
-  text-align: left;
+.league_auth_title {
+  text-align: center;
 }
 
 .leagueAuth-btn-container {
-  width: 100%;
   display: flex;
-  border: 1px solid red;
+  flex-direction: row;
   justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 10px;
 }
 
-.no_team {
-  border-bottom: none;
+.add-leagueAuth-btn {
+  background-color: white;
+  cursor: pointer;
+  display: flex;
+  border: none;
+  transition: transform 0.1s ease-out;
+  padding-right: 7px;
 }
 
-.leagueAuth-team-table td a {
-  text-decoration: none;
-  color: black;
+.add-leagueAuth-btn:hover {
+  transform: scale(1.1)
 }
 
-.leagueAuth-team-table td a:hover {
-  text-shadow: 0 0 1px rgba(0, 0, 0, 1)
+.delete-leagueAuth-btn {
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s ease-out;
+  /* ✅ Smooth scaling effect */
 }
 
-.league-update-btn {
+.delete-leagueAuth-btn:hover {
+  transform: scale(1.2);
+  /* ✅ Grows without affecting layout */
+}
+
+.leagueAuthTeam-update-btn {
   width: 30%;
   font-size: 12px;
   background: none;
@@ -56,19 +54,35 @@ padding-top: 2rem
   color: rgb(20, 122, 231)
 }
 
-
-
-.league-btn-container {
-  display: flex;
-  justify-content: space-between;
-}
-.league-btn-container button {
-  border: 1px solid yellow
-}
-.league-update-btn span {
-  margin-right: 3px;
+.leagueAuthTeam-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: none;
 }
 
+.leagueAuthTeam-table th,
+.leagueAuthTeam-table td {
+  padding: 2px;
+  text-align: left;
+
+}
+.leagueAuthTeam-table th {
+  border-top: 1px solid rgb(224, 219, 219);
+  border-bottom: 1px solid rgb(224, 219, 219);
+}
+
+.leagueAuthTeam-table td a {
+  text-decoration: none;
+  color: black;
+}
+
+.leagueAuthTeam-table td a:hover {
+  text-shadow: 0 0 1px rgba(0, 0, 0, 1)
+}
+
+
+
+/* ✅ Modal Styling */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -124,15 +138,30 @@ padding-top: 2rem
 }
 
 @media (max-width: 768px) {
-  .league_auth {
-      width: 100%;
-      margin-left: 0;
-      padding-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      border: 1px solid rgb(28, 51, 220);
-      color: black;
-      padding-top: 4rem
-    }
+  .leagueAuthTeam_auth {
+    width: 100%;
+    margin-left: 0;
+    padding-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: column;
+    color: black;
+    padding-top: 5rem
+  }
+
+  .leagueAuthTeam-table th,
+  .leagueAuthTeam-table td {
+    text-align: center;
+  }
+
+  .delete-leagueAuth-btn {
+    padding-left: 2%;
+  }
+}
+
+@media (max-width: 578px) {
+  .delete-leagueAuth-btn {
+    padding-left: 1.2%;
+  }
 }

@@ -1,59 +1,82 @@
 .playerList_auth {
  height: 100vh;
  width: calc(100vw - 150px);
- padding-left: 100px;
- padding-top: 20px;
+ margin-left: 150px;
+ padding-top: 40px;
+ padding-left: 20px;
+ padding-right: 20px;
 }
 
-.player-table {
+.playerList-btn-container {
+ display: flex;
+ flex-direction: row;
+ justify-content: space-between;
+ align-items: flex-end;
+ padding-bottom: 10px;
+
+}
+
+.playerList-update-btn {
+ width: 30%;
+ font-size: 12px;
+ background: none;
+ border: none;
+ cursor: pointer;
+ width: auto;
+ color: rgb(20, 122, 231)
+}
+
+.add-playerList-btn {
+ background-color: white;
+ cursor: pointer;
+ display: flex;
+ border: none;
+ transition: transform 0.1s ease-out;
+ padding-right: 7px;
+}
+
+.add-playerList-btn:hover {
+ transform: scale(1.1)
+}
+
+.delete-playerList-btn {
+ background-color: white;
+ border: none;
+ cursor: pointer;
+ transition: transform 0.1s ease-out;
+ /* ✅ Smooth scaling effect */
+}
+
+.delete-playerList-btn:hover {
+ transform: scale(1.2);
+ /* ✅ Grows without affecting layout */
+}
+
+.playerList-table {
  width: 100%;
  border-collapse: collapse;
+ border: none;
 }
 
-.player-table th,
-.player-table td {
- border: 1px solid #ddd;
- padding: 10px;
+.playerList-table th,
+.playerList-table td {
+ padding: 2px;
  text-align: left;
 }
-
-.player-table td a {
+.playerList-table th {
+ border-top: 1px solid rgb(224, 219, 219);
+ border-bottom: 1px solid rgb(224, 219, 219);
+}
+.playerList-table td a {
  text-decoration: none;
  color: black;
 }
 
-.player-table td a:hover {
+.playerList-table td a:hover {
  text-shadow: 0 0 1px rgba(0, 0, 0, 1)
 }
 
-.update-btn,
-.delete-btn {
- width: 30%;
- padding: 10px;
- font-size: 10px;
- border-radius: 10px;
- border: 1px solid #ddd;
-}
 
-.add-player-btn {
- background-color: white;
- padding: 10px;
- border: 1px solid #ddd;
- cursor: pointer;
- margin-bottom: 10px;
-}
-
-.update-btn {
- background-color: #ffcc00;
- padding: 5px;
-}
-
-.delete-btn {
- background-color: #ff3333;
- padding: 5px;
- margin-left: 2px;
- color: white;
-}
 
 /* ✅ Modal Styling */
 .modal-overlay {
@@ -112,119 +135,29 @@
 
 @media (max-width: 768px) {
  .playerList_auth {
-  width: 100vw;
-  padding-left: 0;
-  padding-top: 80px;
- }
-
- /* ✅ Responsive Table - Turns into a Card Layout */
- .player-table {
   width: 100%;
+  margin-left: 0;
+  padding-bottom: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
   display: flex;
   flex-direction: column;
- }
-
- /* Hide table headers on mobile */
- .player-table thead {
-  display: none;
- }
-
- /* Convert rows into block elements */
- .player-table tbody,
- .player-table tr {
-  display: block;
-  width: 100%;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
- }
-
- .player-table tr {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
- }
-
- /* Style individual player items */
- .player-table td {
-  flex: 1;
-  /* Ensures equal space */
-  display: flex;
-  justify-content: flex-start;
-  /* Center content */
-  padding: 12px;
-  font-size: 15px;
-  border: none;
- }
-
- .player-table td a {
-  text-decoration: none;
   color: black;
+  padding-top: 5rem
  }
 
- .player-table td a:hover {
-  text-shadow: 0 0 1px rgba(0, 0, 0, 1)
+ .playerList-table th,
+ .playerList-table td {
+  text-align: center;
  }
 
- /* Add labels before each field */
- .player-table td::before {
-  content: attr(data-label);
-  font-weight: bold;
-  text-transform: capitalize;
-  color: #555;
+ .delete-playerList-btn {
+  padding-left: 2%;
  }
+}
 
- /* Last row in the card should not have a border */
- .player-table td:last-child {
-  border-bottom: none;
- }
-
- /* Buttons - Full Width on Mobile */
- .update-btn,
- .delete-btn {
-  width: 80%;
-  padding: 10px;
-  font-size: 10px;
-  border-radius: 10px;
- }
-
- .update-btn {
-  background-color: #ffcc00;
-  color: black;
- }
-
- .delete-btn {
-  background-color: #ff3333;
-  color: white;
- }
-
- .update-btn:hover,
- .delete-btn:hover {
-  opacity: 0.8;
- }
-
- /* ✅ Modal Styling for Mobile */
- .modal-content {
-  width: 90%;
-  max-width: 400px;
-  padding: 20px;
-  border-radius: 10px;
- }
-
- .modal-content input {
-  width: 100%;
-  font-size: 16px;
-  padding: 12px;
-  border-radius: 5px;
- }
-
- .modal-content button {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 5px;
+@media (max-width: 578px) {
+ .delete-playerList-btn {
+  padding-left: 1.2%;
  }
 }

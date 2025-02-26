@@ -1,9 +1,18 @@
 .dashboard_container {
-height: 100vh;
-width: 100%;
-/* Subtract sidebar width */
-padding-left: 150px;
-display: flex;
-justify-content: center;
-background-color: aliceblue;
+  height: 100vh;
+  width: calc(100vw - 150px);
+  margin-left: 150px;
+  padding-top: 40px;
+  border: 1px solid red;
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+.dashboard_container {
+    width: 100%;
+     margin-left: 0;
+     padding-left: 10px;
+     padding-right: 10px;
+ }
 }

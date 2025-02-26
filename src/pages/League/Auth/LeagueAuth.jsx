@@ -136,11 +136,11 @@ function LeagueAuth() {
   return (
     <div className="league_auth">
       <div>
-        <h2>{leagueInfo?.name}</h2>
+        <h2 className="league_auth_title">{leagueInfo?.name}</h2>
       </div>
       <div className="leagueAuth-btn-container">
-        <button className="delete-teams-btn" onClick={handleDeleteTeams}>🗑️</button>
-        <button className="add-league-btn" onClick={() => setIsModalOpen(true)}> + Add Team</button>
+        <button className="delete-leagueAuth-btn" onClick={handleDeleteTeams}>🗑️</button>
+        <button className="add-leagueAuth-btn" onClick={() => setIsModalOpen(true)}> + Add Team</button>
       </div>
 
       {isModalOpen && (
@@ -184,7 +184,7 @@ function LeagueAuth() {
 
       {message && <p>{message}</p>}
 
-      <table className="leagueAuth-team-table">
+      <table className="leagueAuthTeam-table">
         <thead>
           <tr>
             <th>
@@ -194,7 +194,7 @@ function LeagueAuth() {
                 onChange={handleSelectAll}
               />
             </th>
-            <th>id</th>
+            <th>ID</th>
             <th>Teams</th>
             <th># Players</th>
             <th></th>
@@ -217,9 +217,9 @@ function LeagueAuth() {
                 <td>
                   <NavLink to={`/teams/${team.id}`}>{team.name}</NavLink>
                 </td>
-                <td>{team.teams?.length}</td>
+                <td>{team.players?.length}</td>
                 <td>
-                  <button className="team-update-btn" onClick={() => openUpdateModal(team)}><span>🖊</span>  EDIT</button>
+                  <button className="leagueAuthTeam-update-btn" onClick={() => openUpdateModal(team)}><span>🖊</span>  EDIT</button>
                 </td>
               </tr>
             ))

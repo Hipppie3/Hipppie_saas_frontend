@@ -40,7 +40,7 @@ function PlayerAuth() {
  },[id, domain, isAuthenticated, loading])
 
   return (
-    <div className="player_auth">
+    <div className="playerAuth_profile">
       {player.image ? (
         <img
           src={player.image}

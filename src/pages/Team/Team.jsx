@@ -6,11 +6,13 @@ import { useNavigate } from "react-router-dom";
 
 
 function Team() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
   const [domain, setDomain] = useState(null);
 
   useEffect(() => {
+    if (loading) return;
+
     const currentUrl = new URL(window.location.href);
     const urlDomain = currentUrl.searchParams.get("domain");
     setDomain(urlDomain);
@@ -20,8 +22,8 @@ function Team() {
       const previousPage = document.referrer || "/"; // Default to home if no referrer
       navigate(previousPage, { replace: true });
     }
-  }, [navigate]);
+  }, [isAuthenticated, loading, navigate]);
 
-  return isAuthenticated ? <TeamAuth /> : <TeamPublic domain={domain} />;
+  return loading ? <p>Loading...</p> : isAuthenticated ? <TeamAuth /> : <TeamPublic domain={domain} />;
 }
 export default Team
