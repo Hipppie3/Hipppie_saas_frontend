@@ -6,9 +6,6 @@
   padding-left: 20px;
   padding-right: 20px;
 }
-.league_auth_title {
-  text-align: center;
-}
 
 .leagueAuth-btn-container {
   display: flex;
@@ -16,6 +13,17 @@
   justify-content: space-between;
   align-items: flex-end;
   padding-bottom: 10px;
+
+}
+
+.leagueAuthTeam-update-btn {
+  width: 30%;
+  font-size: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: auto;
+  color: rgb(20, 122, 231)
 }
 
 .add-leagueAuth-btn {
@@ -44,16 +52,6 @@
   /* ✅ Grows without affecting layout */
 }
 
-.leagueAuthTeam-update-btn {
-  width: 30%;
-  font-size: 12px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  width: auto;
-  color: rgb(20, 122, 231)
-}
-
 .leagueAuthTeam-table {
   width: 100%;
   border-collapse: collapse;
@@ -64,8 +62,8 @@
 .leagueAuthTeam-table td {
   padding: 2px;
   text-align: left;
-
 }
+
 .leagueAuthTeam-table th {
   border-top: 1px solid rgb(224, 219, 219);
   border-bottom: 1px solid rgb(224, 219, 219);
@@ -138,7 +136,7 @@
 }
 
 @media (max-width: 768px) {
-  .leagueAuthTeam_auth {
+  .league_auth {
     width: 100%;
     margin-left: 0;
     padding-bottom: 20px;
@@ -150,8 +148,8 @@
     padding-top: 5rem
   }
 
-  .leagueAuthTeam-table th,
-  .leagueAuthTeam-table td {
+  .leagueAuth-table th,
+  .leagueAuth-table td {
     text-align: center;
   }
 
