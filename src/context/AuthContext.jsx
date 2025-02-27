@@ -38,18 +38,22 @@ const login = async (formData) => {
   }
 };
 
-const register = async (registerData) => {
-  setLoading(true);
-  try {
-    await axios.post('/api/users/register', registerData, { withCredentials: true });
-    await checkAuth();
-    setLoading(false);
-    return { success: true };  // ✅ Return success so `Login.jsx` knows it's successful
-  } catch (error) {
-    setLoading(false);
-    return { success: false, message: "Registration failed. Please try again." };  // ✅ Return error message
-  }
-};
+  const register = async (registerData) => {
+    console.log('Registering user:', registerData);  // Log data being sent
+    setLoading(true);
+    try {
+      const response = await axios.post('/api/users/register', registerData, { withCredentials: true });
+
+      setLoading(false);
+      return { success: true, user: response.data.user }; // ✅ Return user data
+    } catch (error) {
+      console.error('Register Error:', error.response?.data || error.message);
+      setLoading(false);
+      return { success: false, message: error.response?.data?.error || "Registration failed." };
+    }
+  };
+
+
 
   // Logout Function
   const logout = async () => {

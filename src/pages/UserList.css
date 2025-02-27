@@ -1,0 +1,93 @@
+.userList-auth {
+   height: 100vh;
+    width: calc(100vw - 150px);
+    margin-left: 150px;
+    padding-top: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.userList-auth-title {
+ text-align: center;
+}
+
+.userList-table {
+ width: 100%;
+ border-collapse: collapse;
+ border: none;
+}
+
+.userList-table th,
+.userList-table td {
+ padding: 2px;
+ text-align: left;
+
+}
+
+.userList-table th {
+ border-top: 1px solid rgb(224, 219, 219);
+ border-bottom: 1px solid rgb(224, 219, 219);
+}
+
+.userList-table td a {
+ text-decoration: none;
+ color: black;
+}
+
+.userList-table td a:hover {
+ text-shadow: 0 0 1px rgba(0, 0, 0, 1)
+}
+
+
+.user-btn-container {
+ display: flex;
+ flex-direction: row;
+ justify-content: space-between;
+ align-items: flex-end;
+ padding-bottom: 10px;
+ padding-top: 2rem;
+}
+
+.add-user-btn {
+ background-color: white;
+ cursor: pointer;
+ display: flex;
+ border: none;
+ transition: transform 0.1s ease-out;
+ padding-right: 7px;
+}
+
+.add-user-btn:hover {
+ transform: scale(1.1)
+}
+
+.delete-user-btn {
+ background-color: white;
+ border: none;
+ cursor: pointer;
+ transition: transform 0.1s ease-out;
+ /* ✅ Smooth scaling effect */
+}
+
+.delete-user-btn:hover {
+ transform: scale(1.2);
+ /* ✅ Grows without affecting layout */
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+}
