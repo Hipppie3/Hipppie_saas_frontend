@@ -36,11 +36,6 @@ function Sidebar() {
   };
 
 
-
-
-
-
-
   if (loading) return <div>Loading...</div>;
 
   return (
@@ -63,6 +58,8 @@ function Sidebar() {
             <li><NavLink to="/leagueList" onClick={toggleSidebar} className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>Leagues</NavLink></li>
             <li><NavLink to="/teamList" onClick={toggleSidebar} className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>Teams</NavLink></li>
             <li><NavLink to="/playerList" onClick={toggleSidebar} className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>Players</NavLink></li>
+            <li><NavLink to="/stats" onClick={toggleSidebar} className={({ isActive }) => isActive ? " active-class" : "inactive-class"}>Stats</NavLink></li>
+            <li><NavLink to="/sportList" onClick={toggleSidebar} className={({ isActive }) => isActive ? " active-class" : "inactive-class"}>Sports</NavLink></li>
             {user?.role === 'super_admin' && (
               <li><NavLink to="/userList" onClick={toggleSidebar}>Users</NavLink></li>
             )}

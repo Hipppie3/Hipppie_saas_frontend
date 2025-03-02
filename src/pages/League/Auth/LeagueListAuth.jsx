@@ -1,36 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import './LeagueListAuth.css';
 
 function LeagueListAuth() {
   const [leagues, setLeagues] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [leagueForm, setLeagueForm] = useState({ name: "" });
+  const {id} = useParams();
+  const [leagueForm, setLeagueForm] = useState({ name: "", sportId: id});
   const [updateForm, setUpdateForm] = useState({ id: null, name: "" });
   const [message, setMessage] = useState("");
   const [selectedLeagues, setSelectedLeagues] = useState([]); // ✅ Track selected leagues for bulk delete
+  const [toggleLeagueForm, setToggleLeagueForm] = useState(true);
 
   // Fetch Leagues
   useEffect(() => {
     const fetchLeagues = async () => {
       try {
-        const response = await axios.get('/api/leagues', { withCredentials: true });
+        const response = await axios.get(`/api/leagues/sports?sportId=${id}`, { withCredentials: true });
         setLeagues(response.data.leagues || []);
+        console.log(response.data.leagues)
       } catch (error) {
         console.error("Error fetching leagues:", error);
       }
     };
     fetchLeagues();
-  }, []);
+  }, [id]);
 
   // Create League
   const handleCreateLeague = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/leagues', leagueForm, { withCredentials: true });
-      const newLeague = await axios.get('/api/leagues', { withCredentials: true });
+      const response = await axios.post('/api/leagues', { ...leagueForm, sportId: id }, { withCredentials: true });
+      const newLeague = await axios.get(`/api/leagues/sports?sportId=${id}`, { withCredentials: true });
       setLeagues(newLeague.data.leagues || []);
       setLeagueForm({ name: "" });
       setMessage(`${response.data.league.name} created successfully`);
@@ -95,8 +98,24 @@ function LeagueListAuth() {
     }
   };
 
+  const handleToggleLeagueForm = () => {
+    setToggleLeagueForm(prevToggle => !prevToggle)
+  }
+
   return (
     <div className="leagueList_auth">
+
+      <button onClick={handleToggleLeagueForm}>{toggleLeagueForm ? "Edit League" : "Hide League"}</button>
+      {toggleLeagueForm ? (
+        <div>
+          {leagues.map((league) => (
+            <div key={league.id}>
+              <h2>{league.name}</h2>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <>
       <div className="leagueList-btn-container">
         <button className="delete-leagueList-btn" onClick={handleDeleteLeagues}>🗑️</button>
         <button className="add-leagueList-btn" onClick={() => setIsModalOpen(true)}> + Add League</button>
@@ -189,6 +208,8 @@ function LeagueListAuth() {
           )}
         </tbody>
       </table>
+          </>
+      )}
     </div>
   );
 }

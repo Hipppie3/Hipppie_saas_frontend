@@ -1,20 +1,26 @@
 import React from 'react';
 import { Routes, Route, useSearchParams } from 'react-router-dom';
-import Sidebar from './components/Sidebar.jsx';  // ✅ Default navbar
-import Navbar from './components/Navbar.jsx';  // ✅ League-specific navbar
+import './App.css';
+
+import Navbar from './components/Navbar.jsx';
+import Sidebar from './components/Sidebar.jsx'; 
+
+import StatAuth from './pages/Stat/StatAuth.jsx'
+import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
+import UserHomepage from './pages/UserHomepage.jsx';
+import Dashboard from './pages/Dashboard.jsx';
+
 import UserList from './pages/UserList.jsx';
 import User from './pages/User.jsx';
-import Dashboard from './pages/Dashboard.jsx';
 import LeagueList from './pages/League/LeagueList.jsx';
 import League from './pages/League/League.jsx';
 import TeamList from './pages/Team/TeamList.jsx';
 import Team from './pages/Team/Team.jsx';
-import UserHomepage from './pages/UserHomepage.jsx';
 import PlayerList from './pages/Player/PlayerList.jsx';
 import Player from './pages/Player/Player.jsx';
-import Home from './pages/Home.jsx';
-import './App.css';
+import SportList from './pages/Sport/SportListAuth.jsx'
+import Sport from './pages/Sport/SportAuth.jsx'
 
 
 function App() {
@@ -29,9 +35,10 @@ function App() {
       <div className="content_wrapper">
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/site' element={<UserHomepage />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/site' element={<UserHomepage />} />
           <Route path='/dashboard' element={<Dashboard />} />
+
           <Route path='/userList' element={<UserList />} />
           <Route path='/user/:id' element={<User />} />
           <Route path='/leagueList' element={<LeagueList />} />
@@ -40,6 +47,9 @@ function App() {
           <Route path='/teams/:id' element={<Team />} />
           <Route path='/playerList' element={<PlayerList />} />
           <Route path='/players/:id' element={<Player />} />
+          <Route path='/sportList' element={<SportList />} />
+          <Route path='/sports/:id' element={<Sport />} />
+          <Route path='/stats' element={<StatAuth />} />
         </Routes>
     </div>
     </div>

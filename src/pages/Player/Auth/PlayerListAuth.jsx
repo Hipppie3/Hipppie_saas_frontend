@@ -241,7 +241,7 @@ function PlayerListAuth() {
               <td>{index + 1}</td>
               <td><NavLink to={`/players/${player.id}`}>{player.firstName} {player.lastName}</NavLink></td>
               <td>{player.age || "N/A"}</td>
-              <td><NavLink to={`/teams/${player.teams?.id}`}>{player.teams?.name || "No Team"}</NavLink></td>
+              <td><NavLink to={`/teams/${player.team?.id}`}>{player.team?.name || "No Team"}</NavLink></td>
               <td><button className="playerList-update-btn" onClick={() => openUpdateModal(player)}> <span>🖊</span> EDIT</button></td>
             </tr>
           ))}

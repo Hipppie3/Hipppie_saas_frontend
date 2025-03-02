@@ -2,11 +2,25 @@
   height: 100vh;
   width: calc(100vw - 150px);
   margin-left: 150px;
-  padding-top: 40px;
+  padding-top: 20px;
   padding-left: 20px;
   padding-right: 20px;
 }
+.show_league_list {
 
+  border: 1px solid red;
+}
+
+.show-team-list-table{
+  border: 1px solid blue
+}
+.show-team-list-table td {
+  border: 1px solid blue
+}
+
+.league_auth_title {
+  text-align: center;
+}
 .leagueAuth-btn-container {
   display: flex;
   flex-direction: row;

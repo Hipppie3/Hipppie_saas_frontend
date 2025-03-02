@@ -1,0 +1,10 @@
+.statAuth-container {
+  height: 100vh;
+   width: calc(100vw - 150px);
+   margin-left: 150px;
+   border: 1px solid red;
+   display: flex;
+   flex-direction: column;
+   color: black;
+   align-items: center;
+}

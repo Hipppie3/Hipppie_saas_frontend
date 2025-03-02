@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useParams, NavLink, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import LeagueGameAuth from '../../Game/LeagueGameAuth'
 import './LeagueAuth.css';
 
 function LeagueAuth() {
@@ -18,6 +19,7 @@ function LeagueAuth() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [selectedTeams, setSelectedTeams] = useState([])
+  const [toggleTeamForm, setToggleTeamForm] = useState(false)
 
 
   // Fetches League
@@ -133,101 +135,149 @@ function LeagueAuth() {
   if (loading) return <p>Loading team...</p>;
   if (error) return <p>{error}</p>;
 
+
+  const handleToggleTeamForm = () => {
+      setToggleTeamForm((prevState) => !prevState);
+  }
+
+
   return (
     <div className="league_auth">
       <div>
         <h2 className="league_auth_title">{leagueInfo?.name}</h2>
       </div>
-      <div className="leagueAuth-btn-container">
-        <button className="delete-leagueAuth-btn" onClick={handleDeleteTeams}>🗑️</button>
-        <button className="add-leagueAuth-btn" onClick={() => setIsModalOpen(true)}> + Add Team</button>
-      </div>
 
-      {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3>Create Team</h3>
-            <form onSubmit={handleCreateTeam}>
-              <input
-                type="text"
-                name="name"
-                value={teamForm.name}
-                onChange={(e) => setTeamForm({ name: e.target.value })}
-                placeholder="Enter team name"
-                required
-              />
-              <button type="submit">Create</button>
-              <button type="button" onClick={() => setIsModalOpen(false)}>Cancel</button>
-            </form>
-          </div>
+      {/* Button to toggle between show_league_list and leagueAuth-btn-container + table */}
+      <button onClick={handleToggleTeamForm}>
+        {toggleTeamForm ? "Hide Teams" : "Expand Teams"}
+      </button>
+
+      {/* Show the league list initially (when toggleTeamForm is false) */}
+      {!toggleTeamForm ? (
+        <>
+        <div className="show-team-list-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Team</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {teams.map((team, index) => (
+                  <tr key={team.id}>
+                      <td>{team.name}</td>
+                  </tr>
+                  ))}
+                </tbody>
+              </table>
         </div>
-      )}
-      {/* Update League Modal */}
-      {isUpdateModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3>Update League</h3>
-            <form onSubmit={handleUpdateTeam}>
-              <input
-                type="text"
-                name="name"
-                value={updateForm.name}
-                onChange={(e) => setUpdateForm({ ...updateForm, name: e.target.value })}
-                required
-              />
-              <button type="submit">Update</button>
-              <button type="button" onClick={() => setIsUpdateModalOpen(false)}>Cancel</button>
-            </form>
-          </div>
+        <div>
+          <LeagueGameAuth />
         </div>
-      )}
+        </>
+      ) 
+      : 
+      (
 
-      {message && <p>{message}</p>}
+        <>
+          {/* Show buttons and table when toggleTeamForm is true */}
+          <div className="leagueAuth-btn-container">
+            <button className="delete-leagueAuth-btn" onClick={handleDeleteTeams}>🗑️</button>
+            <button className="add-leagueAuth-btn" onClick={() => setIsModalOpen(true)}> + Add Team</button>
+          </div>
 
-      <table className="leagueAuthTeam-table">
-        <thead>
-          <tr>
-            <th>
-              <input
-                type="checkbox"
-                checked={selectedTeams.length === teams.length}
-                onChange={handleSelectAll}
-              />
-            </th>
-            <th>ID</th>
-            <th>Teams</th>
-            <th># Players</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {teams.length === 0 ? (
-            <tr><td colSpan="5" className="no_team">No teams available</td></tr>
-          ) : (
-            teams.map((team, index) => (
-              <tr key={team.id}>
-                <td>
+          {isModalOpen && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <h3>Create Team</h3>
+                <form onSubmit={handleCreateTeam}>
+                  <input
+                    type="text"
+                    name="name"
+                    value={teamForm.name}
+                    onChange={(e) => setTeamForm({ name: e.target.value })}
+                    placeholder="Enter team name"
+                    required
+                  />
+                  <button type="submit">Create</button>
+                  <button type="button" onClick={() => setIsModalOpen(false)}>Cancel</button>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* Update League Modal */}
+          {isUpdateModalOpen && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <h3>Update League</h3>
+                <form onSubmit={handleUpdateTeam}>
+                  <input
+                    type="text"
+                    name="name"
+                    value={updateForm.name}
+                    onChange={(e) => setUpdateForm({ ...updateForm, name: e.target.value })}
+                    required
+                  />
+                  <button type="submit">Update</button>
+                  <button type="button" onClick={() => setIsUpdateModalOpen(false)}>Cancel</button>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {message && <p>{message}</p>}
+
+          {/* Show table when toggleTeamForm is true */}
+          <table className="leagueAuthTeam-table">
+            <thead>
+              <tr>
+                <th>
                   <input
                     type="checkbox"
-                    checked={selectedTeams.includes(team.id)}
-                    onChange={() => handleCheckboxChange(team.id)}
+                    checked={selectedTeams.length === teams.length}
+                    onChange={handleSelectAll}
                   />
-                </td>
-                <td>{index + 1}</td>
-                <td>
-                  <NavLink to={`/teams/${team.id}`}>{team.name}</NavLink>
-                </td>
-                <td>{team.players?.length}</td>
-                <td>
-                  <button className="leagueAuthTeam-update-btn" onClick={() => openUpdateModal(team)}><span>🖊</span>  EDIT</button>
-                </td>
+                </th>
+                <th>ID</th>
+                <th>Teams</th>
+                <th># Players</th>
+                <th></th>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            </thead>
+            <tbody>
+              {teams.length === 0 ? (
+                <tr><td colSpan="5" className="no_team">No teams available</td></tr>
+              ) : (
+                teams.map((team, index) => (
+                  <tr key={team.id}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selectedTeams.includes(team.id)}
+                        onChange={() => handleCheckboxChange(team.id)}
+                      />
+                    </td>
+                    <td>{index + 1}</td>
+                    <td>
+                      <NavLink to={`/teams/${team.id}`}>{team.name}</NavLink>
+                    </td>
+                    <td>{team.players?.length}</td>
+                    <td>
+                      <button className="leagueAuthTeam-update-btn" onClick={() => openUpdateModal(team)}>
+                        <span>🖊</span> EDIT
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </>
+      )}
     </div>
   );
+
 };
 
 export default LeagueAuth;
