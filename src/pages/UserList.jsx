@@ -2,16 +2,17 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import './UserList.css';
+import LeagueGameAuth from '../pages/Game/LeagueGameAuth.jsx'
 
 function UserList() {
   const { user, deleteUser, register } = useAuth();
   const [users, setUsers] = useState([]);
-  const [userForm, setUserForm] = useState({ username: "", password: "", email: "", role: "client_admin", domain: "" });
+  const [userForm, setUserForm] = useState({ username: "", password: "", email: "", domain: "" });
   const [message, setMessage] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [updateForm, setUpdateForm] = useState({ id: null, username: "", email: "", role: "", domain: "" });
+  const [updateForm, setUpdateForm] = useState({ id: null, username: "", email: "",  domain: "" });
 
   useEffect(() => {
     const getUser = async () => {
@@ -94,7 +95,6 @@ function UserList() {
       id: user.id,
       username: user.username,
       email: user.email || "",
-      role: user.role,
       domain: user.domain || "",
     });
     setIsUpdateModalOpen(true);
@@ -155,13 +155,6 @@ function UserList() {
                 <input type="password" name="password" value={userForm.password} onChange={handleInputChange} />
               </label>
               <label>
-                Role:
-                <select name="role" value={userForm.role} onChange={handleInputChange}>
-                  <option value="client_admin">Client Admin</option>
-                  <option value="super_admin">Super Admin</option>
-                </select>
-              </label>
-              <label>
                 Domain:
                 <input type="text" name="domain" value={userForm.domain} onChange={handleInputChange} />
               </label>
@@ -180,8 +173,7 @@ function UserList() {
             <th>Users</th>
             <th>Email</th>
             <th>Domain</th>
-            <th>Roles</th>
-            <th>Actions</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -200,7 +192,6 @@ function UserList() {
               <td>{user.username}</td>
               <td>{user.email}</td>
               <td>{user.domain}</td>
-              <td>{user.role}</td>
               <td>
                 <button className="leagueList-update-btn" onClick={() => openUpdateModal(user)}>
                   <span>🖊</span> EDIT
@@ -237,17 +228,6 @@ function UserList() {
                   value={updateForm.email}
                   onChange={(e) => setUpdateForm({ ...updateForm, email: e.target.value })}
                 />
-              </label>
-              <label>
-                Role:
-                <select
-                  name="role"
-                  value={updateForm.role}
-                  onChange={(e) => setUpdateForm({ ...updateForm, role: e.target.value })}
-                >
-                  <option value="client_admin">Client Admin</option>
-                  <option value="super_admin">Super Admin</option>
-                </select>
               </label>
               <label>
                 Domain:

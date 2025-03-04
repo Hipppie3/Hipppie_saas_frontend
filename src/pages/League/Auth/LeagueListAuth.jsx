@@ -8,7 +8,7 @@ function LeagueListAuth() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const {id} = useParams();
-  const [leagueForm, setLeagueForm] = useState({ name: "", sportId: id});
+  const [leagueForm, setLeagueForm] = useState({ name: ""});
   const [updateForm, setUpdateForm] = useState({ id: null, name: "" });
   const [message, setMessage] = useState("");
   const [selectedLeagues, setSelectedLeagues] = useState([]); // ✅ Track selected leagues for bulk delete
@@ -18,7 +18,7 @@ function LeagueListAuth() {
   useEffect(() => {
     const fetchLeagues = async () => {
       try {
-        const response = await axios.get(`/api/leagues/sports?sportId=${id}`, { withCredentials: true });
+        const response = await axios.get(`/api/leagues`, { withCredentials: true });
         setLeagues(response.data.leagues || []);
         console.log(response.data.leagues)
       } catch (error) {
@@ -32,8 +32,8 @@ function LeagueListAuth() {
   const handleCreateLeague = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/leagues', { ...leagueForm, sportId: id }, { withCredentials: true });
-      const newLeague = await axios.get(`/api/leagues/sports?sportId=${id}`, { withCredentials: true });
+      const response = await axios.post('/api/leagues', { ...leagueForm}, { withCredentials: true });
+      const newLeague = await axios.get(`/api/leagues`, { withCredentials: true });
       setLeagues(newLeague.data.leagues || []);
       setLeagueForm({ name: "" });
       setMessage(`${response.data.league.name} created successfully`);

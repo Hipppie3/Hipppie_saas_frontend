@@ -6,9 +6,11 @@
   padding-left: 20px;
   padding-right: 20px;
 }
-.show_league_list {
 
-  border: 1px solid red;
+.league-game-container {
+  display: flex;
+  justify-content: center;
+  border: 1px solid red
 }
 
 .show-team-list-table{

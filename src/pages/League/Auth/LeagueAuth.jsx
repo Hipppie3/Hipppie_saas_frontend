@@ -2,8 +2,8 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useParams, NavLink, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
-import LeagueGameAuth from '../../Game/LeagueGameAuth'
 import './LeagueAuth.css';
+import LeagueGameAuth from '../../Game/LeagueGameAuth';
 
 function LeagueAuth() {
   const { isAuthenticated, loading, user } = useAuth(); // ✅ Add auth state
@@ -171,8 +171,8 @@ function LeagueAuth() {
                 </tbody>
               </table>
         </div>
-        <div>
-          <LeagueGameAuth />
+        <div className="league-game-container">
+          <LeagueGameAuth leagueInfo={leagueInfo}/>
         </div>
         </>
       ) 
