@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import './LeagueGameAuth.css';
+import { NavLink } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 function LeagueGameAuth({ leagueInfo }) {
   const [gameForm, setGameForm] = useState({
@@ -12,6 +14,8 @@ function LeagueGameAuth({ leagueInfo }) {
   });
   const [games, setGames] = useState([]);
   const [leagueData, setLeagueData] = useState(leagueInfo); // Add a separate state to store the league data
+  const {user} = useAuth();
+
 
   useEffect(() => {
     // When leagueInfo changes, update the form's leagueId and set the league data state
@@ -33,7 +37,7 @@ function LeagueGameAuth({ leagueInfo }) {
       return;
     }
     try {
-      const response = await axios.post('/api/games', gameForm, { withCredentials: true });
+      const response = await axios.post('/api/games', {...gameForm, userId: user.id }, { withCredentials: true });
       console.log(response.data);
 
       // After submitting the game, re-fetch the league info to ensure we have the latest data
@@ -107,7 +111,6 @@ function LeagueGameAuth({ leagueInfo }) {
         </label>
         <button type="submit">Submit</button>
       </form>
-
       <div className="game-schedule-container">
         <h3>Schedule</h3>
         {leagueGames.map((leagueGame) => (
@@ -120,8 +123,7 @@ function LeagueGameAuth({ leagueInfo }) {
                 day: 'numeric',
               })}
             </p>
-            <p>{getTeamNameById(leagueGame.team1_id)} vs {getTeamNameById(leagueGame.team2_id)}</p>
-
+            <NavLink to={`/games/${leagueGame.id}`}><p>{getTeamNameById(leagueGame.team1_id)} vs {getTeamNameById(leagueGame.team2_id)}</p></NavLink>
           </div>
         ))}
       </div>

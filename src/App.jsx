@@ -19,6 +19,7 @@ import TeamList from './pages/Team/TeamList.jsx';
 import Team from './pages/Team/Team.jsx';
 import PlayerList from './pages/Player/PlayerList.jsx';
 import Player from './pages/Player/Player.jsx';
+import Game from './pages/Game/GameAuth.jsx';
 
 
 
@@ -46,6 +47,7 @@ function App() {
           <Route path='/teams/:id' element={<Team />} />
           <Route path='/playerList' element={<PlayerList />} />
           <Route path='/players/:id' element={<Player />} />
+          <Route path='/games/:id' element={<Game />} />
           <Route path='/stats' element={<StatAuth />} />
         </Routes>
     </div>

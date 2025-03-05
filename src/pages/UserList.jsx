@@ -7,18 +7,24 @@ import LeagueGameAuth from '../pages/Game/LeagueGameAuth.jsx'
 function UserList() {
   const { user, deleteUser, register } = useAuth();
   const [users, setUsers] = useState([]);
-  const [userForm, setUserForm] = useState({ username: "", password: "", email: "", domain: "" });
+  const [userForm, setUserForm] = useState({ username: "", password: "", email: "", domain: "", sportIds: [] });
+  const [sports, setSports] = useState([])
   const [message, setMessage] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [updateForm, setUpdateForm] = useState({ id: null, username: "", email: "",  domain: "" });
+  const [updateForm, setUpdateForm] = useState({ id: null, username: "", email: "",  domain: "", sportIds: [] });
 
   useEffect(() => {
     const getUser = async () => {
       try {
         const response = await axios.get('/api/users/userList', { withCredentials: true });
-        setUsers(response.data.users);
+        const usersWithSports = response.data.users.map(user => ({
+          ...user,
+          sports: user.sports || [] // Ensure sports exist
+        }));
+        setUsers(usersWithSports);
+
       } catch (error) {
         console.error('Error fetching users');
       }
@@ -26,19 +32,30 @@ function UserList() {
     getUser();
   }, []);
 
+  useEffect(() => {
+    const fetchSports = async () => {
+      try {
+        const response = await axios.get('/api/sports'); // ✅ Adjust this based on your API route
+        setSports(response.data);
+      } catch (error) {
+        console.error('Error fetching sports:', error);
+      }
+    };
+    fetchSports();
+  }, []);
+
+
   const createUser = async (e) => {
     e.preventDefault();
-
     const sanitizedForm = {
       ...userForm,
       email: userForm.email.trim() !== "" ? userForm.email : null,
       password: userForm.password.trim() !== "" ? userForm.password : null,
       domain: userForm.domain.trim() !== "" ? userForm.domain : null,
+      sportIds: userForm.sportIds.map(id => Number(id)),
     };
-
     try {
       const response = await register(sanitizedForm);
-
       if (response.success && response.user) {
         setUsers((prevUsers) => [...prevUsers, response.user]);
         setMessage(`User ${response.user.username} created successfully`);
@@ -57,10 +74,8 @@ function UserList() {
       alert("No users selected for deletion.");
       return;
     }
-
     const confirmDelete = window.confirm("Are you sure you want to delete the selected users?");
     if (!confirmDelete) return;
-
     try {
       for (const userId of selectedUsers) {
         const response = await deleteUser(userId);
@@ -68,7 +83,6 @@ function UserList() {
           alert(`Failed to delete user with ID: ${userId}`);
         }
       }
-
       setUsers((prevUsers) => prevUsers.filter((user) => !selectedUsers.includes(user.id)));
       setMessage(`Deleted ${selectedUsers.length} user(s) successfully`);
       setTimeout(() => setMessage(''), 3000);
@@ -96,6 +110,7 @@ function UserList() {
       username: user.username,
       email: user.email || "",
       domain: user.domain || "",
+      sportIds: user.sports ? user.sports.map(sport => sport.id) : []
     });
     setIsUpdateModalOpen(true);
   };
@@ -107,6 +122,7 @@ function UserList() {
       ...updateForm,
       email: updateForm.email.trim() === "" ? "" : updateForm.email,
       domain: updateForm.domain.trim() === "" ? "" : updateForm.domain,
+      sportIds: updateForm.sportIds.map(id => Number(id)), 
     };
     try {
       const response = await axios.put(`/api/users/${updateForm.id}`, sanitizedForm, { withCredentials: true });
@@ -124,7 +140,6 @@ function UserList() {
       setIsUpdateModalOpen(false);
     }
   };
-
 
 
 
@@ -158,6 +173,17 @@ function UserList() {
                 Domain:
                 <input type="text" name="domain" value={userForm.domain} onChange={handleInputChange} />
               </label>
+              <label>
+                Select Sports:
+                <select multiple name="sportIds" value={userForm.sportIds} onChange={(e) => {
+                  const selectedValues = Array.from(e.target.selectedOptions, option => option.value);
+                  setUserForm(prevForm => ({ ...prevForm, sportIds: selectedValues }));
+                }}>
+                  {sports.map((sport) => (
+                    <option key={sport.id} value={sport.id}>{sport.name}</option>
+                  ))}
+                </select>
+              </label>
               <button type="submit">Create</button>
               <button type="button" onClick={() => setIsModalOpen(false)}>Cancel</button>
             </form>
@@ -173,6 +199,7 @@ function UserList() {
             <th>Users</th>
             <th>Email</th>
             <th>Domain</th>
+            <th>Sports</th>
             <th></th>
           </tr>
         </thead>
@@ -192,6 +219,8 @@ function UserList() {
               <td>{user.username}</td>
               <td>{user.email}</td>
               <td>{user.domain}</td>
+              <td>{user.sports.map(sport => sport.name).join(', ') || 'No Sports'}</td>
+
               <td>
                 <button className="leagueList-update-btn" onClick={() => openUpdateModal(user)}>
                   <span>🖊</span> EDIT
@@ -237,6 +266,17 @@ function UserList() {
                   value={updateForm.domain}
                   onChange={(e) => setUpdateForm({ ...updateForm, domain: e.target.value })}
                 />
+              </label>
+              <label>
+                Select Sports:
+                <select multiple name="sportIds" value={updateForm.sportIds} onChange={(e) => {
+                  const selectedValues = Array.from(e.target.selectedOptions, option => option.value);
+                  setUpdateForm(prevForm => ({ ...prevForm, sportIds: selectedValues }));
+                }}>
+                  {sports.map((sport) => (
+                    <option key={sport.id} value={sport.id}>{sport.name}</option>
+                  ))}
+                </select>
               </label>
               <button type="submit">Update</button>
               <button type="button" onClick={() => setIsUpdateModalOpen(false)}>Cancel</button>
