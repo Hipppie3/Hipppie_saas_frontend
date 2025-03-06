@@ -91,7 +91,6 @@ function UserList() {
       console.error("Error deleting users:", error);
     }
   };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUserForm({ ...userForm, [name]: value });

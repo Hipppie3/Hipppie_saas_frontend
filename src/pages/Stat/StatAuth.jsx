@@ -1,66 +1,49 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import './StatAuth.css'
+import React, { useEffect, useState } from 'react';
+import './StatAuth.css';
+import { useAuth } from '../../context/AuthContext';
 
 function Stats() {
- const [stats, setStats] = useState([]);
- const [sports, setSports] = useState([])
- const [selectedSportId, setSelectedSportId] = useState("");
+  const [stats, setStats] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const {user} = useAuth();
+  const [newStat, setNewStat] = useState({ name: "", shortName: "" });
+
+  useEffect(() => {
+    const fetchUserStats = async () => {
+      if (!user) return;
+      try {
+        const response = await axios.get(`/api/stats/user/${user.id}`);
+        setStats(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching user stats:", error);
+      }
+      setLoading(false);
+    };
+
+    fetchUserStats();
+  }, [user]);
+
+  
+
+  if (!user) return <p>Loading user...</p>
+  if (loading) return <p>Loading stats...</p>;
+  if (!stats.length) return <p>No stats available for your sport.</p>;
 
 
- useEffect(() => {
-  const fetchStats = async () => {
-   try {
-    const response = await axios.get(`/api/stats`)
-    setStats(response.data)
-    console.log(response.data)
-
-   } catch (error) {
-    console.error("Error fetching stats")
-   }};
-   fetchStats()
- },[])
-
- useEffect(() => {
-  const fetchSports = async () => {
-    try {
-      const response = await axios.get('/api/sports')
-      setSports(response.data)
-      console.log(response.data)
-     } catch (error) {
-       console.error("Error fetching sports")
-     }
-   };
-   fetchSports()
- }, [])
-
-const updateSelectedSport = (e) => {
-  setSelectedSportId(e.target.value)
-}
-
-  const filteredStats = stats.filter(stat => stat.sportId === Number(selectedSportId));
   return (
     <div className="statAuth-container">
-      <select value={selectedSportId} onChange={updateSelectedSport}>
-        <option value="">Choose a sport</option>
-        {sports.map((sport)=> (
-          <option value={sport.id}>{sport.name}</option>
+      <h2>Stats for Your Sport</h2>
+      <div className="stats-list">
+        {stats.map((stat) => (
+          <div key={stat.id} className="stat-item">
+            <h3>{stat.name}</h3>
+          </div>
         ))}
-      </select>
-
-      <div>
-        {filteredStats.length > 0 ? (
-          filteredStats.map((stat) => (
-            <div key={stat.id}>
-              <h3>{stat.name}</h3>
-            </div>
-          ))
-        ) : (
-          <p>Select a sport to see stats</p>
-        )}
       </div>
     </div>
-  )
+  );
 }
 
-export default Stats
+export default Stats;

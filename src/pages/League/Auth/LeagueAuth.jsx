@@ -20,6 +20,7 @@ function LeagueAuth() {
   const [error, setError] = useState("");
   const [selectedTeams, setSelectedTeams] = useState([])
   const [toggleTeamForm, setToggleTeamForm] = useState(false)
+  const [toggleGameForm, setToggleGameForm] = useState(false)
 
 
   // Fetches League
@@ -56,16 +57,22 @@ function LeagueAuth() {
 
 
   // Create Team
+  // Create Team
   const handleCreateTeam = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`/api/leagues/${id}/teams`, teamForm, { withCredentials: true });
-      // Fetch updated team list
-      const response = await axios.get(`/api/leagues/${id}`, { withCredentials: true });
-      setTeams(response.data.league.teams || []);
+      const response = await axios.post(`/api/leagues/${id}/teams`, teamForm, { withCredentials: true });
+      // Get the newly created team from response
+      const newTeam = response.data.team;
+      // Update teams state immediately without fetching again
+      setTeams((prevTeams) => [...prevTeams, newTeam]);
+      // Update leagueInfo directly
+      setLeagueInfo((prevLeague) => ({
+        ...prevLeague,
+        teams: [...(prevLeague?.teams || []), newTeam],
+      }));
       // Close the modal
       setIsModalOpen(false);
-      // Reset the form
       setTeamForm({ name: "" });
       // Display success message
       setMessage("Team created successfully");
@@ -74,6 +81,7 @@ function LeagueAuth() {
       console.error('Error creating team:', error);
     }
   };
+
 
   // Update Team
   const handleUpdateTeam = async (e) => {
@@ -139,7 +147,9 @@ function LeagueAuth() {
   const handleToggleTeamForm = () => {
       setToggleTeamForm((prevState) => !prevState);
   }
-
+  const handleToggleGameForm = () => {
+      setToggleGameForm ((prevState) => !prevState);
+  }
 
   return (
     <div className="league_auth">
@@ -151,34 +161,13 @@ function LeagueAuth() {
       <button onClick={handleToggleTeamForm}>
         {toggleTeamForm ? "Hide Teams" : "Expand Teams"}
       </button>
-
       {/* Show the league list initially (when toggleTeamForm is false) */}
       {!toggleTeamForm ? (
-        <>
-        <div className="show-team-list-table">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Team</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {teams.map((team, index) => (
-                  <tr key={team.id}>
-                      <td>{team.name}</td>
-                  </tr>
-                  ))}
-                </tbody>
-              </table>
+        <div>
         </div>
-        <div className="league-game-container">
-          <LeagueGameAuth leagueInfo={leagueInfo}/>
-        </div>
-        </>
       ) 
       : 
       (
-
         <>
           {/* Show buttons and table when toggleTeamForm is true */}
           <div className="leagueAuth-btn-container">
@@ -274,6 +263,23 @@ function LeagueAuth() {
             </tbody>
           </table>
         </>
+      )}
+
+
+      <button onClick={handleToggleGameForm}>
+        {toggleGameForm ? "Hide Games" : "Expand Games"}
+      </button>
+      {!toggleGameForm ? (
+        <div>
+        </div>
+      ) : (
+      <>
+        <div className="show-team-list-table">
+        </div>
+        <div className="league-game-container">
+          <LeagueGameAuth leagueInfo={leagueInfo} />
+        </div>
+      </>
       )}
     </div>
   );

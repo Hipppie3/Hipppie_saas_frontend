@@ -1,10 +1,25 @@
 .statAuth-container {
-  height: 100vh;
-   width: calc(100vw - 150px);
-   margin-left: 150px;
-   border: 1px solid red;
-   display: flex;
-   flex-direction: column;
-   color: black;
-   align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.stats-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.stat-item {
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  min-width: 150px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
 }
