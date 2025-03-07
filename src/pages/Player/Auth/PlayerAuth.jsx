@@ -3,6 +3,7 @@ import axios from 'axios'
 import { NavLink, useParams, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../../context/AuthContext'
 import './PlayerAuth.css';
+import DefaultImage from '../../../images/default_image.png';
 
 function PlayerAuth() {
   const {isAuthenticated, loading, user} = useAuth()
@@ -33,24 +34,23 @@ function PlayerAuth() {
       console.log(response.data.player)
     } catch (error) {
       console.error("Error fetching player:", error.response?.data || error.message);
-      setError("Failed to fetch player")
+      setError("Failed to fetch player:", error)
     }
   };
   getPlayer()
  },[id, domain, isAuthenticated, loading])
 
+ {console.log(player.image?.length)}
+ 
   return (
     <div className="playerAuth_profile">
-      {player.image ? (
-        <img
-          src={player.image}
-          alt={`${player.firstName} ${player.lastName}`}
-          className="player-image"
-          style={{ width: "150px", height: "150px", objectFit: "cover", borderRadius: "50%" }}
-        />
-      ) : (
-        <div className="placeholder-image">No Image</div>
-      )}
+      <img
+        src={player.image || DefaultImage} // ✅ Use DefaultImage when player.image is null/empty
+        alt={`${player.firstName} ${player.lastName}`}
+        className="player-image"
+        style={{ width: "150px", height: "150px", objectFit: "cover", borderRadius: "50%" }}
+      />
+      
       <h2>{player.firstName} {player.lastName}</h2>
       <p><strong>Age:</strong> {player.age ? player.age : "N/A"}</p>
 

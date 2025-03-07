@@ -24,18 +24,7 @@
  border: 2px solid #ddd;
 }
 
-.placeholder-image {
- width: 150px;
- height: 150px;
- background: #ddd;
- display: flex;
- align-items: center;
- justify-content: center;
- border-radius: 50%;
- margin: 10px 0;
- font-size: 14px;
- color: #777;
-}
+
 
 .team-link,
 .league-link {

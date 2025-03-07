@@ -156,18 +156,11 @@ function LeagueAuth() {
       <div>
         <h2 className="league_auth_title">{leagueInfo?.name}</h2>
       </div>
+    
+      <div className="league-auth-team-list-table">
 
-      {/* Button to toggle between show_league_list and leagueAuth-btn-container + table */}
-      <button onClick={handleToggleTeamForm}>
-        {toggleTeamForm ? "Hide Teams" : "Expand Teams"}
-      </button>
-      {/* Show the league list initially (when toggleTeamForm is false) */}
-      {!toggleTeamForm ? (
-        <div>
-        </div>
-      ) 
-      : 
-      (
+      </div>
+
         <>
           {/* Show buttons and table when toggleTeamForm is true */}
           <div className="leagueAuth-btn-container">
@@ -263,16 +256,10 @@ function LeagueAuth() {
             </tbody>
           </table>
         </>
-      )}
 
 
-      <button onClick={handleToggleGameForm}>
-        {toggleGameForm ? "Hide Games" : "Expand Games"}
-      </button>
-      {!toggleGameForm ? (
-        <div>
-        </div>
-      ) : (
+
+
       <>
         <div className="show-team-list-table">
         </div>
@@ -280,7 +267,6 @@ function LeagueAuth() {
           <LeagueGameAuth leagueInfo={leagueInfo} />
         </div>
       </>
-      )}
     </div>
   );
 

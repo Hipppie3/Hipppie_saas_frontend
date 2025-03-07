@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
+import './UserHomePage.css';
 
 const UserHomepage = () => {
   const [searchParams] = useSearchParams();
@@ -30,7 +31,7 @@ const UserHomepage = () => {
 
   console.log(isAuthenticated)
   return (
-    <div>
+    <div className="user_homepage">
       {loading ? (
         <p>Loading...</p>
       ) : (

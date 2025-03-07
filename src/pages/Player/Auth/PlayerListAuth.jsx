@@ -113,6 +113,9 @@ function PlayerListAuth() {
     }
   };
 
+
+
+
   // Bulk Delete Players
   const handleDeletePlayers = async () => {
     if (!selectedPlayers.length) {
@@ -209,7 +212,7 @@ function PlayerListAuth() {
               <input
                 type="file"
                 accept="image/*"
-                onChange={(e) => setPlayerForm({ ...updateForm, image: e.target.files[0] })} />
+                onChange={(e) => setUpdateForm({ ...updateForm, image: e.target.files[0] })} />
               <select value={updateForm.teamId} onChange={(e) => setUpdateForm({ ...updateForm, teamId: e.target.value })} required>
                 <option value="" disabled>Select a team</option>
                 {teams.map((team) => <option key={team.id} value={team.id}>{team.name}</option>)}

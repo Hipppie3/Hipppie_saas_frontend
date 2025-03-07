@@ -7,7 +7,7 @@ function Stats() {
   const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const {user} = useAuth();
-  const [newStat, setNewStat] = useState({ name: "", shortName: "" });
+
 
   useEffect(() => {
     const fetchUserStats = async () => {

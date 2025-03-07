@@ -7,6 +7,7 @@ function Navbar() {
   const [searchParams] = useSearchParams();
   const domain = searchParams.get("domain");
   const [isOpen, setIsOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   // Toggle Sidebar
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -14,6 +15,9 @@ function Navbar() {
   // Close menu when a link is clicked
   const closeMenu = () => setIsOpen(false);
 
+  const showDropdown = () => setIsDropdownOpen(true)
+  const hideDropdown = () => setIsDropdownOpen(false)
+  
   return (
     <nav className="navbar_container">
       {/* Hamburger Menu Button */}

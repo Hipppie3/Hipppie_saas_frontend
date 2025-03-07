@@ -12,7 +12,7 @@ function LeagueListAuth() {
   const [updateForm, setUpdateForm] = useState({ id: null, name: "" });
   const [message, setMessage] = useState("");
   const [selectedLeagues, setSelectedLeagues] = useState([]); // ✅ Track selected leagues for bulk delete
-  const [toggleLeagueForm, setToggleLeagueForm] = useState(true);
+
 
   // Fetch Leagues
   useEffect(() => {
@@ -105,17 +105,7 @@ function LeagueListAuth() {
   return (
     <div className="leagueList_auth">
 
-      <button onClick={handleToggleLeagueForm}>{toggleLeagueForm ? "Edit League" : "Hide League"}</button>
-      {toggleLeagueForm ? (
-        <div>
-          {leagues.map((league) => (
-            <div key={league.id}>
-              <h2>{league.name}</h2>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <>
+
       <div className="leagueList-btn-container">
         <button className="delete-leagueList-btn" onClick={handleDeleteLeagues}>🗑️</button>
         <button className="add-leagueList-btn" onClick={() => setIsModalOpen(true)}> + Add League</button>
@@ -197,7 +187,7 @@ function LeagueListAuth() {
                 <td>
                   <NavLink to={`/leagues/${league.id}`}>{league.name}</NavLink>
                 </td>
-                <td>{league.teams?.length || 0}</td>
+                <td>{league.teamsCount}</td>
                 <td>
                   <button className="leagueList-update-btn" onClick={() => openUpdateModal(league)}>
                     <span>🖊</span> EDIT
@@ -208,8 +198,6 @@ function LeagueListAuth() {
           )}
         </tbody>
       </table>
-          </>
-      )}
     </div>
   );
 }

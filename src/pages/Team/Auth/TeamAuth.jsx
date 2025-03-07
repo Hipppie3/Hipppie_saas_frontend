@@ -235,7 +235,7 @@ function TeamAuth() {
               <input
                 type="file"
                 accept="image/*"
-                onChange={(e) => setPlayerForm({ ...updateForm, image: e.target.files[0] })} />
+                onChange={(e) => setUpdateForm({ ...updateForm, image: e.target.files[0] })} />
               <button type="submit">Update</button>
               <button type="button" onClick={() => setIsUpdateModalOpen(false)}>Cancel</button>
             </form>

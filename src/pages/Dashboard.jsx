@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import LeagueAuthList from '../pages/League/LeagueList'
 import './Dashboard.css'
 
 function Dashboard() {
@@ -39,6 +39,7 @@ function Dashboard() {
   return (
     <div className="dashboard_container">
       <h2 className="dashboard_welcome_msg">WELCOME {user.username}!</h2>
+      <LeagueAuthList />
     </div>
   );
 }

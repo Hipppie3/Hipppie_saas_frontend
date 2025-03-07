@@ -105,7 +105,7 @@ function GameAuth() {
       ))}
      </ul>
     ) : (
-     <table className="stat-table">
+     <table className="game-auth-stat-table">
       <thead>
        <tr>
         <th className="player-column">Player</th>
@@ -192,7 +192,7 @@ function GameAuth() {
         <tr className="total-row">
          <td className="player-name"><strong>Total</strong></td>
          {game.stats.map((stat) => {
-          const total = game.game.homeTeam?.players.reduce((sum, player) => {
+          const total = game.game.awayTeam?.players.reduce((sum, player) => {
            return sum + (statValues[`${player.id}-${stat.id}`] || 0);
           }, 0);
           return <td key={stat.id}><strong>{total}</strong></td>;

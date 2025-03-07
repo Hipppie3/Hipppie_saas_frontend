@@ -1,3 +1,68 @@
 .playerList_public {
- margin-top: 3rem;
+  margin-top: 8rem;
+  display: flex;
+  align-self: flex-start;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+
 }
+/* Grid layout for player cards */
+.public-player-container {
+ display: flex;
+ flex-wrap: wrap;
+ justify-content: space-evenly;
+ gap: 20px;
+ width: 100%;
+ padding-left: 20px;
+ padding-right: 20px;
+  }
+
+/* Individual player card */
+.player-public-card {
+ background: white;
+ padding: 8px;
+ box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+ text-align: center;
+ transition: transform 0.2s;
+ border: 2px solid black;
+ height: 220px;
+ min-width: 150px;
+ /* Ensures cards don’t shrink too much */
+}
+
+.player-public-card:hover {
+  transform: scale(1.05);
+  /* Slightly enlarges the card */
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  /* Adds more depth */
+  /* Optional: Change border color on hover */
+}
+
+.player-public-card a {
+text-decoration: none;
+color: black
+}
+/* Player image as a circle */
+.player-public-image {
+ width: 160px;
+ height: 170px;
+ object-fit: cover;
+ border-radius: 5%;
+ border: 3px solid black;
+ margin-bottom: 2px;
+}
+
+/* Player name */
+.player-public-name {
+ font-size: 16px;
+ font-weight: bold;
+ color:black;
+ border: 2px solid black;
+ margin-bottom: 10px;
+}
+
+
+

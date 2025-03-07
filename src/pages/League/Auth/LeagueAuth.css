@@ -7,14 +7,16 @@
   padding-right: 20px;
 }
 
+
+
 .league-game-container {
   display: flex;
   justify-content: center;
-  border: 1px solid red
+
 }
 
 .show-team-list-table{
-  border: 1px solid blue
+
 }
 .show-team-list-table td {
   border: 1px solid blue
