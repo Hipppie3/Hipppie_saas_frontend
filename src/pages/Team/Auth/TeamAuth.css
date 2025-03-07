@@ -137,6 +137,41 @@
   background-color: #999;
 }
 
+.teamAuthGame-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: none;
+}
+
+.teamAuthGame-table th,
+.teamAuthGame-table td {
+  padding: 2px;
+  text-align: left;
+}
+
+.teamAuthGame-table th {
+  border-top: 1px solid rgb(224, 219, 219);
+  border-bottom: 1px solid rgb(224, 219, 219);
+}
+
+.teamAuthGame-table td a {
+  text-decoration: none;
+  color: black;
+}
+
+.teamAuthGame-table td a:hover {
+  text-shadow: 0 0 1px rgba(0, 0, 0, 1);
+}
+
+/* ✅ Responsive Styling */
+@media (max-width: 768px) {
+
+  .teamAuthGame-table th,
+  .teamAuthGame-table td {
+    text-align: center;
+  }
+}
+
 @media (max-width: 768px) {
   .teamAuthPlayer_auth {
     width: 100%;

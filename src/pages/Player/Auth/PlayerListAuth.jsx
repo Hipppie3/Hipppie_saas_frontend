@@ -150,12 +150,13 @@ function PlayerListAuth() {
 
   // Select All Players
   const handleSelectAll = () => {
-    if (selectedPlayers.length === players.length) {
-      setSelectedPlayers([]); // Unselect all if already selected
-    } else {
-      setSelectedPlayers(players.map(player => player.id)); // Select all players
-    }
+    setSelectedPlayers((prevSelected) =>
+      prevSelected.length === players.length && players.length > 0
+        ? []  // Unselect all if already selected
+        : players.map(player => player.id) // Select all players
+    );
   };
+
   
   return (
     <div className="playerList_auth">
@@ -222,7 +223,12 @@ function PlayerListAuth() {
       <table className="playerList-table">
         <thead>
           <tr>
-            <th><input type="checkbox" checked={selectedPlayers.length === players.length} onChange={handleSelectAll} /></th>
+            <th><input
+              type="checkbox"
+              checked={selectedPlayers.length === players.length}
+              onChange={handleSelectAll}
+            />
+            </th>
             <th>ID</th>
             <th>Name</th>
             <th>Age</th>
@@ -231,16 +237,21 @@ function PlayerListAuth() {
           </tr>
         </thead>
         <tbody>
-          {players.map((player, index) => (
+          {players.length === 0 ? ( 
+            <tr><td colSpan="5">No players available</td></tr>
+          ) : (
+          players.map((player, index) => (
             <tr key={player.id}>
               <td><input type="checkbox" checked={selectedPlayers.includes(player.id)} onChange={() => handleCheckboxChange(player.id)} /></td>
               <td>{index + 1}</td>
               <td><NavLink to={`/players/${player.id}`}>{player.firstName} {player.lastName}</NavLink></td>
               <td>{player.age || "N/A"}</td>
               <td><NavLink to={`/teams/${player.team?.id}`}>{player.team?.name || "No Team"}</NavLink></td>
-              <td><button className="playerList-update-btn" onClick={() => openUpdateModal(player)}> <span>🖊</span> EDIT</button></td>
+              <td><button className="playerList-update-btn" onClick={() => openUpdateModal(player)}> <span>🖊</span> EDIT</button>
+              </td>
             </tr>
-          ))}
+            ))
+          )}
         </tbody>
       </table>
     </div>

@@ -57,8 +57,8 @@ function PlayerAuth() {
       {/* Display Team & League */}
       <p>
         <strong>Team:</strong>{" "}
-        {player.teams ? (
-          <NavLink to={`/teams/${player.teams.id}`} className="team-link">{player.teams.name}</NavLink>
+        {player.team ? (
+          <NavLink to={`/teams/${player.team.id}`} className="team-link">{player.team.name}</NavLink>
         ) : "No team assigned"}
       </p>
     </div>

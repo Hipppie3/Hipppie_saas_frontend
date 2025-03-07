@@ -7,17 +7,11 @@
   padding-right: 20px;
 }
 
-
-
 .league-game-container {
   display: flex;
   justify-content: center;
-
 }
 
-.show-team-list-table{
-
-}
 .show-team-list-table td {
   border: 1px solid blue
 }
@@ -73,7 +67,7 @@
 .leagueAuthTeam-table {
   width: 100%;
   border-collapse: collapse;
-  border: none;
+  border: 1px solid green
 }
 
 .leagueAuthTeam-table th,

@@ -27,17 +27,20 @@ function TeamListAuth() {
   }, []);
 
   // Fetch Leagues
-  useEffect(() => {
-    const fetchLeagues = async () => {
-      try {
-        const response = await axios.get('/api/leagues', { withCredentials: true });
-        setLeagues(response.data.leagues || []);
-      } catch (error) {
-        console.error("Error fetching leagues:", error);
-      }
-    };
-    fetchLeagues();
-  }, []);
+useEffect(() => {
+  const fetchLeagues = async () => {
+    try {
+      const response = await axios.get('/api/leagues', { withCredentials: true });
+      setLeagues(response.data.leagues || []);
+    } catch (error) {
+      console.error("Error fetching leagues:", error);
+    }
+  };
+
+  fetchLeagues(); // Initial fetch
+
+}, []);
+
 
   // Create Team
   const handleCreateTeam = async (e) => {

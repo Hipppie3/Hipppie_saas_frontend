@@ -98,9 +98,7 @@ function LeagueListAuth() {
     }
   };
 
-  const handleToggleLeagueForm = () => {
-    setToggleLeagueForm(prevToggle => !prevToggle)
-  }
+
 
   return (
     <div className="leagueList_auth">
