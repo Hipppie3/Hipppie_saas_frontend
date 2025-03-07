@@ -14,12 +14,12 @@ function PlayerListPublic() {
       try {
         const response = await axios.get(`/api/players?domain=${domain}`);
         setPlayers(response.data.players || []);
-        console.log(response.data.players);
+        
+        console.log(response.data);
       } catch (error) {
         console.error("Error fetching players:", error);
       }
     };
-
     if (domain) fetchPlayers(); // Prevents fetching with an empty domain
   }, [domain]); // Re-fetch if `domain` changes
 
@@ -38,7 +38,6 @@ function PlayerListPublic() {
                   className="player-public-image"
                 />
                 <p className="player-public-name">{player.firstName} {player.lastName}</p>
-
               </NavLink>
             </div>
           ))}

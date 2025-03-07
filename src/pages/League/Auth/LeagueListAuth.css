@@ -1,9 +1,10 @@
 .leagueList_auth {
-height: 100vh;
 width: calc(100vw - 150px);
-padding-top: 40px;
+padding-top: 20px;
+padding-bottom: 2rem;
 padding-left:  20px;
 padding-right: 20px;
+border: 1px solid red;
 }
 
 .leagueList-btn-container {
@@ -36,7 +37,7 @@ padding-right: 20px;
   transform: scale(1.1)
 }
 .delete-leagueList-btn {
-  background-color: white;
+  background-color: transparent;
   border: none;
   cursor: pointer;
   transition: transform 0.1s ease-out;

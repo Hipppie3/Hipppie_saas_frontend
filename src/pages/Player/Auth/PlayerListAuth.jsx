@@ -27,31 +27,25 @@ function PlayerListAuth() {
 
 
   // Fetch Players
+  // Fetch Players and Teams
   useEffect(() => {
-    const fetchPlayers = async () => {
+    const fetchPlayersAndTeams = async () => {
       try {
-        const response = await axios.get('/api/players', { withCredentials: true });
-        setPlayers(response.data.players || []);
+        // Fetch Players
+        const playersResponse = await axios.get('/api/players', { withCredentials: true });
+        setPlayers(playersResponse.data.players || []);
+
+        // ✅ Fetch Teams separately
+        const teamsResponse = await axios.get('/api/teams', { withCredentials: true });
+        setTeams(teamsResponse.data.teams || []);
       } catch (error) {
-        console.error("Error fetching players:", error);
+        console.error("Error fetching players or teams:", error);
       }
     };
-    fetchPlayers();
+    fetchPlayersAndTeams();
   }, []);
 
-  // Fetch Teams
-  useEffect(() => {
-    const fetchTeams = async () => {
-      try {
-        const response = await axios.get('/api/teams', { withCredentials: true });
-        setTeams(response.data.teams || []);
-        console.log(response.data.teams)
-      } catch (error) {
-        console.error("Error fetching teams:", error);
-      }
-    };
-    fetchTeams();
-  }, []);
+
 
   // Create Player
   const handleCreatePlayer = async (e) => {
@@ -87,7 +81,6 @@ function PlayerListAuth() {
 
   // Update Player
   const handleUpdatePlayer = async (e) => {
-
     e.preventDefault();
     const formData = new FormData();
     formData.append("firstName", updateForm.firstName);
@@ -163,7 +156,7 @@ function PlayerListAuth() {
       setSelectedPlayers(players.map(player => player.id)); // Select all players
     }
   };
-
+  
   return (
     <div className="playerList_auth">
       <div className="playerList-btn-container">

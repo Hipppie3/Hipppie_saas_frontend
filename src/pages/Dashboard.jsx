@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import LeagueAuthList from '../pages/League/LeagueList'
+import LeagueAuthList from '../pages/League/LeagueList';
+import TeamAuthList from '../pages/Team/TeamList';
+import PlayerAuthList from '../pages/Player/PlayerList';
 import './Dashboard.css'
 
 function Dashboard() {
@@ -40,6 +42,8 @@ function Dashboard() {
     <div className="dashboard_container">
       <h2 className="dashboard_welcome_msg">WELCOME {user.username}!</h2>
       <LeagueAuthList />
+      <TeamAuthList />
+      <PlayerAuthList />
     </div>
   );
 }

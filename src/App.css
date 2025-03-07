@@ -27,6 +27,5 @@ body,
  flex: 1;
  /* ✅ Ensures the content takes up the remaining space */
  display: flex;
- justify-content: center;
- align-items: center;
+
 }

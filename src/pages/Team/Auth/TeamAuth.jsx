@@ -26,7 +26,7 @@ function TeamAuth() {
       teamId: "" ,
       image: null
     });
-
+    console.log(user)
     console.log(id)
   // Fetches Teams
   useEffect(() => {

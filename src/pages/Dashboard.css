@@ -1,12 +1,9 @@
 .dashboard_container {
-  height: 100vh;
   width: calc(100vw - 150px);
   margin-left: 150px;
-  padding-top: 40px;
-  border: 1px solid red;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 
