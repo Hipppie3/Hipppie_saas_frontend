@@ -165,14 +165,6 @@
 
 /* ✅ Responsive Styling */
 @media (max-width: 768px) {
-
-  .teamAuthGame-table th,
-  .teamAuthGame-table td {
-    text-align: center;
-  }
-}
-
-@media (max-width: 768px) {
   .teamAuthPlayer_auth {
     width: 100%;
     margin-left: 0;
@@ -185,17 +177,36 @@
     padding-top: 5rem
   }
 
+.team_auth {
+    width: 100%;
+      margin-left: 0;
+      padding-bottom: 20px;
+      padding-left: 10px;
+      padding-right: 10px;
+      display: flex;
+      flex-direction: column;
+      color: black;
+      padding-top: 5rem;
+      font-size: 15px;
+}
+
   .teamAuthPlayer-table th,
   .teamAuthPlayer-table td {
     text-align: center;
   }
-
+    .teamAuthGame-table th,
+    .teamAuthGame-table td {
+      text-align: center;
+    }
   .delete-teamAuth-btn {
     padding-left: 2%;
   }
 }
 
 @media (max-width: 578px) {
+  .team_auth{
+    font-size: 7px;
+  }
   .delete-teamAuth-btn {
     padding-left: 1.2%;
   }

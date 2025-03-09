@@ -1,25 +1,28 @@
 .statAuth-container {
-  max-width: 600px;
-  margin: 0 auto;
-  text-align: center;
-  font-family: Arial, sans-serif;
-}
-
-.stats-list {
+  height: 100vh;  
+  width: 100%;
+  margin-left: 150px;
+  border: 1px solid red;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 20px;
+  flex-direction: column;
+  align-items: center;
+}
+.stats-title {
+  border: 1px solid orange;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
-.stat-item {
-  padding: 10px;
-  border-radius: 5px;
-  background-color: #f8f9fa;
-  border: 1px solid #ddd;
-  min-width: 150px;
-  text-align: center;
-  font-size: 16px;
-  font-weight: bold;
+@media (max-width: 768px) {
+  .statAuth-container {
+        width: 100%;
+          margin-left: 0;
+          padding-bottom: 20px;
+          padding-left: 10px;
+          padding-right: 10px;
+          display: flex;
+          flex-direction: column;
+          color: black;
+          padding-top: 5rem
+  }
 }

@@ -34,7 +34,7 @@ function Stats() {
 
   return (
     <div className="statAuth-container">
-      <h2>Stats for Your Sport</h2>
+      <h2 className="stats-title">Stats for Your Sport</h2>
       <div className="stats-list">
         {stats.map((stat) => (
           <div key={stat.id} className="stat-item">

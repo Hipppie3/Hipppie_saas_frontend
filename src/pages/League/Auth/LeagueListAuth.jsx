@@ -106,6 +106,7 @@ function LeagueListAuth() {
 
       <div className="leagueList-btn-container">
         <button className="delete-leagueList-btn" onClick={handleDeleteLeagues}>🗑️</button>
+        <h2>LEAGUES</h2>
         <button className="add-leagueList-btn" onClick={() => setIsModalOpen(true)}> + Add League</button>
       </div>
 

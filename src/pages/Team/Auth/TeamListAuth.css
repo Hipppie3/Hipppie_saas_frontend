@@ -2,7 +2,8 @@
  width: calc(100vw - 150px);
  padding-left: 20px;
  padding-right: 20px;
- border: 1px solid orange
+ border: 3px solid orange;
+ margin-top: 2rem;
 }
 
 .teamList-btn-container {

@@ -12,6 +12,7 @@ function TeamListAuth() {
   const [updateForm, setUpdateForm] = useState({ id: null, name: "", leagueId: "" });
   const [message, setMessage] = useState("");
   const [selectedTeams, setSelectedTeams] = useState([]); // ✅ Track selected teams for bulk delete
+  const [scoreUpdated, setScoreUpdated] = useState(false);
 
   // Fetch Teams
   useEffect(() => {
@@ -24,7 +25,8 @@ function TeamListAuth() {
       }
     };
     fetchTeams();
-  }, []);
+  }, [scoreUpdated]); // ✅ Re-fetch teams when score is updated
+
 
   // Fetch Leagues
 useEffect(() => {
@@ -76,7 +78,7 @@ useEffect(() => {
       console.error('Error updating team:', error);
     }
   };
-
+console.log(teams)
   // Bulk Delete Teams
   const handleDeleteTeams = async () => {
     if (!selectedTeams.length) {
@@ -120,6 +122,7 @@ useEffect(() => {
     <div className="teamList_auth">
       <div className="teamList-btn-container">
         <button className="delete-teamList-btn" onClick={handleDeleteTeams}>🗑️</button>
+        <h2>TEAMS</h2>
         <button className="add-teamList-btn" onClick={() => setIsModalOpen(true)}> + Add Team</button>
       </div>
 
@@ -198,6 +201,7 @@ useEffect(() => {
             </th>
             <th>ID</th>
             <th>Teams</th>
+            <th>League</th>
             <th># Players</th>
             <th></th>
           </tr>
@@ -219,6 +223,7 @@ useEffect(() => {
                 <td>
                   <NavLink to={`/teams/${team.id}`}>{team.name}</NavLink>
                 </td>
+                <td>{team.league?.name}</td>
                 <td>{team.players?.length || 0}</td>
                 <td>
                   <button className="teamList-update-btn" onClick={() => openUpdateModal(team)}>

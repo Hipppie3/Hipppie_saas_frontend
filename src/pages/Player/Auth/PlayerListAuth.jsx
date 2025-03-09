@@ -162,6 +162,7 @@ function PlayerListAuth() {
     <div className="playerList_auth">
       <div className="playerList-btn-container">
         <button className="delete-playerList-btn" onClick={handleDeletePlayers}>🗑️</button>
+        <h2>PLAYERS</h2>
         <button className="add-playerList-btn" onClick={() => setIsModalOpen(true)}> + Add Player</button>
       </div>
 

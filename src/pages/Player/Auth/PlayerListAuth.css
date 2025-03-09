@@ -1,9 +1,9 @@
 .playerList_auth {
  width: calc(100vw - 150px);
- padding-top: 40px;
+ margin-top: 2rem;
  padding-left: 20px;
  padding-right: 20px;
- border: 1px solid green
+ border: 3px solid green
 }
 
 .playerList-btn-container {

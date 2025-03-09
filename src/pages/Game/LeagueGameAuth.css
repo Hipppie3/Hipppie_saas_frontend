@@ -261,21 +261,11 @@ input[type="number"] {
 }
 
 /* ✅ Responsive Fixes */
-@media (max-width: 480px) {
- .score-modal-content {
-  width: 90%;
-  padding: 20px;
- }
-}
+
 /* Responsive Adjustments */
-@media (max-width: 480px) {
- .game-schedule-modal-content {
-  width: 90%;
-  padding: 20px;
- }
-}
+
 @media (max-width: 768px) {
- .leagueList_auth {
+ .league-game-auth-container {
   width: 100%;
   margin-left: 0;
   padding-bottom: 20px;
@@ -284,11 +274,12 @@ input[type="number"] {
   display: flex;
   flex-direction: column;
   color: black;
-  padding-top: 5rem
+  padding-top: 5rem;
+  font-size: 15px;
  }
 
- .leagueList-table th,
- .leagueList-table td {
+ .game-schedule-table th,
+ .game-schedule-table td {
   text-align: center;
  }
 
@@ -301,6 +292,20 @@ input[type="number"] {
  .delete-leagueList-btn {
   padding-left: 1.2%;
  }
+ .league-game-auth-container {
+  font-size: 10px;
+ }
+}
+
+
+@media (max-width: 480px) {
+ .game-schedule-modal-content {
+  width: 90%;
+  padding: 20px;
+ }
+    .league-game-auth-container {
+     font-size: 7px;
+    }
 }
 
 

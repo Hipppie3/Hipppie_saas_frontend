@@ -1,146 +1,161 @@
-/* General Styling */
+/* GameAuth Container */
 .game-container {
+ height: 100vh;
  width: calc(100vw - 150px);
-  margin-left: 150px;
- display: flex;
- flex-direction: column;
- align-items: center;
- gap: 20px;
- padding: 20px;
- font-family: Arial, sans-serif;
- border: 1px solid green
+ margin-left: 150px;
+ padding-top: 40px;
+ padding-left: 20px;
+ padding-right: 20px;
+ border: 1px solid red;
+ font-size: 15px;
 }
 
-/* Team Section */
-.team-container {
- width: 100%;
- max-width: 800px;
-}
 
-.team-header {
- font-size: 18px;
- font-weight: bold;
- margin-bottom: 10px;
- text-align: center;
-}
 
-/* Toggle Button */
-.toggle-button,
-.submit-button {
- margin: 10px;
- padding: 6px 12px;
+/* Toggle Edit Button */
+.toggle-button {
  font-size: 14px;
- cursor: pointer;
+ background: none;
  border: none;
- border-radius: 5px;
- background-color: #007bff;
- color: white;
- transition: background 0.3s;
+ cursor: pointer;
+ color: rgb(20, 122, 231);
+ font-weight: bold;
 }
 
-.submit-button {
- background-color: #28a745;
+.toggle-button:hover {
+ text-decoration: underline;
 }
 
-.toggle-button:hover,
-.submit-button:hover {
- opacity: 0.8;
-}
-
-/* Table Styling */
-.game-auth-stat-table {
+/* Tables */
+.gameAuth-stat-table {
  width: 100%;
  border-collapse: collapse;
- box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
- background-color: #fff;
- border: 1px solid red;
+ border: none;
+ border: 1px solid orange
 }
 
-.stat-table th {
- background-color: #f8f9fa;
- font-weight: bold;
- padding: 6px;
- border: 1px solid #ddd;
- font-size: 12px;
-}
-
-.stat-table td {
- border: 1px solid #ddd;
- padding: 4px;
- text-align: center;
- font-size: 12px;
-}
-
-/* Player Column */
-.player-column {
- width: 120px;
- text-align: left;
- font-size: 12px;
-}
-
-.player-name {
- padding: 6px;
- font-weight: bold;
- border: 1px solid #ddd;
+.gameAuth-stat-table th,
+.gameAuth-stat-table td {
+ padding: 5px;
  text-align: left;
 }
 
-/* Stat Inputs - Smaller in Edit Mode */
-.stat-input {
- width: 40px;
- height: 20px;
- padding: 3px;
- text-align: center;
- font-size: 12px;
- border: 1px solid #ccc;
- background-color: #f9f9f9;
+.gameAuth-stat-table th {
+ border-top: 1px solid rgb(224, 219, 219);
+ border-bottom: 1px solid rgb(224, 219, 219);
 }
 
-/* Remove Up/Down Arrows from Number Inputs */
-.stat-input {
- -moz-appearance: textfield;
- /* Firefox */
+.gameAuth-stat-table td a {
+ text-decoration: none;
+ color: black;
 }
 
-.stat-input::-webkit-outer-spin-button,
-.stat-input::-webkit-inner-spin-button {
- -webkit-appearance: none;
- /* Chrome, Safari */
- margin: 0;
+.team-container-away {
+ margin-top: 3rem;
+}
+.gameAuth-stat-table td a:hover {
+ text-shadow: 0 0 1px rgba(0, 0, 0, 1);
 }
 
-/* View Mode - Small Text */
-.player-list {
- list-style: none;
- padding: 0;
- font-size: 12px;
- color: #333;
-}
-
-.player-list li {
- margin: 5px 0;
- padding: 4px;
- background-color: #f4f4f4;
- border-radius: 4px;
- display: flex;
- justify-content: space-between;
- padding: 6px;
-}
-
-.stat-value {
- margin-left: 10px;
- font-size: 12px;
- font-weight: bold;
- color: #555;
-}
-
-/* Total Row Styling */
 .total-row {
- background-color: #e9ecef;
- font-weight: bold;
+ border: 1px solid green
+}
+.total-row td {
+ border: 1px solid brown
 }
 
-.total-row td {
- border-top: 2px solid #000;
+/* Stat Input Fields */
+.stat-input {
+ width: 35px;
+ padding: 5px;
  text-align: center;
+ font-size: 10px;
+ border: 1px solid #ccc;
+ border-radius: 4px;
+ outline: none;
+}
+
+
+
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+ .game-container{
+ width: 100%;
+  margin-left: 0;
+  padding-bottom: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  padding-top: 5rem;
+  font-size: 10px;
+ }
+  .stat-input {
+   width: 30px;
+   padding: 0px;
+   text-align: center;
+   font-size: 14px;
+   border: 1px solid #ccc;
+   border-radius: 4px;
+   outline: none;
+  }
+
+ .gameAuth-stat-table th,
+ .gameAuth-stat-table td {
+  text-align: center;
+ }
+}
+
+@media (max-width: 578px) {
+ .delete-gameAuth-btn {
+  padding-left: 1.2%;
+ }
+    .game-container {
+     width: 100%;
+     margin-left: 0;
+     padding-bottom: 20px;
+     padding-left: 10px;
+     padding-right: 10px;
+     display: flex;
+     flex-direction: column;
+     color: black;
+     padding-top: 5rem;
+     font-size: 7px;
+    }
+      .stat-input {
+       width: 20px;
+       padding: 0px;
+       text-align: center;
+       font-size: 10px;
+       border: 1px solid #ccc;
+       border-radius: 4px;
+       outline: none;
+      }
+}
+
+@media (max-width: 380px) {
+     .game-container {
+       width: 100%;
+       margin-left: 0;
+       padding-bottom: 20px;
+       padding-left: 5px;
+       padding-right: 5px;
+       display: flex;
+       flex-direction: column;
+       color: black;
+       padding-top: 5rem;
+       font-size: 5px;
+      }
+     
+      .stat-input {
+       width: 10px;
+       padding: 0px;
+       text-align: center;
+       font-size: 7px;
+       border: 1px solid #ccc;
+       border-radius: 4px;
+       outline: none;
+      }
 }
