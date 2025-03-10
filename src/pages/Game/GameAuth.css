@@ -1,12 +1,10 @@
 /* GameAuth Container */
 .game-container {
- height: 100vh;
  width: calc(100vw - 150px);
  margin-left: 150px;
  padding-top: 40px;
  padding-left: 20px;
  padding-right: 20px;
- border: 1px solid red;
  font-size: 15px;
 }
 
@@ -31,13 +29,17 @@
  width: 100%;
  border-collapse: collapse;
  border: none;
- border: 1px solid orange
+ font-size: 13px;
 }
 
+.gameAuth-stat-table th:first-child,
+.gameAuth-stat-table td:first-child {
+  text-align: left;
+}
 .gameAuth-stat-table th,
 .gameAuth-stat-table td {
- padding: 5px;
- text-align: left;
+ padding: 2px;
+ text-align: center;
 }
 
 .gameAuth-stat-table th {
@@ -56,18 +58,15 @@
 .gameAuth-stat-table td a:hover {
  text-shadow: 0 0 1px rgba(0, 0, 0, 1);
 }
-
 .total-row {
- border: 1px solid green
+border-top: 1px solid rgb(224, 219, 219);
 }
-.total-row td {
- border: 1px solid brown
-}
+
 
 /* Stat Input Fields */
 .stat-input {
  width: 35px;
- padding: 5px;
+ padding: 2px;
  text-align: center;
  font-size: 10px;
  border: 1px solid #ccc;

@@ -42,8 +42,8 @@ function Dashboard() {
     <div className="dashboard_container">
       <h2 className="dashboard_welcome_msg">WELCOME {user.username}!</h2>
       <LeagueAuthList />
-      <TeamAuthList />
-      <PlayerAuthList />
+      {/* <TeamAuthList />
+      <PlayerAuthList /> */}
     </div>
   );
 }

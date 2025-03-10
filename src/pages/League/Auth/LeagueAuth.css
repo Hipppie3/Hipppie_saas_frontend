@@ -12,9 +12,6 @@
   justify-content: center;
 }
 
-.show-team-list-table td {
-  border: 1px solid blue
-}
 
 .league_auth_title {
   text-align: center;
@@ -67,7 +64,7 @@
 .leagueAuthTeam-table {
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid green
+  border: none;
 }
 
 .leagueAuthTeam-table th,
@@ -79,6 +76,8 @@
 .leagueAuthTeam-table th {
   border-top: 1px solid rgb(224, 219, 219);
   border-bottom: 1px solid rgb(224, 219, 219);
+  
+
 }
 
 .leagueAuthTeam-table td a {
@@ -89,8 +88,15 @@
 .leagueAuthTeam-table td a:hover {
   text-shadow: 0 0 1px rgba(0, 0, 0, 1)
 }
-
-
+.pagination-btn {
+  background-color: transparent;
+  border: none;
+}
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+}
 
 /* ✅ Modal Styling */
 .modal-overlay {

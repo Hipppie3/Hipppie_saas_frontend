@@ -161,7 +161,6 @@ console.log(team)
         <thead>
           <tr>
             <th><input type="checkbox" checked={selectedPlayers.length === team.players.length} onChange={handleSelectAll} /></th>
-            <th>ID</th>
             <th>Name</th>
             <th>Age</th>
             <th></th>
@@ -171,7 +170,6 @@ console.log(team)
           {team.players.map((player) => (
             <tr key={player.id}>
               <td><input type="checkbox" checked={selectedPlayers.includes(player.id)} onChange={() => handleCheckboxChange(player.id)} /></td>
-              <td>{player.id}</td>
               <td><NavLink to={`/players/${player.id}`}>{player.firstName} {player.lastName}</NavLink></td>
               <td>{player.age}</td>
               <td>
@@ -225,7 +223,6 @@ console.log(team)
       <table className="teamAuthGame-table">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Date</th>
             <th>Matchup</th>
             <th>Result</th>
@@ -241,9 +238,12 @@ console.log(team)
               .sort((a, b) => new Date(a.date) - new Date(b.date))
               .map((game, index) => (
                 <tr key={game.id}>
-                  <td>{index + 1}</td>
                   <td>{new Date(game.date).toLocaleDateString()}</td>
-                  <td>{game.team1} vs {game.team2}</td>
+                  <td>
+                    <NavLink to={`/games/${game.id}`}>
+                    {game.team1} vs {game.team2}
+                    </NavLink>
+                  </td>
                   <td>{game.score_team1} - {game.score_team2}</td>
                   <td>{game.status}</td>
                 </tr>

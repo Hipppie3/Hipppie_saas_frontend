@@ -26,7 +26,7 @@ function PlayerListAuth() {
     }, [isAuthenticated, navigate, domain]);
 
 
-  // Fetch Players
+
   // Fetch Players and Teams
   useEffect(() => {
     const fetchPlayersAndTeams = async () => {

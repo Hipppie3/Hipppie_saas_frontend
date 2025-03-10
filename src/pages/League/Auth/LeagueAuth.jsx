@@ -294,7 +294,6 @@ function LeagueAuth() {
                   </td>
                   <td>{team.wins}</td>
                   <td>{team.losses}</td>
-                  <td>{team.players?.length}</td>
                   <td>
                     <button className="leagueAuthTeam-update-btn" onClick={() => openUpdateModal(team)}>
                       <span>🖊</span> EDIT
@@ -307,22 +306,26 @@ function LeagueAuth() {
         </table>
       </>
       <div className="pagination">
+      <div>
         <button
+        className="pagination-btn"
           onClick={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage === 1}
         >
-          ◀ Prev
+          ◀ 
         </button>
 
         <span> Page {currentPage} </span>
 
         <button
+          className="pagination-btn"
           onClick={() => setCurrentPage(currentPage + 1)}
           disabled={indexOfLastLeague >= teams.length}
         >
-          Next ▶
+          ▶
         </button>
-
+        </div>
+        <div>
         <select
           value={leaguesPerPage}
           onChange={(e) => setLeaguesPerPage(Number(e.target.value))}
@@ -331,6 +334,7 @@ function LeagueAuth() {
           <option value="20">Show 20</option>
           <option value="50">Show 50</option>
         </select>
+        </div>
       </div>
 
 

@@ -42,12 +42,22 @@ function LeagueGameAuth({ leagueInfo }) {
       alert('Teams must be different.');
       return;
     }
+
+    // ✅ Convert the date to PST before sending it to the backend
+    const dateInPST = new Date(gameForm.date + "T00:00:00-08:00").toISOString();
+
     try {
-      const response = await axios.post('/api/games', { ...gameForm, userId: user.id }, { withCredentials: true });
+      await axios.post('/api/games', {
+        ...gameForm,
+        userId: user.id,
+        date: dateInPST // ✅ Ensure correct timezone
+      }, { withCredentials: true });
+
       // ✅ Refetch league info after creating game
       const leagueResponse = await axios.get(`/api/leagues/${gameForm.leagueId}`, { withCredentials: true });
       setLeagueData(leagueResponse.data.league);
       setGames(leagueResponse.data.league.games);
+
       // ✅ Reset form & close modal
       setGameForm({
         leagueId: leagueInfo?.id,
@@ -61,6 +71,7 @@ function LeagueGameAuth({ leagueInfo }) {
       console.log('Error creating game:', error);
     }
   };
+
 
   const handleUpdateScore = async (e) => {
     e.preventDefault();
@@ -251,6 +262,7 @@ function LeagueGameAuth({ leagueInfo }) {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',
+                        timeZone: 'America/Los_Angeles'
                       })}
                     </td>
                     <td>

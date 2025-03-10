@@ -117,7 +117,7 @@ function GameAuth() {
           <tbody>
             {game.game.homeTeam?.players.map((player) => (
               <tr key={player.id}>
-                <td className="player-name">{player.firstName}</td>
+                <td className="player-name">{player.firstName} {player.lastName}</td>
                 {game.stats.map((stat) => (
                   <td key={stat.id}>
                     {!editMode ? (

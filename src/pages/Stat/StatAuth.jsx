@@ -91,9 +91,7 @@ function Stats() {
 
   return (
     <div className="statAuth-container">
-      <h2 className="stats-title">Stats for Your Sport</h2>
-      <button className="stat-reset-button" onClick={handleResetStats}>Reset to Default</button>
-
+    
       <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={stats.map(stat => stat.id)}>
           <div className="stats-list">
@@ -104,6 +102,7 @@ function Stats() {
         </SortableContext>
       </DndContext>
 
+      <div className="bottom-stat">
       <div className="add-stat-form">
         <h3>Add New Stat</h3>
         <form onSubmit={handleAddStat}>
@@ -119,8 +118,11 @@ function Stats() {
             value={newStat.shortName}
             onChange={(e) => setNewStat({ ...newStat, shortName: e.target.value })}
           />
-          <button type="submit">Add Stat</button>
+          <button className='add-stat-btn' type="submit">Add Stat</button>
         </form>
+          <button className="stat-reset-button" onClick={handleResetStats}>Reset to Default</button>
+      </div>
+
       </div>
     </div>
   );

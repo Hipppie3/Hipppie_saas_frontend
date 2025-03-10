@@ -1,25 +1,16 @@
 /* General container styles */
 .statAuth-container {
-  height: 100vh;
   margin-left: 150px;
-  border: 1px solid red;
+  width: 100%;
 }
 
-/* Title styling */
-.stats-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 15px;
-  color: #333;
-  text-align: center;
-}
 
 /* Stats list container */
 .stats-list {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
   padding: 10px;
 }
 
@@ -28,7 +19,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 5px;
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -58,18 +49,22 @@
 
 /* Button styles */
 .stat-reset-button {
-  padding: 8px 12px;
+  height: 20px;
+  padding: 5px 10px;
   border: none;
   background-color: #ff4d4d;
   color: white;
-  font-size: 14px;
+  font-size: 10px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.stat-reset-button:hover {
-  background-color: #cc0000;
+.bottom-stat {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Add Stat Form */
@@ -77,13 +72,12 @@
   margin-top: 20px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 100%;
   max-width: 400px;
   gap: 10px;
   padding: 15px;
-  background-color: #fff;
   border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .add-stat-form input {
@@ -91,11 +85,21 @@
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  display: flex;
 }
 
-.add-stat-form button {
-  background-color: #007bff;
-  color: white;
+.add-stat-btn {
+    margin-top: 5px;
+    height: 20px;
+    width: 100%;
+    padding: 5px 10px;
+    border: none;
+    background-color: green;
+    color: white;
+    font-size: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .add-stat-form button:hover {
