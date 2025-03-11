@@ -1,5 +1,6 @@
 .team_public {
   width: 100%;
+  margin-top: 80px;
   display: flex;
   flex-direction: column;
   align-items: center;

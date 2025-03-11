@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, NavLink, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import './LeagueAuth.css';
-import LeagueGameAuth from '../../Game/LeagueGameAuth';
+import LeagueGameAuth from '../../Game/Auth/LeagueGameAuth';
 
 function LeagueAuth() {
   const { isAuthenticated, loading, user } = useAuth(); // ✅ Add auth state

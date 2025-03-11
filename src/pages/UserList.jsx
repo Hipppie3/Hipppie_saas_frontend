@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import './UserList.css';
-import LeagueGameAuth from '../pages/Game/LeagueGameAuth.jsx'
+// import LeagueGameAuth from '../pages/Game/Auth/LeagueGameAuth.jsx'
 
 function UserList() {
   const { user, deleteUser, register } = useAuth();

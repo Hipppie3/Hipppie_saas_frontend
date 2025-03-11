@@ -1,8 +1,6 @@
 .player_public {
- height: calc(100vh - 80px);
  width: 100%;
  margin-top: 80px;
- border: 1px solid red;
 }
 .player-details-container {
  border: 1px solid purple;
@@ -43,14 +41,42 @@
 }
 
 .player-public-stats-container {
- margin-top: 1rem;
- border: 2px solid blue;
- padding-top: 10px;
  width: calc(100% - 2rem);
  margin-left: 1rem;
  margin-right: 1rem;
+ padding-top: 10px;
+ overflow-x: auto;
+ max-width: 100%;
+ white-space: nowrap;
 }
-.player-public-stats-title {
- font-size: 20px;
- padding-bottom: 5px;
+
+.player-public-stats-table {
+ width: max-content;
+ /* ✅ Forces table to be larger than container */
+ min-width: 100%;
+ border-collapse: collapse;
+ text-align: center;
+}
+.player-public-stats-table th,
+.player-public-stats-table td {
+ padding: 8px 12px;
+ border: 1px solid #ddd;
+ white-space: nowrap;
+ /* ✅ Ensures no text wrapping */
+ font-size: 15px;
+}
+
+/* ✅ Make sure scrolling works with a custom scrollbar */
+.player-public-stats-container::-webkit-scrollbar {
+ height: 8px;
+ /* ✅ Adjust scrollbar height */
+}
+
+.player-public-stats-container::-webkit-scrollbar-thumb {
+ background: #888;
+ border-radius: 4px;
+}
+
+.player-public-stats-container::-webkit-scrollbar-thumb:hover {
+ background: #555;
 }

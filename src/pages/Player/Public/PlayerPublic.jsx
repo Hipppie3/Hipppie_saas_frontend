@@ -11,35 +11,46 @@ function PlayerPublic() {
   const { id } = useParams();
 
   useEffect(() => {
-    const getPlayerAndStats = async () => {
+    const getPlayer = async () => {
       try {
-        const playerResponse = await axios.get(`/api/players/${id}?domain=${domain}`, { withCredentials: true });
-        setPlayer(playerResponse.data.player);
-
-        if (playerResponse.data.player.userId) {
-          const statsResponse = await axios.get(`/api/stats/user/${playerResponse.data.player.userId}?domain=${domain}`, { withCredentials: true });
-          setAllStats(statsResponse.data || []);
-        }
+        const response = await axios.get(`/api/players/${id}?domain=${domain}`, { withCredentials: true });
+        setPlayer(response.data.player);
+        setAllStats(response.data.allStats)
       } catch (error) {
-        console.error("Error fetching player or stats:", error.response?.data || error.message);
+        console.error("Error fetching player:", error.response?.data || error.message);
       }
     };
-
-    getPlayerAndStats();
+    getPlayer();
   }, [id, domain]);
+
+  const uniqueGames = Array.from(
+    new Map(
+      player?.gameStats?.map(gameStat => [
+        gameStat.game?.id,
+        {
+          date: gameStat.game?.date || "N/A",
+          homeTeam: gameStat.game?.homeTeam?.name || "Unknown",
+          awayTeam: gameStat.game?.awayTeam?.name || "Unknown",
+          stats: allStats.map(stat => ({
+            shortName: stat.shortName,
+            value: player?.gameStats?.find(gs => gs.game_id === gameStat.game?.id && gs.stat_id === stat.id)?.value || 0
+          }))
+        }
+      ])
+    ).values()
+  );
+
+
+
+  console.log(uniqueGames)
+
+
+
+
+
 
   if (!player) return <p>Loading...</p>;
 
-  // ✅ Group stats by game ID to avoid duplicates
-  const gameStatsMap = player.gameStats?.reduce((acc, stat) => {
-    if (!acc[stat.game.id]) {
-      acc[stat.game.id] = { game: stat.game, stats: {} };
-    }
-    acc[stat.game.id].stats[stat.stat.id] = stat.value;
-    return acc;
-  }, {});
-
-  const uniqueGames = Object.values(gameStatsMap || {});
 
   return (
     <div className="player_public">
@@ -89,7 +100,7 @@ function PlayerPublic() {
       {/* Stats Table */}
       <div className="player-public-stats-container">
         <h2 className="player-public-stats-title">LAST 5 GAMES</h2>
-        <table>
+        <table className="player-public-stats-table">
           <thead>
             <tr>
               <th>Game Date</th>
@@ -100,17 +111,18 @@ function PlayerPublic() {
             </tr>
           </thead>
           <tbody>
-            {uniqueGames.map(({ game, stats }) => (
-              <tr key={game.id}>
-                <td>{new Date(game.date).toLocaleDateString()}</td>
-                <td>{game.homeTeam?.name} vs {game.awayTeam?.name}</td>
-                {allStats.map((statItem) => (
-                  <td key={statItem.id}>{stats[statItem.id] || 0}</td>
+            {uniqueGames.map((game, index) => (
+              <tr key={index}>
+                <td>{new Date(game.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</td>
+                <td>{game.homeTeam} vs {game.awayTeam}</td>
+                {game.stats?.map((statValue, idx) => (
+                  <td key={idx}>{statValue.value}</td>
                 ))}
               </tr>
             ))}
           </tbody>
         </table>
+
       </div>
     </div>
   );
