@@ -171,18 +171,19 @@ function GameAuth() {
         <table className="gamePeriods-table">
           <thead>
             <tr>
-              <th>Period</th>
-              <th>{game?.homeTeam?.name}</th> {/* ✅ Shows home team name */}
-              <th>{game?.awayTeam?.name}</th> {/* ✅ Shows away team name */}
+              <th>Team Name</th>
+              {periodScores.map((period) => (
+                <th key={period.id}>{period.gamePeriod?.name}</th>
+              ))}
+              <th>Final</th>
             </tr>
           </thead>
           <tbody>
-            {periodScores.map((period) => (
-              <tr key={period.id}>
-                <td>{period.gamePeriod?.name}</td> {/* ✅ Show period name */}
-
-                {/* ✅ Home Team Score */}
-                <td>
+            {/* Team 1 Row */}
+            <tr>
+              <td>{game.game?.homeTeam.name}</td>
+              {periodScores.map((period) => (
+                <td key={period.id}>
                   {!editModeScores ? (
                     <span>{period.period_score_team1}</span>
                   ) : (
@@ -193,23 +194,29 @@ function GameAuth() {
                     />
                   )}
                 </td>
+              ))}
+              <td>{periodScores.reduce((total, period) => total + period.period_score_team1, 0)}</td>
+            </tr>
 
-                {/* ✅ Away Team Score */}
-                <td>
+            {/* Team 2 Row */}
+            <tr>
+              <td>{game.game?.awayTeam.name}</td>
+              {periodScores.map((period) => (
+                <td key={period.id}>
                   {!editModeScores ? (
-                    <span>{period.period_score_team2}</span>
+                    <span>{period?.period_score_team2}</span>
                   ) : (
                     <input
                       type="number"
-                      value={period.period_score_team2}
+                      value={period?.period_score_team2}
                       onChange={(e) => handleScoreChange(period.id, "team2", e.target.value)}
                     />
                   )}
                 </td>
-              </tr>
-            ))}
+              ))}
+              <td>{periodScores.reduce((total, period) => total + period.period_score_team2, 0)}</td>
+            </tr>
           </tbody>
-
         </table>
 
         {/* Save Scores Button */}
@@ -218,6 +225,7 @@ function GameAuth() {
             Save Scores
           </button>
         )}
+
 
 
 

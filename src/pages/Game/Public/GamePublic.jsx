@@ -44,6 +44,74 @@ console.log(game)
   <div className="gamePublic-container">
    {/* Home Team Stats */}
    <div className="teamPublic-container-home">
+
+
+
+
+
+{/* Game Period Scores Table */}
+<table className="gamePublic-periods-table">
+  <thead>
+    <tr>
+      <th>Team Name</th>
+       {game.game.periodScores
+        .filter(period => !period.gamePeriod.hidden) // ✅ Exclude hidden periods
+        .map((period) => (
+         <th key={period.id}>{period.gamePeriod?.name}</th>
+        ))}
+
+
+      <th>Final</th>
+    </tr>
+  </thead>
+  <tbody>
+    {/* Home Team Row */}
+      {/* Home Team Row */}
+      {/* Home Team Row */}
+      <tr>
+       <td>{game.game.homeTeam?.name}</td>
+       {game.game.periodScores
+        .filter(period => !period.gamePeriod.hidden) // ✅ Exclude hidden periods
+        .map((period) => (
+         <td key={period.id}>{period.period_score_team1}</td>
+        ))}
+       <td>
+        {game.game.periodScores
+         .filter(period => !period.gamePeriod.hidden) // ✅ Exclude hidden periods
+         .reduce((total, period) => total + period.period_score_team1, 0)}
+       </td>
+      </tr>
+
+      {/* Away Team Row */}
+      <tr>
+       <td>{game.game.awayTeam?.name}</td>
+       {game.game.periodScores
+        .filter(period => !period.gamePeriod.hidden) // ✅ Exclude hidden periods
+        .map((period) => (
+         <td key={period.id}>{period.period_score_team2}</td>
+        ))}
+       <td>
+        {game.game.periodScores
+         .filter(period => !period.gamePeriod.hidden) // ✅ Exclude hidden periods
+         .reduce((total, period) => total + period.period_score_team2, 0)}
+       </td>
+      </tr>
+
+
+  </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
     <h3 className="teamPublic-header">
      Home Team: {game.game.homeTeam?.name} ({game.game.team1_id === game.game.homeTeam?.id ? game.game.score_team1 : game.game.score_team2})
     </h3>

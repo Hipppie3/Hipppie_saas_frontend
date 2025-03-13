@@ -5,12 +5,13 @@
  width: 100%;
  height: 80px;
  /* Adjust as needed */
- background-color: #1E3A8A;
+ background-color: none;
  display: flex;
  align-items: center;
  justify-content: space-between;
  padding: 0 20px;
  z-index: 1000;
+ color: white
 }
 
 .navbar_list {
@@ -34,7 +35,6 @@
 
 .navbar_list a:hover,
 .navbar_list a.active-class {
- background-color: #2563EB;
  border-radius: 5px;
 }
 
@@ -52,6 +52,7 @@
  .navbar_hamburger {
   display: block;
   padding-top: 10px;
+  color: white;
  }
 
  .navbar_list {

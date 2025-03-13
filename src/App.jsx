@@ -35,8 +35,8 @@ function App() {
   
   return (
     <div className="app_container">
-  {isPublicView || isLoginPage ? <Navbar /> : <Sidebar />}
-      <div className="content_wrapper">
+  {isPublicView || isLoginPage ?  <Navbar /> : <Sidebar />}
+      <div className={isPublicView ? "content_wrapper_public" : "content_wrapper"}>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />

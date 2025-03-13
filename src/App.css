@@ -29,3 +29,12 @@ body,
  display: flex;
  overflow-x: hidden;
 }
+
+.content_wrapper_public {
+ background-color: black;
+  flex: 1;
+  /* ✅ Ensures the content takes up the remaining space */
+  display: flex;
+  overflow-x: hidden;
+  color: white;
+ }
