@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import './UserList.css';
-import api from "../../utils/api"; // ✅ Import API instance
+import api from "../utils/api"; // ✅ Import API instance
 
 function UserList() {
   const { user, deleteUser, register } = useAuth();
