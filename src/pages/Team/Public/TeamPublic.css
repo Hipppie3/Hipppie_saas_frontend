@@ -1,8 +1,181 @@
-.team_public {
+.teamPublic-container {
   width: 100%;
-  margin-top: 80px;
+  margin-top: 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
   color: white;
+}
+
+.teamPublic-banner {
+  height: 100px;
+  width: 100%;
+  border: 1px solid red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+}
+
+.teamPublic-games-container {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+}
+
+.teamPublic-games-table {
+  width: 80%;
+}
+.teamPublic-games-container {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.teamPublic-games-title {
+  width: 95%;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #c6daed;
+}
+
+.teamPublic-games-table {
+  width: 95%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+.clickable-row {
+  cursor: pointer;
+  /* ✅ Changes cursor to pointer on hover */
+}
+
+.clickable-row:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  /* ✅ Optional: Add a slight hover effect */
+}
+
+
+
+.teamPublic-games-table thead tr {
+  background-color: rgb(67, 98, 119);
+  font-size: 12px;
+}
+
+.teamPublic-games-table a {
+  text-decoration: none;
+  color: #56a6f2
+}
+
+.teamPublic-games-table th {
+  text-align: center;
+  padding: 10px;
+  white-space: nowrap;
+}
+
+.teamPublic-games-table td {
+    text-align: center;
+      white-space: nowrap;
+      padding: 5px;
+}
+
+
+
+
+
+
+
+.teamPublic-players-container {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+}
+
+.teamPublic-players-title {
+  width: 95%;
+  padding-bottom: 10px;
+border-bottom: 1px solid #c6daed;
+}
+
+.teamPublic-players-table {
+  width: 95%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+/* Align the first header (th) to the left */
+.teamPublic-players-table th:first-child {
+  text-align: left;
+  padding-left: 5px;
+  /* Adjust spacing as needed */
+}
+
+/* Align the first column (td) to the left */
+.teamPublic-players-table td:first-child {
+  text-align: left;
+  padding-left: 5px;
+  /* Adjust spacing as needed */
+}
+.teamPublic-players-table thead tr {
+  background-color: rgb(67, 98, 119);
+  font-size: 12px;
+}
+.teamPublic-players-table a {
+  text-decoration: none;
+  color: #56a6f2
+}
+
+.teamPublic-players-table th {
+  text-align: center;
+  padding: 10px;
+  white-space: nowrap;
+}
+
+.teamPublic-players-table th:nth-child(2) {
+  text-align: left;
+  padding-left: 3px;
+}
+
+
+.teamPublic-players-table td {
+  text-align: center;
+  border-bottom: 1px solid #c6daed;
+}
+
+/* Change background of all cells in the same column when hovering */
+.teamPublic-players-table tbody tr:hover td:nth-child(1),
+.teamPublic-players-table tbody tr:hover td:nth-child(2),
+.teamPublic-players-table tbody tr:hover td:nth-child(3),
+.teamPublic-players-table tbody tr:hover td:nth-child(4),
+.teamPublic-players-table tbody tr:hover td:nth-child(5),
+.teamPublic-players-table tbody tr:hover td:nth-child(6) {
+  background-color: rgb(42, 72, 93);
+}
+
+.teamPublic-players-table td:nth-child(2) {
+  text-align: left;
+  padding: 5px;
+}
+
+
+/* Hover effect on links */
+.teamPublic-players-table td a:hover {
+  text-shadow: 0 0 1px rgba(0, 0, 0, 1);
+}
+
+.teamPublic-players-table td a:hover {
+  text-shadow: 0 0 1px rgba(0, 0, 0, 1)
+}
+
+@media (max-width:480px) {
+  .teamPublic-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
 }

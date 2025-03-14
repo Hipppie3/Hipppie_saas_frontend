@@ -15,7 +15,7 @@ function PlayerPublic() {
       try {
         const response = await axios.get(`/api/players/${id}?domain=${domain}`, { withCredentials: true });
         setPlayer(response.data.player);
-        setAllStats(response.data.allStats)
+        setAllStats(response.data.allStats.sort((a, b) => a.order - b.order)); // ✅ Ensure stats are ordered
       } catch (error) {
         console.error("Error fetching player:", error.response?.data || error.message);
       }
@@ -31,14 +31,18 @@ function PlayerPublic() {
           date: gameStat.game?.date || "N/A",
           homeTeam: gameStat.game?.homeTeam?.name || "Unknown",
           awayTeam: gameStat.game?.awayTeam?.name || "Unknown",
-          stats: allStats.map(stat => ({
-            shortName: stat.shortName,
-            value: player?.gameStats?.find(gs => gs.game_id === gameStat.game?.id && gs.stat_id === stat.id)?.value || 0
-          }))
+          stats: allStats.map(stat => {
+            const foundStat = player?.gameStats?.find(gs => gs.game_id === gameStat.game?.id && gs.stat_id === stat.id);
+            return {
+              shortName: stat.shortName,
+              value: foundStat ? foundStat.value : 0, // ✅ Ensure order is preserved
+            };
+          })
         }
       ])
     ).values()
   );
+
 
 
 

@@ -40,66 +40,50 @@ console.log(game)
 
 
 
- return (
+return (
   <div className="gamePublic-container">
-   {/* Home Team Stats */}
-   <div className="teamPublic-container-home">
-
-
-
-
-
-{/* Game Period Scores Table */}
+  
+<div className="gamePublic-periods-container">
+  <div className="gamePublic-periods-final-score">
+    <h5>{game.game.homeTeam?.name}</h5>
+    <h5>{game.game.score_team1}</h5>
+    <h5>FINAL</h5>
+    <h5>{game.game.score_team2}</h5>
+    <h5>{game.game.awayTeam?.name}</h5>
+  </div>
 <table className="gamePublic-periods-table">
   <thead>
     <tr>
-      <th>Team Name</th>
-       {game.game.periodScores
-        .filter(period => !period.gamePeriod.hidden) // ✅ Exclude hidden periods
-        .map((period) => (
-         <th key={period.id}>{period.gamePeriod?.name}</th>
+      <th></th>
+      {game.game.periodScores
+      .filter(period => !period.gamePeriod.hidden) // ✅ Exclude hidden periods
+      .map((period) => (
+        <th key={period.id}>{period.gamePeriod?.name}</th>
         ))}
-
-
-      <th>Final</th>
     </tr>
   </thead>
   <tbody>
-    {/* Home Team Row */}
-      {/* Home Team Row */}
-      {/* Home Team Row */}
       <tr>
-       <td>{game.game.homeTeam?.name}</td>
-       {game.game.periodScores
-        .filter(period => !period.gamePeriod.hidden) // ✅ Exclude hidden periods
-        .map((period) => (
-         <td key={period.id}>{period.period_score_team1}</td>
-        ))}
-       <td>
-        {game.game.periodScores
-         .filter(period => !period.gamePeriod.hidden) // ✅ Exclude hidden periods
-         .reduce((total, period) => total + period.period_score_team1, 0)}
-       </td>
+      <td>{game.game.homeTeam?.name}</td>
+      {game.game.periodScores
+      .filter(period => !period.gamePeriod.hidden) // ✅ Exclude hidden periods
+      .map((period) => (
+        <td key={period.id}>{period.period_score_team1}</td>
+      ))}
+    </tr>
+
+    {/* Away Team Row */}
+    <tr>
+      <td>{game.game.awayTeam?.name}</td>
+      {game.game.periodScores
+      .filter(period => !period.gamePeriod.hidden) // ✅ Exclude hidden periods
+      .map((period) => (
+        <td key={period.id}>{period.period_score_team2}</td>
+      ))}
       </tr>
-
-      {/* Away Team Row */}
-      <tr>
-       <td>{game.game.awayTeam?.name}</td>
-       {game.game.periodScores
-        .filter(period => !period.gamePeriod.hidden) // ✅ Exclude hidden periods
-        .map((period) => (
-         <td key={period.id}>{period.period_score_team2}</td>
-        ))}
-       <td>
-        {game.game.periodScores
-         .filter(period => !period.gamePeriod.hidden) // ✅ Exclude hidden periods
-         .reduce((total, period) => total + period.period_score_team2, 0)}
-       </td>
-      </tr>
-
-
   </tbody>
 </table>
+    </div>
 
 
 
@@ -107,91 +91,86 @@ console.log(game)
 
 
 
+  <div className="teamPublic-container-home">
 
 
-
-
-
-    <h3 className="teamPublic-header">
-     Home Team: {game.game.homeTeam?.name} ({game.game.team1_id === game.game.homeTeam?.id ? game.game.score_team1 : game.game.score_team2})
-    </h3>
-    <table className="gamePublic-stat-table">
-     <thead>
-      <tr>
-       <th className="playerPublic-column">Player</th>
-       {game.stats.map((stat) => (
-        <th key={stat.id} className="statPublic-column">{stat.shortName}</th>
-       ))}
-      </tr>
-     </thead>
-
-
-     
-     <tbody>
-      {game.game.homeTeam?.players.map((player) => (
-       <tr key={player.id}>
-        <td className="playerPublic-name">{player.firstName} {player.lastName}</td>
-        {game.stats.map((stat) => (
-         <td key={stat.id}>
-          <span className="statPublic-value">{statValues[`${player.id}-${stat.id}`] || 0}</span>
-         </td>
-        ))}
-       </tr>
+  <h3 className="teamPublic-header">
+    Home Team: {game.game.homeTeam?.name} ({game.game.team1_id === game.game.homeTeam?.id ? game.game.score_team1 : game.game.score_team2})
+  </h3>
+  <table className="gamePublic-stat-table">
+    <thead>
+    <tr>
+      <th className="playerPublic-column">Player</th>
+      {game.stats.map((stat) => (
+      <th key={stat.id} className="statPublic-column">{stat.shortName}</th>
       ))}
-      {/* Total Row */}
-      <tr className="totalPublic-row">
-       <td className="playerPublic-name"><strong>Total</strong></td>
-       {game.stats.map((stat) => {
-        const total = game.game.homeTeam?.players.reduce((sum, player) => {
-         return sum + (statValues[`${player.id}-${stat.id}`] || 0);
-        }, 0);
-        return <td key={stat.id}><strong>{total}</strong></td>;
-       })}
-      </tr>
-     </tbody>
-    </table>
-   </div>
-
-   {/* Away Team Stats */}
-   <div className="teamPublic-container-away">
-    <h3 className="teamPublic-header">
-     Away Team: {game.game.awayTeam?.name} ({game.game.team2_id === game.game.awayTeam?.id ? game.game.score_team2 : game.game.score_team1})
-    </h3>
-    <table className="gamePublic-stat-table">
-     <thead>
-      <tr>
-       <th className="playerPublic-column">Player</th>
-       {game.stats.map((stat) => (
-        <th key={stat.id} className="statPublic-column">{stat.shortName}</th>
-       ))}
-      </tr>
-     </thead>
-     <tbody>
-      {game.game.awayTeam?.players.map((player) => (
-       <tr key={player.id}>
-        <td className="playerPublic-name">{player.firstName} {player.lastName}</td>
-        {game.stats.map((stat) => (
-         <td key={stat.id}>
-          <span className="statPublic-value">{statValues[`${player.id}-${stat.id}`] || 0}</span>
-         </td>
-        ))}
-       </tr>
+    </tr>
+    </thead>
+    <tbody>
+    {game.game.homeTeam?.players.map((player) => (
+      <tr key={player.id}>
+      <td className="playerPublic-name">{player.firstName} {player.lastName}</td>
+      {game.stats.map((stat) => (
+        <td key={stat.id}>
+        <span className="statPublic-value">{statValues[`${player.id}-${stat.id}`] || 0}</span>
+        </td>
       ))}
-      {/* Total Row */}
-      <tr className="totalPublic-row">
-       <td className="playerPublic-name"><strong>Total</strong></td>
-       {game.stats.map((stat) => {
-        const total = game.game.awayTeam?.players.reduce((sum, player) => {
-         return sum + (statValues[`${player.id}-${stat.id}`] || 0);
-        }, 0);
-        return <td key={stat.id}><strong>{total}</strong></td>;
-       })}
       </tr>
-     </tbody>
-    </table>
-   </div>
+    ))}
+    {/* Total Row */}
+    <tr className="totalPublic-row">
+      <td className="playerPublic-name"><strong>Total</strong></td>
+      {game.stats.map((stat) => {
+      const total = game.game.homeTeam?.players.reduce((sum, player) => {
+        return sum + (statValues[`${player.id}-${stat.id}`] || 0);
+      }, 0);
+      return <td key={stat.id}><strong>{total}</strong></td>;
+      })}
+    </tr>
+    </tbody>
+  </table>
   </div>
- );
+
+  {/* Away Team Stats */}
+  <div className="teamPublic-container-away">
+  <h3 className="teamPublic-header">
+    Away Team: {game.game.awayTeam?.name} ({game.game.team2_id === game.game.awayTeam?.id ? game.game.score_team2 : game.game.score_team1})
+  </h3>
+  <table className="gamePublic-stat-table">
+    <thead>
+    <tr>
+      <th className="playerPublic-column">Player</th>
+      {game.stats.map((stat) => (
+      <th key={stat.id} className="statPublic-column">{stat.shortName}</th>
+      ))}
+    </tr>
+    </thead>
+    <tbody>
+    {game.game.awayTeam?.players.map((player) => (
+      <tr key={player.id}>
+      <td className="playerPublic-name">{player.firstName} {player.lastName}</td>
+      {game.stats.map((stat) => (
+        <td key={stat.id}>
+        <span className="statPublic-value">{statValues[`${player.id}-${stat.id}`] || 0}</span>
+        </td>
+      ))}
+      </tr>
+    ))}
+    {/* Total Row */}
+    <tr className="totalPublic-row">
+      <td className="playerPublic-name"><strong>Total</strong></td>
+      {game.stats.map((stat) => {
+      const total = game.game.awayTeam?.players.reduce((sum, player) => {
+        return sum + (statValues[`${player.id}-${stat.id}`] || 0);
+      }, 0);
+      return <td key={stat.id}><strong>{total}</strong></td>;
+      })}
+    </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+);
 }
 
 export default GamePublic;
