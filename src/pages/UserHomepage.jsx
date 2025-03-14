@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
-import './UserHomePage.css';
+import './UserHomepage.css';
 
 const UserHomepage = () => {
   const [searchParams] = useSearchParams();

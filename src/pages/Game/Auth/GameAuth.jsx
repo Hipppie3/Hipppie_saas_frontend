@@ -226,11 +226,6 @@ function GameAuth() {
           </button>
         )}
 
-
-
-
-
-
         
         <table className="gameAuth-stat-table">
           <thead>
