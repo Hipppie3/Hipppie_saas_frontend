@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import axios from 'axios'
+import api from "../utils/api"; // ✅ Import API instance
 import { NavLink } from 'react-router-dom'
 import './Home.css'
 
@@ -9,7 +9,7 @@ function Home() {
   useEffect(() => {
 const fetchWebsites = async () => {
   try {
-    const response = await axios.get('/api/users', { withCredentials: false });
+    const response = await api.get('/api/users', { withCredentials: false });
     setWebsites(response.data.users);
     console.log('Fetched websites:', response.data.users);
   } catch (error) {
