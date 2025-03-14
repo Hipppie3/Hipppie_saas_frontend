@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import axios from "axios";
 import './UserHomepage.css';
+import api from "../utils/api"; // ✅ Import API instance
 
 const UserHomepage = () => {
   const [searchParams] = useSearchParams();
@@ -15,7 +15,7 @@ const UserHomepage = () => {
 
       console.log("Fetching domain:", `/api/users/domain/${domain}`);
       try {
-        const response = await axios.get(`/api/users/domain/${domain}`);
+        const response = await api.get(`/api/users/domain/${domain}`);
         console.log("Domain response:", response.data);
         setUser(response.data.user);
       } catch (error) {
