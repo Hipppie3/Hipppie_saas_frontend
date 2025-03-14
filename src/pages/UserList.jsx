@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import './UserList.css';
-// import LeagueGameAuth from '../pages/Game/Auth/LeagueGameAuth.jsx'
+import api from "../../utils/api"; // ✅ Import API instance
 
 function UserList() {
   const { user, deleteUser, register } = useAuth();
@@ -18,7 +17,7 @@ function UserList() {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await axios.get('/api/users/userList', { withCredentials: true });
+        const response = await api.get('/api/users/userList', { withCredentials: true });
         const usersWithSports = response.data.users.map(user => ({
           ...user,
           sports: user.sports || [] // Ensure sports exist
@@ -35,7 +34,7 @@ function UserList() {
   useEffect(() => {
     const fetchSports = async () => {
       try {
-        const response = await axios.get('/api/sports'); // ✅ Adjust this based on your API route
+        const response = await api.get('/api/sports'); // ✅ Adjust this based on your API route
         setSports(response.data);
       } catch (error) {
         console.error('Error fetching sports:', error);
@@ -124,11 +123,11 @@ function UserList() {
       sportIds: updateForm.sportIds.map(id => Number(id)), 
     };
     try {
-      const response = await axios.put(`/api/users/${updateForm.id}`, sanitizedForm, { withCredentials: true });
+      const response = await api.put(`/api/users/${updateForm.id}`, sanitizedForm, { withCredentials: true });
       if (response.data.success) {
         setMessage(`User ${updateForm.username} updated successfully`);
         // ✅ Refetch users after update to get the latest data
-        const updatedUsers = await axios.get('/api/users/userList', { withCredentials: true });
+        const updatedUsers = await api.get('/api/users/userList', { withCredentials: true });
         setUsers(updatedUsers.data.users);
       } else {
         alert(response.data.message);

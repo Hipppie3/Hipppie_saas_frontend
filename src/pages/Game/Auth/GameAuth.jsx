@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './GameAuth.css';
 
+
 function GameAuth() {
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,17 +16,16 @@ function GameAuth() {
   const fetchGame = async () => {
     try {
       const response = await axios.get(`/api/games/${id}`);
+
+      console.log("Fetched game data:", response.data); // Debug log
+
       const sortedStats = response.data.stats
         .filter(stat => !stat.hidden)
         .sort((a, b) => a.order - b.order);
 
-      // ✅ Exclude hidden game periods from periodScores
-      const visiblePeriodScores = response.data?.game?.periodScores.filter(
-        (period) => !period.gamePeriod.hidden
-      ) || [];
-
-      setGame({ ...response.data, stats: sortedStats });
-      setPeriodScores(visiblePeriodScores); // ✅ Store only visible period scores
+      setGame(response.data.game); // ✅ Store game separately
+      setStats(sortedStats); // ✅ Store stats separately
+      setPeriodScores(response.data.game?.periodScores || []);
 
       initializeStatValues(response.data);
     } catch (error) {
@@ -33,6 +33,7 @@ function GameAuth() {
     }
     setLoading(false);
   };
+
 
 
   useEffect(() => {

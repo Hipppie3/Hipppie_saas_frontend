@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import api from "../../utils/api"; // ✅ Correct API instance
 
 // ✅ Create Context
 const AuthContext = createContext();
@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
   const checkAuth = async () => {
     setLoading(true)
     try {
-      const response = await axios.get('/api/users/check-auth', { withCredentials: true });
+      const response = await api.get('/api/users/check-auth', { withCredentials: true });
       setIsAuthenticated(response.data.authenticated);
       setUser(response.data.user || null);
     } catch (error) {
@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
 const login = async (formData) => {
   setLoading(true);
   try {
-    const response = await axios.post('/api/users/login', formData, { withCredentials: true });
+    const response = await api.post('/api/users/login', formData, { withCredentials: true });
     console.log(response.data)
     await checkAuth();
     setLoading(false);
@@ -42,7 +42,7 @@ const login = async (formData) => {
     console.log('Registering user:', registerData);  // Log data being sent
     setLoading(true);
     try {
-      const response = await axios.post('/api/users/register', registerData, { withCredentials: true });
+      const response = await api.post('/api/users/register', registerData, { withCredentials: true });
 
       setLoading(false);
       return { success: true, user: response.data.user }; // ✅ Return user data
@@ -58,7 +58,7 @@ const login = async (formData) => {
   // Logout Function
   const logout = async () => {
     try {
-      const response = await axios.post('/api/users/logout', {}, { withCredentials: true });
+      const response = await api.post('/api/users/logout', {}, { withCredentials: true });
       setIsAuthenticated(false);
       setUser(null);
       console.log(response.data)
@@ -74,7 +74,7 @@ const login = async (formData) => {
   const deleteUser = async (userId) => {
     console.log(userId)
     try {
-      await axios.delete(`/api/users/${userId}`, { withCredentials: true });
+      await api.delete(`/api/users/${userId}`, { withCredentials: true });
       return { success: true};
     } catch (error) {
       console.error("Delete failed", error);
