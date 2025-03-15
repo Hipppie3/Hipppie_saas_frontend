@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaUser, FaLock } from "react-icons/fa";  // ✅ Import icons
-import axios from 'axios';
+
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';  // ✅ Import useAuth
 import './Login.css'
