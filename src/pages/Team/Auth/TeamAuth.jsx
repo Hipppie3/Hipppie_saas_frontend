@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '@api'; // Instead of ../../../utils/api
 import { NavLink, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import './TeamAuth.css';
@@ -26,9 +26,9 @@ function TeamAuth() {
       try {
         let response;
         if (isAuthenticated) {
-          response = await axios.get(`/api/teams/${id}`, { withCredentials: true });
+          response = await api.get(`/api/teams/${id}`, { withCredentials: true });
         } else if (domain) {
-          response = await axios.get(`/api/teams/${id}?domain=${domain}`);
+          response = await api.get(`/api/teams/${id}?domain=${domain}`);
         } else {
           return setError("Unauthorized access");
         }
@@ -45,7 +45,7 @@ function TeamAuth() {
   const handleCreatePlayer = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`/api/players`, { ...playerForm, teamId: id }, { withCredentials: true });
+      const response = await api.post(`/api/players`, { ...playerForm, teamId: id }, { withCredentials: true });
       const newPlayer = response.data.player;
 
       // Update UI immediately
@@ -67,7 +67,7 @@ function TeamAuth() {
   const handleUpdatePlayer = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`/api/players/${updateForm.id}`, updateForm, { withCredentials: true });
+      const response = await api.put(`/api/players/${updateForm.id}`, updateForm, { withCredentials: true });
       const updatedPlayer = response.data.player;
 
       setTeam((prevTeam) => ({
@@ -92,7 +92,7 @@ function TeamAuth() {
     }
     if (!window.confirm("Are you sure you want to delete the selected players?")) return;
     try {
-      await Promise.all(selectedPlayers.map(id => axios.delete(`/api/players/${id}`, { withCredentials: true })));
+      await Promise.all(selectedPlayers.map(id => api.delete(`/api/players/${id}`, { withCredentials: true })));
       setTeam((prevTeam) => ({
         ...prevTeam,
         players: prevTeam.players.filter(player => !selectedPlayers.includes(player.id)),

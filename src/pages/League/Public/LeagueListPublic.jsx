@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '@api'; // Instead of ../../../utils/api
 import { NavLink, useSearchParams } from 'react-router-dom';
 import './LeagueListPublic.css';
 
@@ -11,7 +11,7 @@ function LeagueListPublic() {
   useEffect(() => {
     const fetchLeagues = async () => {
       try {
-        const response = await axios.get(`/api/leagues?domain=${domain}`);
+        const response = await api.get(`/api/leagues?domain=${domain}`);
         setLeagues(response.data.leagues || []);
         console.log(response.data.leagues)
       } catch (error) {

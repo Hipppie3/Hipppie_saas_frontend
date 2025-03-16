@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './ScheduleAuth.css';
-import axios from 'axios';
+import api from '@api'; // Instead of ../../../utils/api
 import { NavLink } from 'react-router-dom';
 
 function ScheduleAuth() {
@@ -11,7 +11,7 @@ function ScheduleAuth() {
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const response = await axios.get('/api/games');
+        const response = await api.get('/api/games');
         console.log(response.data);
         setGames(response.data.games); // ✅ Store only games array
       } catch (error) {
@@ -21,7 +21,7 @@ function ScheduleAuth() {
 
     const fetchLeagues = async () => {
       try {
-        const response = await axios.get('/api/leagues'); // ✅ Fetch all leagues
+        const response = await api.get('/api/leagues'); // ✅ Fetch all leagues
         console.log("Leagues:", response.data.leagues);
         setLeagues(response.data.leagues); // ✅ Store leagues
       } catch (error) {

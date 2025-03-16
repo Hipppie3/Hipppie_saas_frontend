@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '@api'; // Instead of ../../../utils/api
 import { useAuth } from '../../context/AuthContext';
 import './GamePeriod.css';
 import { DndContext, closestCenter } from '@dnd-kit/core';
@@ -17,7 +17,7 @@ function GamePeriod() {
    if (!user) return;
    try {
     const sportId = user.sports[0].id;
-    const response = await axios.get(`/api/gamePeriods/${sportId}`, { withCredentials: true });
+    const response = await api.get(`/api/gamePeriods/${sportId}`, { withCredentials: true });
 
     setGamePeriods(response.data); // Show all, handle visibility in UI
    } catch (error) {
@@ -31,7 +31,7 @@ function GamePeriod() {
 
  const handleHidePeriod = async (periodId) => {
   try {
-   await axios.put(`/api/gamePeriods/hide/${periodId}`, {}, { withCredentials: true });
+   await api.put(`/api/gamePeriods/hide/${periodId}`, {}, { withCredentials: true });
    setGamePeriods(gamePeriods.map(period =>
     period.id === periodId ? { ...period, hidden: true } : period
    ));
@@ -42,7 +42,7 @@ function GamePeriod() {
 
  const handleUnhidePeriod = async (periodId) => {
   try {
-   await axios.put(`/api/gamePeriods/unhide/${periodId}`, {}, { withCredentials: true });
+   await api.put(`/api/gamePeriods/unhide/${periodId}`, {}, { withCredentials: true });
    setGamePeriods(gamePeriods.map(period =>
     period.id === periodId ? { ...period, hidden: false } : period
    ));
@@ -54,14 +54,14 @@ function GamePeriod() {
  const handleAddPeriod = async () => {
   try {
    const sportId = user.sports[0].id;
-   await axios.post(
+   await api.post(
     `/api/gamePeriods`,
     { sportId, name: newPeriod.name },
     { withCredentials: true }
    );
 
    // ✅ Refetch game periods after adding a new one
-   const updatedResponse = await axios.get(`/api/gamePeriods/${sportId}`, { withCredentials: true });
+   const updatedResponse = await api.get(`/api/gamePeriods/${sportId}`, { withCredentials: true });
    setGamePeriods(updatedResponse.data); // ✅ Update gamePeriods state with the latest data
   } catch (error) {
    console.error("Error adding game period:", error);
@@ -79,7 +79,7 @@ function GamePeriod() {
   setGamePeriods(reorderedPeriods);
 
   try {
-   await axios.put('/api/gamePeriods/reorder', {
+   await api.put('/api/gamePeriods/reorder', {
     gamePeriods: reorderedPeriods.map((period, index) => ({ id: period.id, order: index })),
    });
   } catch (error) {
@@ -93,7 +93,7 @@ function GamePeriod() {
   try {
    const sportId = user.sports[0].id;
    console.log(sportId);
-   const response = await axios.post(`/api/gamePeriods/reset/${sportId}`, {}, { withCredentials: true });
+   const response = await api.post(`/api/gamePeriods/reset/${sportId}`, {}, { withCredentials: true });
    setGamePeriods(response.data);
   } catch (error) {
    console.error("Error resetting game periods:", error);

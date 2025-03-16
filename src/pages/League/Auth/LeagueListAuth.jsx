@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '@api'; // Instead of ../../../utils/api
 import { NavLink, useParams } from 'react-router-dom';
 import './LeagueListAuth.css';
 
@@ -18,7 +18,7 @@ function LeagueListAuth() {
   useEffect(() => {
     const fetchLeagues = async () => {
       try {
-        const response = await axios.get(`/api/leagues`, { withCredentials: true });
+        const response = await api.get(`/api/leagues`, { withCredentials: true });
         setLeagues(response.data.leagues || []);
         console.log(response.data.leagues)
       } catch (error) {
@@ -32,8 +32,8 @@ function LeagueListAuth() {
   const handleCreateLeague = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/leagues', { ...leagueForm}, { withCredentials: true });
-      const newLeague = await axios.get(`/api/leagues`, { withCredentials: true });
+      const response = await api.post('/api/leagues', { ...leagueForm}, { withCredentials: true });
+      const newLeague = await api.get(`/api/leagues`, { withCredentials: true });
       setLeagues(newLeague.data.leagues || []);
       setLeagueForm({ name: "" });
       setMessage(`${response.data.league.name} created successfully`);
@@ -48,8 +48,8 @@ function LeagueListAuth() {
   const handleUpdateLeague = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`/api/leagues/${updateForm.id}`, { name: updateForm.name }, { withCredentials: true });
-      const updatedLeagues = await axios.get('/api/leagues', { withCredentials: true });
+      const response = await api.put(`/api/leagues/${updateForm.id}`, { name: updateForm.name }, { withCredentials: true });
+      const updatedLeagues = await api.get('/api/leagues', { withCredentials: true });
       setLeagues(updatedLeagues.data.leagues || []);
       setMessage(`${response.data.league.name} updated successfully`);
       setIsUpdateModalOpen(false);
@@ -66,7 +66,7 @@ function LeagueListAuth() {
     }
     if (!window.confirm("Are you sure you want to delete the selected leagues?")) return;
     try {
-      await Promise.all(selectedLeagues.map(id => axios.delete(`/api/leagues/${id}`, { withCredentials: true })));
+      await Promise.all(selectedLeagues.map(id => api.delete(`/api/leagues/${id}`, { withCredentials: true })));
       setLeagues((prevLeagues) => prevLeagues.filter(league => !selectedLeagues.includes(league.id)));
       setSelectedLeagues([]); // Clear selection after deletion
       setMessage("Leagues deleted successfully");

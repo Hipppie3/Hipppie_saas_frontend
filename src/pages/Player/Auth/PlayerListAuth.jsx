@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '@api'; // Instead of ../../../utils/api
 import './PlayerListAuth.css';
 import { useNavigate } from 'react-router-dom'; // ✅ Import navigation hook
 import { NavLink, useParams } from 'react-router-dom';
@@ -32,11 +32,11 @@ function PlayerListAuth() {
     const fetchPlayersAndTeams = async () => {
       try {
         // Fetch Players
-        const playersResponse = await axios.get('/api/players', { withCredentials: true });
+        const playersResponse = await api.get('/api/players', { withCredentials: true });
         setPlayers(playersResponse.data.players || []);
 
         // ✅ Fetch Teams separately
-        const teamsResponse = await axios.get('/api/teams', { withCredentials: true });
+        const teamsResponse = await api.get('/api/teams', { withCredentials: true });
         setTeams(teamsResponse.data.teams || []);
       } catch (error) {
         console.error("Error fetching players or teams:", error);
@@ -61,7 +61,7 @@ function PlayerListAuth() {
     formData.append("teamId", Number(playerForm.teamId));
     if (playerForm.image) formData.append("image", playerForm.image);
     try {
-      const response = await axios.post(`/api/players`, formData, {
+      const response = await api.post(`/api/players`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true
       });
@@ -91,12 +91,12 @@ function PlayerListAuth() {
       formData.append("image", updateForm.image);
     }
     try {
-      await axios.put(`/api/players/${updateForm.id}`, formData, {
+      await api.put(`/api/players/${updateForm.id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true
     });
 
-      const response = await axios.get(`/api/players`, { withCredentials: true });
+      const response = await api.get(`/api/players`, { withCredentials: true });
       setPlayers(response.data.players || []);
       setMessage("Player updated successfully");
       setIsUpdateModalOpen(false);
@@ -117,7 +117,7 @@ function PlayerListAuth() {
     if (!window.confirm("Are you sure you want to delete the selected players?")) return;
 
     try {
-      await Promise.all(selectedPlayers.map(id => axios.delete(`/api/players/${id}`, { withCredentials: true })));
+      await Promise.all(selectedPlayers.map(id => api.delete(`/api/players/${id}`, { withCredentials: true })));
       setPlayers((prevPlayers) => prevPlayers.filter(player => !selectedPlayers.includes(player.id)));
       setSelectedPlayers([]); // Clear selection after deletion
       setMessage("Players deleted successfully");

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from '@api'; // Instead of ../../../utils/api
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './GameAuth.css';
@@ -15,7 +15,7 @@ function GameAuth() {
 
   const fetchGame = async () => {
     try {
-      const response = await axios.get(`/api/games/${id}`);
+      const response = await api.get(`/api/games/${id}`);
 
       console.log("Fetched game data:", response.data); // Debug log
 
@@ -97,7 +97,7 @@ function GameAuth() {
     });
 
     try {
-      await axios.put('/api/playerGameStats', {
+      await api.put('/api/playerGameStats', {
         player_id: statsToUpdate[0]?.player_id,
         game_id: game.game.id,
         stats: statsToUpdate,
@@ -113,7 +113,7 @@ function GameAuth() {
 
   const handleSaveScores = async () => {
     try {
-      await axios.put(`/api/games/gamePeriodScores`, {
+      await api.put(`/api/games/gamePeriodScores`, {
         game_id: game.game.id,
         scores: periodScores.map(period => ({
           id: period.id,

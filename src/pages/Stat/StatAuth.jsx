@@ -1,7 +1,7 @@
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, arrayMove, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import axios from 'axios';
+import api from '@api'; // Instead of ../../../utils/api
 import React, { useEffect, useState } from 'react';
 import './StatAuth.css';
 import { useAuth } from '../../context/AuthContext';
@@ -20,7 +20,7 @@ function Stats() {
     if (!user || !user.sports || user.sports.length === 0) return;
     try {
       const sportId = user.sports[0].id;
-      const response = await axios.get(`/api/stats/${sportId}`);
+      const response = await api.get(`/api/stats/${sportId}`);
       setStats(response.data);
     } catch (error) {
       console.error("Error fetching stats:", error);
@@ -42,7 +42,7 @@ function Stats() {
 
     try {
       // ✅ Save the new order in the database
-      await axios.put('/api/stats/reorder', {
+      await api.put('/api/stats/reorder', {
         stats: reorderedStats.map((stat, index) => ({ id: stat.id, order: index })),
       });
 
@@ -57,7 +57,7 @@ function Stats() {
 
   const handleHideStat = async (id, currentVisibility) => {
     try {
-      await axios.put(`/api/stats/${id}/toggle-visibility`, { hidden: !currentVisibility });
+      await api.put(`/api/stats/${id}/toggle-visibility`, { hidden: !currentVisibility });
 
       // ✅ Maintain the current order instead of fetching from backend again
       setStats((prevStats) =>
@@ -78,7 +78,7 @@ function Stats() {
 
     try {
       const sportId = user.sports[0].id;
-      await axios.post('/api/stats/reset', { sportId });
+      await api.post('/api/stats/reset', { sportId });
       fetchStatsBySport(); // ✅ Refresh the stats after reset
     } catch (error) {
       console.error("Error resetting stats:", error);
@@ -91,7 +91,7 @@ function Stats() {
 
     try {
       const sportId = user.sports[0].id;
-      const response = await axios.post('/api/stats', {
+      const response = await api.post('/api/stats', {
         sportId,
         name: newStat.name,
         shortName: newStat.shortName

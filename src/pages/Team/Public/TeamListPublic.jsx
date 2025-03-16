@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '@api'; // Instead of ../../../utils/api
 import { NavLink, useSearchParams } from 'react-router-dom';
 import './TeamListPublic.css';
 
@@ -13,7 +13,7 @@ function TeamListPublic() {
   useEffect(() => {
     const fetchTeams = async () => {
     try {
-      const response = await axios.get(`/api/teams?domain=${domain}`);
+      const response = await api.get(`/api/teams?domain=${domain}`);
       setTeams(response.data.teams || []);
       console.log(response.data.teams)
     } catch (error) {
@@ -22,7 +22,7 @@ function TeamListPublic() {
     };
     const fetchLeagues = async () => {
       try {
-        const response = await axios.get(`/api/leagues?domain=${domain}`); // ✅ Fetch all leagues
+        const response = await api.get(`/api/leagues?domain=${domain}`); // ✅ Fetch all leagues
         console.log("Leagues:", response.data.leagues);
         setLeagues(response.data.leagues); // ✅ Store leagues
       } catch (error) {

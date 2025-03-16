@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '@api'; // Instead of ../../../utils/api
 import { NavLink } from 'react-router-dom';
 import './TeamListAuth.css';
 
@@ -18,7 +18,7 @@ function TeamListAuth() {
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const response = await axios.get('/api/teams', { withCredentials: true });
+        const response = await api.get('/api/teams', { withCredentials: true });
         setTeams(response.data.teams || []);
       } catch (error) {
         console.error("Error fetching teams:", error);
@@ -32,7 +32,7 @@ function TeamListAuth() {
 useEffect(() => {
   const fetchLeagues = async () => {
     try {
-      const response = await axios.get('/api/leagues', { withCredentials: true });
+      const response = await api.get('/api/leagues', { withCredentials: true });
       setLeagues(response.data.leagues || []);
     } catch (error) {
       console.error("Error fetching leagues:", error);
@@ -52,8 +52,8 @@ useEffect(() => {
       return;
     }
     try {
-      await axios.post(`/api/leagues/${teamForm.leagueId}/teams`, teamForm, { withCredentials: true });
-      const updatedTeams = await axios.get('/api/teams', { withCredentials: true });
+      await api.post(`/api/leagues/${teamForm.leagueId}/teams`, teamForm, { withCredentials: true });
+      const updatedTeams = await api.get('/api/teams', { withCredentials: true });
       setTeams(updatedTeams.data.teams || []);
       setTeamForm({ name: "", leagueId: "" });
       setMessage("Team created successfully");
@@ -68,8 +68,8 @@ useEffect(() => {
   const handleUpdateTeam = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`/api/teams/${updateForm.id}`, { name: updateForm.name, leagueId: updateForm.leagueId }, { withCredentials: true });
-      const updatedTeams = await axios.get('/api/teams', { withCredentials: true });
+      await api.put(`/api/teams/${updateForm.id}`, { name: updateForm.name, leagueId: updateForm.leagueId }, { withCredentials: true });
+      const updatedTeams = await api.get('/api/teams', { withCredentials: true });
       setTeams(updatedTeams.data.teams || []);
       setMessage("Team updated successfully");
       setIsUpdateModalOpen(false);
@@ -86,7 +86,7 @@ console.log(teams)
     }
     if (!window.confirm("Are you sure you want to delete the selected teams?")) return;
     try {
-      await Promise.all(selectedTeams.map(id => axios.delete(`/api/teams/${id}`, { withCredentials: true })));
+      await Promise.all(selectedTeams.map(id => api.delete(`/api/teams/${id}`, { withCredentials: true })));
       setTeams((prevTeams) => prevTeams.filter(team => !selectedTeams.includes(team.id)));
       setSelectedTeams([]); // Clear selection after deletion
       setMessage("Teams deleted successfully");

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./PlayerListPublic.css";
 import { NavLink, useSearchParams } from "react-router-dom";
-import axios from "axios";
+import api from '@api'; // Instead of ../../../utils/api
 import DefaultImg from "../../../images/default_image.png";
 
 function PlayerListPublic() {
@@ -12,7 +12,7 @@ function PlayerListPublic() {
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
-        const response = await axios.get(`/api/players?domain=${domain}`);
+        const response = await api.get(`/api/players?domain=${domain}`);
         setPlayers(response.data.players || []);
         
         console.log(response.data);

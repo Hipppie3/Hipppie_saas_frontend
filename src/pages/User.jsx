@@ -1,5 +1,5 @@
 import React, { useState, useEffect }from 'react';
-import axios from 'axios';
+import api from '@api'; // Instead of ../../../utils/api
 import { useParams } from 'react-router-dom';
 
 function User() {

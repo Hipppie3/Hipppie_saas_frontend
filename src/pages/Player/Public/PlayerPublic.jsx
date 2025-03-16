@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from '@api'; // Instead of ../../../utils/api
 import { NavLink, useParams, useSearchParams } from "react-router-dom";
 import "./PlayerPublic.css";
 
@@ -13,7 +13,7 @@ function PlayerPublic() {
   useEffect(() => {
     const getPlayer = async () => {
       try {
-        const response = await axios.get(`/api/players/${id}?domain=${domain}`, { withCredentials: true });
+        const response = await api.get(`/api/players/${id}?domain=${domain}`, { withCredentials: true });
         setPlayer(response.data.player);
         setAllStats(response.data.allStats.sort((a, b) => a.order - b.order)); // ✅ Ensure stats are ordered
       } catch (error) {

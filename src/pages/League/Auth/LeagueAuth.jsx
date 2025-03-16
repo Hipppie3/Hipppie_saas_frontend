@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from '@api'; // Instead of ../../../utils/api
 import React, { useState, useEffect } from 'react';
 import { useParams, NavLink, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
@@ -35,9 +35,9 @@ function LeagueAuth() {
         let response;
 
         if (isAuthenticated) {
-          response = await axios.get(`/api/leagues/${id}`, { withCredentials: true });
+          response = await api.get(`/api/leagues/${id}`, { withCredentials: true });
         } else if (domain) {
-          response = await axios.get(`/api/leagues/${id}?domain=${domain}`);
+          response = await api.get(`/api/leagues/${id}?domain=${domain}`);
         } else {
           return setError("Unauthorized access");
         }
@@ -88,7 +88,7 @@ function LeagueAuth() {
   const handleCreateTeam = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`/api/leagues/${id}/teams`, teamForm, { withCredentials: true });
+      const response = await api.post(`/api/leagues/${id}/teams`, teamForm, { withCredentials: true });
       const newTeam = { ...response.data.team, players: [] }; // Ensure players array exists
 
       setTeams((prevTeams) => [...prevTeams, newTeam]);
@@ -113,7 +113,7 @@ function LeagueAuth() {
   const handleUpdateTeam = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`/api/teams/${updateForm.id}`, { name: updateForm.name }, { withCredentials: true });
+      const response = await api.put(`/api/teams/${updateForm.id}`, { name: updateForm.name }, { withCredentials: true });
       setTeams(teams.map(team =>
         team.id === updateForm.id ? { ...team, name: response.data.team.name } : team
       ));
@@ -139,7 +139,7 @@ function LeagueAuth() {
     if (!window.confirm("Are you sure you want to delete the selected teams?")) return;
     try {
       // Delete all selected teams
-      await Promise.all(selectedTeams.map(id => axios.delete(`/api/teams/${id}`, { withCredentials: true })));
+      await Promise.all(selectedTeams.map(id => api.delete(`/api/teams/${id}`, { withCredentials: true })));
       // Remove deleted teams from the UI
       setTeams((prevTeams) => prevTeams.filter(team => !selectedTeams.includes(team.id)));
       setSelectedTeams([]); // Clear selection after deletion

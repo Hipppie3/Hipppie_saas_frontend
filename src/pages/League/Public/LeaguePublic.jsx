@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from '@api'; // Instead of ../../../utils/api
 import React, { useState, useEffect } from 'react';
 import { useParams, NavLink, useSearchParams } from 'react-router-dom';
 import './LeaguePublic.css';
@@ -14,7 +14,7 @@ function LeaguePublic() {
   useEffect(() => {
     const getLeague = async () => {
       try {
-        const response = await axios.get(`/api/leagues/${id}?domain=${domain}`);
+        const response = await api.get(`/api/leagues/${id}?domain=${domain}`);
         setLeagueInfo(response.data.league);
         console.log("League Data:", response.data.league);
 

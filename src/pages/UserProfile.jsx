@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import axios from 'axios'
+import api from '@api'; // Instead of ../../../utils/api
 import { useAuth } from '../context/AuthContext'
 
 function UserProfile() {

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import axios from 'axios'
+import api from '@api'; // Instead of ../../../utils/api
 import { NavLink, useParams, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../../context/AuthContext'
 import './PlayerAuth.css';
@@ -21,12 +21,12 @@ function PlayerAuth() {
       let response;
       if (isAuthenticated) {
         if (user?.role === "super_admin") {
-          response = await axios.get(`/api/players/${id}`, { withCredentials: true});
+          response = await api.get(`/api/players/${id}`, { withCredentials: true});
         } else {
-          response = await axios.get(`/api/players/${id}`, { withCredentials: true});
+          response = await api.get(`/api/players/${id}`, { withCredentials: true});
         }
       } else if (domain) {
-        response = await axios.get(`/api/players/${id}?domain=${domain}`)
+        response = await api.get(`/api/players/${id}?domain=${domain}`)
       } else {
         return setError("Unauthorized access")
       } 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '@api'; // Instead of ../../../utils/api
 import { NavLink, useSearchParams } from 'react-router-dom';
 import './SchedulePublic.css'
 
@@ -13,7 +13,7 @@ const domain = searchParams.get("domain");
  useEffect(() => {
   const fetchGames = async () => {
    try {
-    const response = await axios.get(`/api/games?domain=${domain}`);
+    const response = await api.get(`/api/games?domain=${domain}`);
     console.log(response.data);
     setGames(response.data.games); // ✅ Store only games array
    } catch (error) {
@@ -23,7 +23,7 @@ const domain = searchParams.get("domain");
 
   const fetchLeagues = async () => {
    try {
-    const response = await axios.get(`/api/leagues?domain=${domain}`); // ✅ Fetch all leagues
+    const response = await api.get(`/api/leagues?domain=${domain}`); // ✅ Fetch all leagues
     console.log("Leagues:", response.data.leagues);
     setLeagues(response.data.leagues); // ✅ Store leagues
    } catch (error) {

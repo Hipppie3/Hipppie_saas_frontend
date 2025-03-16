@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from '@api'; // Instead of ../../../utils/api
 import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import './GamePublic.css';
@@ -14,7 +14,7 @@ function GamePublic() {
  useEffect(() => {
   const fetchGame = async () => {
    try {
-    const response = await axios.get(`/api/games/${id}?domain=${domain}`);
+    const response = await api.get(`/api/games/${id}?domain=${domain}`);
     setGame(response.data);
     initializeStatValues(response.data);
    } catch (error) {

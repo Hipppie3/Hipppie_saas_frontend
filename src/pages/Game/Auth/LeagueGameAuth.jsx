@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from '@api'; // Instead of ../../../utils/api
 import React, { useEffect, useState } from 'react';
 import './LeagueGameAuth.css';
 import { NavLink } from 'react-router-dom';
@@ -47,14 +47,14 @@ function LeagueGameAuth({ leagueInfo }) {
     const dateInPST = new Date(gameForm.date + "T00:00:00-08:00").toISOString();
 
     try {
-      await axios.post('/api/games', {
+      await api.post('/api/games', {
         ...gameForm,
         userId: user.id,
         date: dateInPST // ✅ Ensure correct timezone
       }, { withCredentials: true });
 
       // ✅ Refetch league info after creating game
-      const leagueResponse = await axios.get(`/api/leagues/${gameForm.leagueId}`, { withCredentials: true });
+      const leagueResponse = await api.get(`/api/leagues/${gameForm.leagueId}`, { withCredentials: true });
       setLeagueData(leagueResponse.data.league);
       setGames(leagueResponse.data.league.games);
 
@@ -78,7 +78,7 @@ function LeagueGameAuth({ leagueInfo }) {
     if (!selectedGame) return;
 
     try {
-      const response = await axios.put(`/api/games/${selectedGame.id}/scores`, scoreForm, { withCredentials: true });
+      const response = await api.put(`/api/games/${selectedGame.id}/scores`, scoreForm, { withCredentials: true });
 
       // ✅ Update the local state with the new score
       setLeagueData((prevLeagueData) => ({
@@ -118,7 +118,7 @@ function LeagueGameAuth({ leagueInfo }) {
     if (!window.confirm("Are you sure you want to delete the selected games?")) return;
 
     try {
-      await Promise.all(selectedGames.map(id => axios.delete(`/api/games/${id}`, { withCredentials: true })));
+      await Promise.all(selectedGames.map(id => api.delete(`/api/games/${id}`, { withCredentials: true })));
 
       // ✅ Update state instantly by removing the deleted games
       setLeagueData((prevLeagueData) => ({
