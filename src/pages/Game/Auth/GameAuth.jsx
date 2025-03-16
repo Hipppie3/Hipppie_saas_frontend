@@ -1,22 +1,21 @@
-import api from '@api'; // Instead of ../../../utils/api
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import api from '@api';
 import './GameAuth.css';
-
 
 function GameAuth() {
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [editModeScores, setEditModeScores] = useState(false);
-  const [periodScores, setPeriodScores] = useState({})
+  const [periodScores, setPeriodScores] = useState({});
   const [statValues, setStatValues] = useState({});
+  const [stats, setStats] = useState([]);  // Add stats state
   const { id } = useParams();
 
   const fetchGame = async () => {
     try {
       const response = await api.get(`/api/games/${id}`);
-
       console.log("Fetched game data:", response.data); // Debug log
 
       const sortedStats = response.data.stats
@@ -34,13 +33,9 @@ function GameAuth() {
     setLoading(false);
   };
 
-
-
   useEffect(() => {
     fetchGame();
   }, [id]);
-
-
 
   // Initialize stat values from existing player stats
   const initializeStatValues = (data) => {
@@ -110,7 +105,6 @@ function GameAuth() {
     }
   };
 
-
   const handleSaveScores = async () => {
     try {
       await api.put(`/api/games/gamePeriodScores`, {
@@ -131,7 +125,6 @@ function GameAuth() {
     }
   };
 
-
   const handleScoreChange = (periodId, team, value) => {
     setPeriodScores((prevScores) =>
       prevScores.map((period) =>
@@ -144,7 +137,6 @@ function GameAuth() {
       )
     );
   };
-
 
   if (loading) return <p>Loading game details...</p>;
   if (!game) return <p>Game not found.</p>;
@@ -159,14 +151,11 @@ function GameAuth() {
         {editModeScores ? 'Cancel Edit Scores' : 'Edit Scores'}
       </button>
 
-
-
       {/* Home Team Stats */}
       <div className="team-container-home">
         <h3 className="team-header">
-          Home Team: {game.game.homeTeam?.name} ({game.game.score_team1})
+          Home Team: {game?.homeTeam?.name} ({game?.score_team1})
         </h3>
-
 
         <h2>Game Periods</h2>
         <table className="gamePeriods-table">
@@ -182,7 +171,7 @@ function GameAuth() {
           <tbody>
             {/* Team 1 Row */}
             <tr>
-              <td>{game.game?.homeTeam.name}</td>
+              <td>{game.game?.homeTeam?.name}</td>
               {periodScores.map((period) => (
                 <td key={period.id}>
                   {!editModeScores ? (
@@ -201,7 +190,7 @@ function GameAuth() {
 
             {/* Team 2 Row */}
             <tr>
-              <td>{game.game?.awayTeam.name}</td>
+              <td>{game?.awayTeam.name}</td>
               {periodScores.map((period) => (
                 <td key={period.id}>
                   {!editModeScores ? (
@@ -227,21 +216,20 @@ function GameAuth() {
           </button>
         )}
 
-        
         <table className="gameAuth-stat-table">
           <thead>
             <tr>
               <th className="player-column">Player</th>
-              {game.stats.map((stat) => (
+              {stats.map((stat) => (
                 <th key={stat.id} className="stat-column">{stat.shortName}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {game.game.homeTeam?.players.map((player) => (
+            {game?.homeTeam?.players.map((player) => (
               <tr key={player.id}>
                 <td className="player-name">{player.firstName} {player.lastName}</td>
-                {game.stats.map((stat) => (
+                {stats.map((stat) => (
                   <td key={stat.id}>
                     {!editMode ? (
                       <span className="stat-value">{statValues[`${player.id}-${stat.id}`] || 0}</span>
@@ -260,8 +248,8 @@ function GameAuth() {
             {/* ✅ Total Row for Home Team */}
             <tr className="total-row">
               <td className="player-name"><strong>Total</strong></td>
-              {game.stats.map((stat) => {
-                const total = game.game.homeTeam?.players.reduce((sum, player) => {
+              {stats.map((stat) => {
+                const total = game.game?.homeTeam?.players.reduce((sum, player) => {
                   return sum + (statValues[`${player.id}-${stat.id}`] || 0);
                 }, 0);
                 return <td key={stat.id}><strong>{total}</strong></td>;
@@ -274,22 +262,22 @@ function GameAuth() {
       {/* Away Team Stats */}
       <div className="team-container-away">
         <h3 className="team-header">
-          Away Team: {game.game.awayTeam?.name} ({game.game.score_team2})
+          Away Team: {game?.awayTeam?.name} ({game?.score_team2})
         </h3>
         <table className="gameAuth-stat-table">
           <thead>
             <tr>
               <th className="player-column">Player</th>
-              {game.stats.map((stat) => (
+              {stats.map((stat) => (
                 <th key={stat.id} className="stat-column">{stat.shortName}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {game.game.awayTeam?.players.map((player) => (
+            {game?.awayTeam?.players.map((player) => (
               <tr key={player.id}>
                 <td className="player-name">{player.firstName} {player.lastName}</td>
-                {game.stats.map((stat) => (
+                {stats.map((stat) => (
                   <td key={stat.id}>
                     {!editMode ? (
                       <span className="stat-value">{statValues[`${player.id}-${stat.id}`] || 0}</span>
@@ -308,8 +296,8 @@ function GameAuth() {
             {/* ✅ Total Row for Away Team */}
             <tr className="total-row">
               <td className="player-name"><strong>Total</strong></td>
-              {game.stats.map((stat) => {
-                const total = game.game.awayTeam?.players.reduce((sum, player) => {
+              {stats.map((stat) => {
+                const total = game.game?.awayTeam?.players.reduce((sum, player) => {
                   return sum + (statValues[`${player.id}-${stat.id}`] || 0);
                 }, 0);
                 return <td key={stat.id}><strong>{total}</strong></td>;
