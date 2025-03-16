@@ -24,7 +24,13 @@ function GameAuth() {
 
       setGame(response.data.game); // ✅ Store game separately
       setStats(sortedStats); // ✅ Store stats separately
-      setPeriodScores(response.data.game?.periodScores || []);
+
+      // Filter out the hidden periods from game periods
+      const filteredPeriodScores = response.data.game?.periodScores.filter(
+        (period) => !period.gamePeriod.hidden // Only keep periods that are not hidden
+      );
+
+      setPeriodScores(filteredPeriodScores || []);
 
       initializeStatValues(response.data);
     } catch (error) {
@@ -32,6 +38,11 @@ function GameAuth() {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    fetchGame();
+  }, [id]);
+
 
   useEffect(() => {
     fetchGame();
@@ -57,23 +68,24 @@ function GameAuth() {
 
   // Submit updated stats
   const handleSubmit = async () => {
-    if (!game || !game.game || !game.game.id) {
+    if (!game || !game.id) {
       console.error("Error: game_id is missing");
+      console.log("Game ID (submit):", game.game.id); // Ad
       alert("Game ID is missing. Cannot update stats.");
       return;
     }
 
     // Get the actual stat_id for PTS (points)
-    const ptsStatId = game.stats.find(stat => stat.shortName === "PTS")?.id;
-    const totalPointsHome = game.game.homeTeam?.players.reduce((sum, player) => {
+    const ptsStatId = game.stats?.find(stat => stat.shortName === "PTS")?.id;
+    const totalPointsHome = game.homeTeam?.players.reduce((sum, player) => {
       return sum + (statValues[`${player.id}-${ptsStatId}`] || 0);
     }, 0);
-    const totalPointsAway = game.game.awayTeam?.players.reduce((sum, player) => {
+    const totalPointsAway = game.awayTeam?.players.reduce((sum, player) => {
       return sum + (statValues[`${player.id}-${ptsStatId}`] || 0);
     }, 0);
 
     // Check if totals match the game score
-    if (totalPointsHome !== game.game.score_team1 || totalPointsAway !== game.game.score_team2) {
+    if (totalPointsHome !== game.score_team1 || totalPointsAway !== game.score_team2) {
       const confirmSubmit = window.confirm(
         "Stats total don't match the game score. Proceed to submit stats?"
       );
@@ -85,7 +97,7 @@ function GameAuth() {
       const [player_id, stat_id] = key.split('-').map(Number);
       statsToUpdate.push({
         player_id,
-        game_id: game.game.id,
+        game_id: game.id,
         stat_id,
         value: statValues[key] || 0,
       });
@@ -94,7 +106,7 @@ function GameAuth() {
     try {
       await api.put('/api/playerGameStats', {
         player_id: statsToUpdate[0]?.player_id,
-        game_id: game.game.id,
+        game_id: game.id,
         stats: statsToUpdate,
       });
       alert('Stats updated successfully!');
@@ -107,8 +119,10 @@ function GameAuth() {
 
   const handleSaveScores = async () => {
     try {
+      console.log('Period Scores being sent:', periodScores); // Log scores before sending the request
+
       await api.put(`/api/games/gamePeriodScores`, {
-        game_id: game.game.id,
+        game_id: game.id,
         scores: periodScores.map(period => ({
           id: period.id,
           period_score_team1: period.period_score_team1,
@@ -124,6 +138,8 @@ function GameAuth() {
       alert("Failed to update period scores.");
     }
   };
+
+
 
   const handleScoreChange = (periodId, team, value) => {
     setPeriodScores((prevScores) =>
@@ -141,7 +157,7 @@ function GameAuth() {
   if (loading) return <p>Loading game details...</p>;
   if (!game) return <p>Game not found.</p>;
 
-  console.log(game);
+  console.log(periodScores);
   return (
     <div className="game-container">
       <button className="toggle-button" onClick={() => setEditMode(!editMode)}>
@@ -249,7 +265,7 @@ function GameAuth() {
             <tr className="total-row">
               <td className="player-name"><strong>Total</strong></td>
               {stats.map((stat) => {
-                const total = game.game?.homeTeam?.players.reduce((sum, player) => {
+                const total = game?.homeTeam?.players.reduce((sum, player) => {
                   return sum + (statValues[`${player.id}-${stat.id}`] || 0);
                 }, 0);
                 return <td key={stat.id}><strong>{total}</strong></td>;
@@ -297,7 +313,7 @@ function GameAuth() {
             <tr className="total-row">
               <td className="player-name"><strong>Total</strong></td>
               {stats.map((stat) => {
-                const total = game.game?.awayTeam?.players.reduce((sum, player) => {
+                const total = game?.awayTeam?.players.reduce((sum, player) => {
                   return sum + (statValues[`${player.id}-${stat.id}`] || 0);
                 }, 0);
                 return <td key={stat.id}><strong>{total}</strong></td>;
