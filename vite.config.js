@@ -17,5 +17,10 @@ export default defineConfig(({ mode }) => {
         },
       },
     } : undefined,
+    resolve: {
+      alias: {
+        '@api': '/src/utils/api',  // Resolves the @api alias to the correct path
+      },
+    },
   };
 });

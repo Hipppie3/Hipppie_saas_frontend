@@ -1,0 +1,10 @@
+{
+ "compilerOptions": {
+  "baseUrl": "src", // This allows you to import from the src folder directly
+  "paths": {
+   "@api/*": [
+    "utils/api/*"
+   ] // Custom alias to your API file
+  }
+ }
+}

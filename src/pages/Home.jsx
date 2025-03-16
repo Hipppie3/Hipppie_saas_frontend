@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../utils/api"; // ✅ Correct import
+import api from '@api'; // Instead of ../../../utils/api
 import { NavLink } from "react-router-dom";
 import "./Home.css";
 
