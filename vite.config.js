@@ -22,5 +22,8 @@ export default defineConfig(({ mode }) => {
         '@api': '/src/utils/api',  // Resolves the @api alias to the correct path
       },
     },
+    define: {
+      'process.env.VITE_API_URL': JSON.stringify(env.VITE_API_URL),  // Use the production API URL here
+    },
   };
 });
