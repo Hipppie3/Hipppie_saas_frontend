@@ -12,17 +12,18 @@ export const AuthProvider = ({ children }) => {
 
   // ✅ Function to Check Auths from Backend
   const checkAuth = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const response = await api.get('/api/users/check-auth', { withCredentials: true });
       setIsAuthenticated(response.data.authenticated);
       setUser(response.data.user || null);
     } catch (error) {
       setIsAuthenticated(false);
-      setUser(null)
+      setUser(null);
     }
-    setLoading(false)
+    setLoading(false);
   };
+
 
 const login = async (formData) => {
   setLoading(true);
