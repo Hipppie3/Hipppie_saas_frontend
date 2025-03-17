@@ -44,18 +44,28 @@ function TeamAuth() {
   // Create Player
   const handleCreatePlayer = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("firstName", playerForm.firstName);
+    formData.append("lastName", playerForm.lastName);
+    formData.append("age", playerForm.age ? Number(playerForm.age) : "");
+    formData.append("teamId", id);
+    if (playerForm.image) formData.append("image", playerForm.image); // Append the image to FormData
+
     try {
-      const response = await api.post(`/api/players`, { ...playerForm, teamId: id }, { withCredentials: true });
+      const response = await api.post(`/api/players`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true
+      });
       const newPlayer = response.data.player;
 
-      // Update UI immediately
+      // Update UI immediately using setTeam to modify players array
       setTeam((prevTeam) => ({
         ...prevTeam,
-        players: [...prevTeam.players, newPlayer],
+        players: [...prevTeam.players, newPlayer], // Add new player to the players array
       }));
 
       setIsModalOpen(false);
-      setPlayerForm({ firstName: '', lastName: '', age: '', teamId: id });
+      setPlayerForm({ firstName: '', lastName: '', age: '', teamId: id, image: null }); // Reset form
       setMessage("Player created successfully");
       setTimeout(() => setMessage(''), 3000);
     } catch (error) {
@@ -63,13 +73,31 @@ function TeamAuth() {
     }
   };
 
+
+
   // Update Player
   const handleUpdatePlayer = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("firstName", updateForm.firstName);
+    formData.append("lastName", updateForm.lastName);
+    formData.append("age", updateForm.age ? Number(updateForm.age) : "");
+    formData.append("teamId", updateForm.teamId ? Number(updateForm.teamId) : "");
+
+    // Only append image if it's a new image file
+    if (updateForm.image && updateForm.image instanceof File) {
+      formData.append("image", updateForm.image);
+    }
+
     try {
-      const response = await api.put(`/api/players/${updateForm.id}`, updateForm, { withCredentials: true });
+      const response = await api.put(`/api/players/${updateForm.id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true
+      });
+
       const updatedPlayer = response.data.player;
 
+      // Update the player's data in the team
       setTeam((prevTeam) => ({
         ...prevTeam,
         players: prevTeam.players.map((player) =>
@@ -84,6 +112,8 @@ function TeamAuth() {
       console.error("Error updating player:", error);
     }
   };
+
+
 
   // Delete Players
   const handleDeletePlayers = async () => {
@@ -149,6 +179,11 @@ console.log(team)
               <input type="text" name="firstName" value={playerForm.firstName} onChange={(e) => setPlayerForm({ ...playerForm, firstName: e.target.value })} placeholder="First Name" required />
               <input type="text" name="lastName" value={playerForm.lastName} onChange={(e) => setPlayerForm({ ...playerForm, lastName: e.target.value })} placeholder="Last Name" />
               <input type="number" name="age" value={playerForm.age} onChange={(e) => setPlayerForm({ ...playerForm, age: e.target.value })} placeholder="Age" />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setPlayerForm({ ...playerForm, image: e.target.files[0] })}
+              />
               <button type="submit">Create</button>
               <button type="button" onClick={() => setIsModalOpen(false)}>Cancel</button>
             </form>
@@ -211,6 +246,12 @@ console.log(team)
                 onChange={(e) => setUpdateForm({ ...updateForm, age: e.target.value })}
                 placeholder="Age"
               />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setUpdateForm({ ...updateForm, image: e.target.files[0] })}
+              />
+
               <button type="submit">Update</button>
               <button type="button" onClick={() => setIsUpdateModalOpen(false)}>Cancel</button>
             </form>

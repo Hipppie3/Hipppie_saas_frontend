@@ -63,6 +63,7 @@ function GamePeriod() {
    // ✅ Refetch game periods after adding a new one
    const updatedResponse = await api.get(`/api/gamePeriods/${sportId}`, { withCredentials: true });
    setGamePeriods(updatedResponse.data); // ✅ Update gamePeriods state with the latest data
+   setNewPeriod({name: ""});
   } catch (error) {
    console.error("Error adding game period:", error);
   }

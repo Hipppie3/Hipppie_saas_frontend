@@ -238,22 +238,34 @@ function PlayerListAuth() {
           </tr>
         </thead>
         <tbody>
-          {players.length === 0 ? ( 
+          {players.length === 0 ? (
             <tr><td colSpan="5">No players available</td></tr>
           ) : (
-          players.map((player, index) => (
-            <tr key={player.id}>
-              <td><input type="checkbox" checked={selectedPlayers.includes(player.id)} onChange={() => handleCheckboxChange(player.id)} /></td>
-              <td>{index + 1}</td>
-              <td><NavLink to={`/players/${player.id}`}>{player.firstName} {player.lastName}</NavLink></td>
-              <td>{player.age || "N/A"}</td>
-              <td><NavLink to={`/teams/${player.team?.id}`}>{player.team?.name || "No Team"}</NavLink></td>
-              <td><button className="playerList-update-btn" onClick={() => openUpdateModal(player)}> <span>🖊</span> EDIT</button>
-              </td>
-            </tr>
+            players.map((player, index) => (
+              <tr key={player.id}>
+                <td><input type="checkbox" checked={selectedPlayers.includes(player.id)} onChange={() => handleCheckboxChange(player.id)} /></td>
+                <td>{index + 1}</td>
+                <td>
+                  <NavLink to={`/players/${player.id}`}>
+                    {player.firstName} {player.lastName}
+                  </NavLink>
+                </td>
+                <td>{player.age || "N/A"}</td>
+                <td>
+                  <NavLink to={`/teams/${player.team?.id}`}>
+                    {player.team?.name || "No Team"}
+                  </NavLink>
+                </td>
+                <td>
+                  <button className="playerList-update-btn" onClick={() => openUpdateModal(player)}>
+                    <span>🖊</span> EDIT
+                  </button>
+                </td>
+              </tr>
             ))
           )}
         </tbody>
+
       </table>
     </div>
   );

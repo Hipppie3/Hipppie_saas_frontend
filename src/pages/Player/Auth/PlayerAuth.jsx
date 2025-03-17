@@ -41,16 +41,15 @@ function PlayerAuth() {
  },[id, domain, isAuthenticated, loading])
 
  {console.log(player.image?.length)}
- 
+ {console.log(player.imgae)}
   return (
     <div className="playerAuth_profile">
       <img
-        src={player.image || DefaultImage} // ✅ Use DefaultImage when player.image is null/empty
+        src={player.image ? `${player.image}?${new Date().getTime()}` : DefaultImage}
         alt={`${player.firstName} ${player.lastName}`}
         className="player-image"
         style={{ width: "150px", height: "150px", objectFit: "cover", borderRadius: "50%" }}
       />
-      
       <h2>{player.firstName} {player.lastName}</h2>
       <p><strong>Age:</strong> {player.age ? player.age : "N/A"}</p>
 

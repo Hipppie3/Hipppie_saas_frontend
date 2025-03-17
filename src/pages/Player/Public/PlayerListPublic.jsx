@@ -33,7 +33,7 @@ function PlayerListPublic() {
             <div key={player.id} className="player-public-card">
               <NavLink to={`/players/${player.id}${domain ? `?domain=${domain}` : ""}`} className="player-link">
                 <img
-                  src={player.image && player.image.startsWith("data:image") ? player.image : DefaultImg}
+                  src={player.image ? player.image : DefaultImg}  // Check for valid image URL
                   alt={player.firstName}
                   className="player-public-image"
                 />

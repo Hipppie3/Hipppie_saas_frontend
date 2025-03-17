@@ -11,6 +11,7 @@ function GameAuth() {
   const [periodScores, setPeriodScores] = useState({});
   const [statValues, setStatValues] = useState({});
   const [stats, setStats] = useState([]);  // Add stats state
+  const [editFinalScores, setEditFinalScores] = useState(false); // New state 
   const { id } = useParams();
 
   const fetchGame = async () => {
@@ -84,14 +85,6 @@ function GameAuth() {
       return sum + (statValues[`${player.id}-${ptsStatId}`] || 0);
     }, 0);
 
-    // Check if totals match the game score
-    if (totalPointsHome !== game.score_team1 || totalPointsAway !== game.score_team2) {
-      const confirmSubmit = window.confirm(
-        "Stats total don't match the game score. Proceed to submit stats?"
-      );
-      if (!confirmSubmit) return; // Cancel submission if user selects 'No'
-    }
-
     const statsToUpdate = [];
     Object.keys(statValues).forEach((key) => {
       const [player_id, stat_id] = key.split('-').map(Number);
@@ -125,10 +118,14 @@ function GameAuth() {
       const totalScoreTeam1 = periodScores.reduce((total, period) => total + (period.period_score_team1 || 0), 0);
       const totalScoreTeam2 = periodScores.reduce((total, period) => total + (period.period_score_team2 || 0), 0);
 
-      // Update game scores based on the period scores
+      // If editing final scores, use those values
+      const finalScoreTeam1 = editFinalScores ? game.score_team1 : totalScoreTeam1;
+      const finalScoreTeam2 = editFinalScores ? game.score_team2 : totalScoreTeam2;
+
+      // Update game scores based on the period scores and final score editing
       await api.put(`/api/games/${game.id}/scores`, {
-        score_team1: totalScoreTeam1,
-        score_team2: totalScoreTeam2,
+        score_team1: finalScoreTeam1,
+        score_team2: finalScoreTeam2,
       });
 
       // Update period scores in the backend
@@ -143,6 +140,8 @@ function GameAuth() {
 
       alert("Scores updated successfully!");
       setEditModeScores(false);
+      setEditFinalScores(false);
+
 
       // Refresh game data after updating scores and period scores
       fetchGame(); // Ensure periodScores and game scores are correctly updated
@@ -190,12 +189,19 @@ function GameAuth() {
           {editModeScores ? 'Cancel Edit Scores' : 'Edit Scores'}
         </button>
       }
+      {allPeriodsHidden && (
+        <button className="toggle-button" onClick={() => setEditFinalScores(!editFinalScores)}>
+          {editFinalScores ? 'Cancel Edit Final Scores' : 'Edit Final Scores'}
+        </button>
+      )}
+      {editFinalScores && (
+        <button className="submit-button" onClick={handleSaveScores}>
+          Save Final Scores
+        </button>
+      )}
+
       {/* Home Team Stats */}
       <div className="team-container-home">
-        <h3 className="team-header">
-          Home Team: {game?.homeTeam?.name} ({game?.score_team1})
-        </h3>
-
 
         {!allPeriodsHidden &&
           <table className="gamePeriods-table">
@@ -257,7 +263,22 @@ function GameAuth() {
         )}
 
 
-
+        <h3 className="team-header">
+          Home Team: {game?.homeTeam?.name} (
+          {editFinalScores ? (
+            <input
+              type="number"
+              value={game?.score_team1 || ""}
+              onChange={(e) => {
+                const value = parseInt(e.target.value, 10) || 0;
+                setGame((prev) => ({ ...prev, score_team1: value }));
+              }}
+            />
+          ) : (
+            game?.score_team1
+          )}
+          )
+        </h3>
         <table className="gameAuth-stat-table">
           <thead>
             <tr>
@@ -304,7 +325,20 @@ function GameAuth() {
       {/* Away Team Stats */}
       <div className="team-container-away">
         <h3 className="team-header">
-          Away Team: {game?.awayTeam?.name} ({game?.score_team2})
+          Away Team: {game?.awayTeam?.name} (
+          {editFinalScores ? (
+            <input
+              type="number"
+              value={game?.score_team2 || ""}
+              onChange={(e) => {
+                const value = parseInt(e.target.value, 10) || 0;
+                setGame((prev) => ({ ...prev, score_team2: value }));
+              }}
+            />
+          ) : (
+            game?.score_team2
+          )}
+          )
         </h3>
         <table className="gameAuth-stat-table">
           <thead>

@@ -15,6 +15,7 @@ function PlayerPublic() {
       try {
         const response = await api.get(`/api/players/${id}?domain=${domain}`, { withCredentials: true });
         setPlayer(response.data.player);
+        console.log(response.data)
         setAllStats(response.data.allStats.sort((a, b) => a.order - b.order)); // ✅ Ensure stats are ordered
       } catch (error) {
         console.error("Error fetching player:", error.response?.data || error.message);
@@ -42,15 +43,6 @@ function PlayerPublic() {
       ])
     ).values()
   );
-
-
-
-
-  console.log(uniqueGames)
-
-
-
-
 
 
   if (!player) return <p>Loading...</p>;
