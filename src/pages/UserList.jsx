@@ -12,7 +12,7 @@ function UserList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [updateForm, setUpdateForm] = useState({ id: null, username: "", email: "",  domain: "", sportIds: [] });
+  const [updateForm, setUpdateForm] = useState({ id: null, username: "", email: "",  domain: "", sportIds: [], removePassword: false, });
 
   useEffect(() => {
     const getUser = async () => {
@@ -120,13 +120,14 @@ function UserList() {
       ...updateForm,
       email: updateForm.email.trim() === "" ? "" : updateForm.email,
       domain: updateForm.domain.trim() === "" ? "" : updateForm.domain,
-      sportIds: updateForm.sportIds.map(id => Number(id)), 
+      sportIds: updateForm.sportIds.map(id => Number(id)),
+      removePassword: updateForm.removePassword, // ✅ Send this to the backend
     };
+
     try {
       const response = await api.put(`/api/users/${updateForm.id}`, sanitizedForm, { withCredentials: true });
       if (response.data.success) {
         setMessage(`User ${updateForm.username} updated successfully`);
-        // ✅ Refetch users after update to get the latest data
         const updatedUsers = await api.get('/api/users/userList', { withCredentials: true });
         setUsers(updatedUsers.data.users);
       } else {
@@ -138,6 +139,7 @@ function UserList() {
       setIsUpdateModalOpen(false);
     }
   };
+
 
 
 
@@ -242,7 +244,7 @@ function UserList() {
                 <input
                   type="text"
                   name="username"
-                  value={updateForm.username}
+                  value={updateForm.username || ''}
                   onChange={(e) => setUpdateForm({ ...updateForm, username: e.target.value })}
                   required
                 />
@@ -252,7 +254,7 @@ function UserList() {
                 <input
                   type="email"
                   name="email"
-                  value={updateForm.email}
+                  value={updateForm.email || ''}
                   onChange={(e) => setUpdateForm({ ...updateForm, email: e.target.value })}
                 />
               </label>
@@ -261,13 +263,13 @@ function UserList() {
                 <input
                   type="text"
                   name="domain"
-                  value={updateForm.domain}
+                  value={updateForm.domain || ''}
                   onChange={(e) => setUpdateForm({ ...updateForm, domain: e.target.value })}
                 />
               </label>
               <label>
                 Select Sports:
-                <select multiple name="sportIds" value={updateForm.sportIds} onChange={(e) => {
+                <select multiple name="sportIds" value={updateForm.sportIds || []} onChange={(e) => {
                   const selectedValues = Array.from(e.target.selectedOptions, option => option.value);
                   setUpdateForm(prevForm => ({ ...prevForm, sportIds: selectedValues }));
                 }}>
@@ -275,6 +277,14 @@ function UserList() {
                     <option key={sport.id} value={sport.id}>{sport.name}</option>
                   ))}
                 </select>
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={updateForm.removePassword || false}
+                  onChange={() => setUpdateForm(prevForm => ({ ...prevForm, removePassword: !prevForm.removePassword }))}
+                />
+                Remove Password (User will need to set a new one)
               </label>
               <button type="submit">Update</button>
               <button type="button" onClick={() => setIsUpdateModalOpen(false)}>Cancel</button>

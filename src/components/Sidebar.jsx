@@ -10,6 +10,7 @@ function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
 
 
+
   // ✅ Toggle Sidebar
   const toggleSidebar = () => setIsOpen(!isOpen);
 
@@ -35,7 +36,7 @@ function Sidebar() {
     }
   };
 
-
+console.log(user)
   if (loading) return <div>Loading...</div>;
 
   return (
@@ -61,7 +62,8 @@ function Sidebar() {
             <li><NavLink to="/schedule" onClick={toggleSidebar} className={({ isActive }) => isActive ? " active-class" : "inactive-class"}>Schedule</NavLink></li>  
             <li><NavLink to="/stats" onClick={toggleSidebar} className={({ isActive }) => isActive ? " active-class" : "inactive-class"}>Stats</NavLink></li>
             <li><NavLink to="/GamePeriod" onClick={toggleSidebar} className={({ isActive }) => isActive ? " active-class" : "inactive-class"}>Game Period</NavLink></li>
-            {user?.role === 'super_admin' && (
+            <li><NavLink to="/userSettings" onClick={toggleSidebar} className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>Settings</NavLink></li>
+            {user && user?.role === 'super_admin' && (
               <li><NavLink to="/userList" onClick={toggleSidebar}>Users</NavLink></li>
             )}
             <li><button className="sidebar-button" onClick={handleLogout}>Logout</button></li>
