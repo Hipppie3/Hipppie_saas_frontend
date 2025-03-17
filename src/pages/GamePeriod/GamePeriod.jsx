@@ -100,6 +100,22 @@ function GamePeriod() {
   }
  };
 
+ // Inside GamePeriod.js
+ const handleHideAllPeriods = async () => {
+  try {
+   const periodIds = gamePeriods.map(period => period.id); // Get all period IDs
+   await Promise.all(
+    periodIds.map(periodId =>
+     api.put(`/api/gamePeriods/hide/${periodId}`, {}, { withCredentials: true })
+    )
+   );
+   setGamePeriods(gamePeriods.map(period => ({ ...period, hidden: true }))); // Update state
+  } catch (error) {
+   console.error("Error hiding all game periods:", error);
+  }
+ };
+
+
  
  return (
 
@@ -130,6 +146,8 @@ function GamePeriod() {
       <button onClick={handleAddPeriod}>Add Game Period</button>
      </div>
      <button onClick={handleResetPeriods}>Reset to Default</button> {/* ✅ Reset button added back */}
+      <button onClick={handleHideAllPeriods}>Hide All</button>
+
     </div>
    )}
   </div>

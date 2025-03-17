@@ -119,8 +119,19 @@ function GameAuth() {
 
   const handleSaveScores = async () => {
     try {
-      console.log('Period Scores being sent:', periodScores); // Log scores before sending the request
+      console.log('Period Scores being sent:', periodScores);
 
+      // Calculate the final score for team1 (home team) by summing up the period scores
+      const totalScoreTeam1 = periodScores.reduce((total, period) => total + (period.period_score_team1 || 0), 0);
+      const totalScoreTeam2 = periodScores.reduce((total, period) => total + (period.period_score_team2 || 0), 0);
+
+      // Update game scores based on the period scores
+      await api.put(`/api/games/${game.id}/scores`, {
+        score_team1: totalScoreTeam1,
+        score_team2: totalScoreTeam2,
+      });
+
+      // Update period scores in the backend
       await api.put(`/api/games/gamePeriodScores`, {
         game_id: game.id,
         scores: periodScores.map(period => ({
@@ -130,14 +141,18 @@ function GameAuth() {
         })),
       });
 
-      alert("Period scores updated successfully!");
+      alert("Scores updated successfully!");
       setEditModeScores(false);
-      fetchGame(); // Refresh game data after updating scores
+
+      // Refresh game data after updating scores and period scores
+      fetchGame(); // Ensure periodScores and game scores are correctly updated
     } catch (error) {
       console.error("Error updating period scores:", error);
       alert("Failed to update period scores.");
     }
   };
+
+
 
 
 
@@ -153,84 +168,95 @@ function GameAuth() {
       )
     );
   };
+  const allPeriodsHidden = Object.values(periodScores).every(period => period.gamePeriod?.hidden);
 
   if (loading) return <p>Loading game details...</p>;
   if (!game) return <p>Game not found.</p>;
 
+
+
   console.log(periodScores);
   return (
     <div className="game-container">
-      <button className="toggle-button" onClick={() => setEditMode(!editMode)}>
-        {editMode ? 'Cancel Edit' : 'Edit Stats'}
-      </button>
-      <button className="toggle-button" onClick={() => setEditModeScores(!editModeScores)}>
-        {editModeScores ? 'Cancel Edit Scores' : 'Edit Scores'}
-      </button>
+      <button className="toggle-button" onClick={() => {
+  setEditMode(!editMode);
+  console.log("Edit Mode: ", !editMode);  // Check if editMode is toggling
+}}>
+  {editMode ? 'Cancel Edit' : 'Edit Stats'}
+</button>
 
+      {!allPeriodsHidden &&
+        <button className="toggle-button" onClick={() => setEditModeScores(!editModeScores)}>
+          {editModeScores ? 'Cancel Edit Scores' : 'Edit Scores'}
+        </button>
+      }
       {/* Home Team Stats */}
       <div className="team-container-home">
         <h3 className="team-header">
           Home Team: {game?.homeTeam?.name} ({game?.score_team1})
         </h3>
 
-        <h2>Game Periods</h2>
-        <table className="gamePeriods-table">
-          <thead>
-            <tr>
-              <th>Team Name</th>
-              {periodScores.map((period) => (
-                <th key={period.id}>{period.gamePeriod?.name}</th>
-              ))}
-              <th>Final</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Team 1 Row */}
-            <tr>
-              <td>{game.game?.homeTeam?.name}</td>
-              {periodScores.map((period) => (
-                <td key={period.id}>
-                  {!editModeScores ? (
-                    <span>{period.period_score_team1}</span>
-                  ) : (
-                    <input
-                      type="number"
-                      value={period.period_score_team1}
-                      onChange={(e) => handleScoreChange(period.id, "team1", e.target.value)}
-                    />
-                  )}
-                </td>
-              ))}
-              <td>{periodScores.reduce((total, period) => total + period.period_score_team1, 0)}</td>
-            </tr>
 
-            {/* Team 2 Row */}
-            <tr>
-              <td>{game?.awayTeam.name}</td>
-              {periodScores.map((period) => (
-                <td key={period.id}>
-                  {!editModeScores ? (
-                    <span>{period?.period_score_team2}</span>
-                  ) : (
-                    <input
-                      type="number"
-                      value={period?.period_score_team2}
-                      onChange={(e) => handleScoreChange(period.id, "team2", e.target.value)}
-                    />
-                  )}
-                </td>
-              ))}
-              <td>{periodScores.reduce((total, period) => total + period.period_score_team2, 0)}</td>
-            </tr>
-          </tbody>
-        </table>
+        {!allPeriodsHidden &&
+          <table className="gamePeriods-table">
+            <thead>
+              <tr>
+                <th>Team Name</th>
+                {periodScores.map((period) => (
+                  <th key={period.id}>{period.gamePeriod?.name}</th>
+                ))}
+                <th>Final</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* Team 1 Row */}
+              <tr>
+                <td>{game?.homeTeam?.name}</td>
+                {periodScores.map((period) => (
+                  <td key={period.id}>
+                    {!editModeScores ? (
+                      <span>{period.period_score_team1}</span>
+                    ) : (
+                      <input
+                        type="number"
+                        value={period.period_score_team1}
+                        onChange={(e) => handleScoreChange(period.id, "team1", e.target.value)}
+                      />
+                    )}
+                  </td>
+                ))}
+                <td>{periodScores.reduce((total, period) => total + period.period_score_team1, 0)}</td>
+              </tr>
 
+              {/* Team 2 Row */}
+              <tr>
+                <td>{game?.awayTeam.name}</td>
+                {periodScores.map((period) => (
+                  <td key={period.id}>
+                    {!editModeScores ? (
+                      <span>{period?.period_score_team2}</span>
+                    ) : (
+                      <input
+                        type="number"
+                        value={period?.period_score_team2}
+                        onChange={(e) => handleScoreChange(period.id, "team2", e.target.value)}
+                      />
+                    )}
+                  </td>
+                ))}
+                <td>{periodScores.reduce((total, period) => total + period.period_score_team2, 0)}</td>
+              </tr>
+            </tbody>
+          </table>
+        }
         {/* Save Scores Button */}
         {editModeScores && (
           <button className="submit-button" onClick={handleSaveScores}>
             Save Scores
           </button>
         )}
+
+
 
         <table className="gameAuth-stat-table">
           <thead>
@@ -333,3 +359,4 @@ function GameAuth() {
 }
 
 export default GameAuth;
+

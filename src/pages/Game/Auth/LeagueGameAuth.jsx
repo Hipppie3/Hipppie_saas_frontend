@@ -237,7 +237,7 @@ function LeagueGameAuth({ leagueInfo }) {
               <th>Matchup</th>
               <th>Status</th>
               <th>Results</th>
-              <th></th>
+              {/* <th></th> */}
             </tr>
           </thead>
           <tbody>
@@ -272,11 +272,11 @@ function LeagueGameAuth({ leagueInfo }) {
                     </td>
                     <td>{leagueGame.status.charAt(0).toUpperCase() + leagueGame.status.slice(1)}</td>
                     <td>{leagueGame.score_team1 ?? 0} - {leagueGame.score_team2 ?? 0}</td>
-                    <td>
+                    {/* <td>
                       <button className="game-schedule-update-btn" onClick={() => openScoreModal(leagueGame)}>
                         🖊 Update Score
                       </button>
-                    </td>
+                    </td> */}
                   </tr>
                 ))
             )}
