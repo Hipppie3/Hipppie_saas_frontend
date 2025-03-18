@@ -11,7 +11,7 @@ function Stats() {
   const [loading, setLoading] = useState(true);
   const [newStat, setNewStat] = useState({ name: '', shortName: '' });
   const { user } = useAuth();
-
+ 
   useEffect(() => {
     fetchStatsBySport();
   }, [user]);
@@ -27,7 +27,7 @@ function Stats() {
     }
     setLoading(false);
   };
-
+console.log(user)
   const handleDragEnd = async (event) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return; // ✅ Prevent unnecessary updates
