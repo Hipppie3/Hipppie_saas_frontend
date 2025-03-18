@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import api from '@api'; // Instead of ../../../utils/api
 import { NavLink, useParams, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../../context/AuthContext'
@@ -6,42 +6,92 @@ import './PlayerAuth.css';
 import DefaultImage from '../../../images/default_image.png';
 
 function PlayerAuth() {
-  const {isAuthenticated, loading, user} = useAuth()
-  const [player, setPlayer] = useState([])
+  const { isAuthenticated, loading, user } = useAuth()
+  const [player, setPlayer] = useState({})
+  const [attributes, setAttributes] = useState({})
   const [searchParams] = useSearchParams()
   const domain = searchParams.get("domain")
   const [error, setError] = useState("")
+  const [isEditMode, setIsEditMode] = useState(false)
   const { id } = useParams();
 
   useEffect(() => {
-  if (loading) return 
+    if (loading) return
 
-  const getPlayer = async () => {
-    try {
-      let response;
-      if (isAuthenticated) {
-        if (user?.role === "super_admin") {
-          response = await api.get(`/api/players/${id}`, { withCredentials: true});
+    const getPlayer = async () => {
+      try {
+        let response;
+        if (isAuthenticated) {
+          if (user?.role === "super_admin") {
+            response = await api.get(`/api/players/${id}`, { withCredentials: true });
+          } else {
+            response = await api.get(`/api/players/${id}`, { withCredentials: true });
+          }
+        } else if (domain) {
+          response = await api.get(`/api/players/${id}?domain=${domain}`)
         } else {
-          response = await api.get(`/api/players/${id}`, { withCredentials: true});
+          return setError("Unauthorized access")
         }
-      } else if (domain) {
-        response = await api.get(`/api/players/${id}?domain=${domain}`)
-      } else {
-        return setError("Unauthorized access")
-      } 
-      setPlayer(response.data.player)
-      console.log(response.data.player)
+        setPlayer(response.data.player)
+        setAttributes(response.data.player.attributeValues.reduce((acc, attr) => {
+          acc[attr.attribute.attribute_name] = attr.value;
+          return acc;
+        }, {}));
+        console.log(response.data.player)
+      } catch (error) {
+        console.error("Error fetching player:", error.response?.data || error.message);
+        setError("Failed to fetch player:", error)
+      }
+    };
+    getPlayer()
+  }, [id, domain, isAuthenticated, loading])
+
+  // Handle input changes for attributes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setAttributes((prevAttributes) => ({
+      ...prevAttributes,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Send the updated attributes to the backend
+      await api.put(`/api/players/${id}`, { attributes }, { withCredentials: true });
+
+      // Update the player state with the new values directly
+      const updatedAttributes = player.attributeValues.map((attr) => {
+        if (attributes[attr.attribute.attribute_name]) {
+          return {
+            ...attr,
+            value: attributes[attr.attribute.attribute_name], // Update the value
+          };
+        }
+        return attr;
+      });
+
+      setPlayer((prevPlayer) => ({
+        ...prevPlayer,
+        attributeValues: updatedAttributes,
+      }));
+
+      setError("");
+      setIsEditMode(!isEditMode);
+      console.log("Player updated successfully");
     } catch (error) {
-      console.error("Error fetching player:", error.response?.data || error.message);
-      setError("Failed to fetch player:", error)
+      setError("Error updating player");
+      console.error("Error updating player:", error);
     }
   };
-  getPlayer()
- },[id, domain, isAuthenticated, loading])
 
- {console.log(player.image?.length)}
- {console.log(player.imgae)}
+
+  const toggleEditMode = () => {
+    setIsEditMode(!isEditMode);
+  };
+
+
   return (
     <div className="playerAuth_profile">
       <img
@@ -51,8 +101,6 @@ function PlayerAuth() {
         style={{ width: "150px", height: "150px", objectFit: "cover", borderRadius: "50%" }}
       />
       <h2>{player.firstName} {player.lastName}</h2>
-      <p><strong>Age:</strong> {player.age ? player.age : "N/A"}</p>
-
       {/* Display Team & League */}
       <p>
         <strong>Team:</strong>{" "}
@@ -60,6 +108,49 @@ function PlayerAuth() {
           <NavLink to={`/teams/${player.team.id}`} className="team-link">{player.team.name}</NavLink>
         ) : "No team assigned"}
       </p>
+
+      {player.attributeValues && (
+        <div>
+          <button onClick={toggleEditMode}>
+            {!isEditMode ? "Edit" : "Cancel Edit"}
+          </button>
+
+          {!isEditMode ? (
+            <div className="player-info-container">
+              {player.attributeValues.map((attr) => (
+                // Only show attributes where is_visible is true
+                attr.attribute.is_visible !== false && (
+                  <div key={attr.id} className="attribute-field">
+                    <p>{attr.attribute.attribute_name}</p>
+                    <p>{attr.value}</p>
+                  </div>
+                )
+              ))}
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit}>
+              {player.attributeValues.map((attr) => (
+                // Only show attributes where is_visible is true in edit mode
+                attr.attribute.is_visible !== false && (
+                  <div key={attr.id} className="attribute-field">
+                    <label htmlFor={attr.attribute.attribute_name}>{attr.attribute.attribute_name}</label>
+                    <input
+                      type="text"
+                      id={attr.attribute.attribute_name}
+                      name={attr.attribute.attribute_name}
+                      value={attributes[attr.attribute.attribute_name] || ""}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                )
+              ))}
+              <button type="submit">Update Attributes</button>
+            </form>
+          )}
+        </div>
+      )}
+
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 }

@@ -175,8 +175,10 @@ console.log(leagueData)
 
 
   const formatTime = (time) => {
+    if (!time) return "TBD"; // ✅ Return "TBD" or any default value if time is null
+
     // Split the time into hours and minutes
-    const [hours, minutes] = time.split(':');
+    const [hours, minutes] = time.split(":");
 
     // Create a new date object using today's date and the provided time
     const date = new Date();
@@ -185,8 +187,9 @@ console.log(leagueData)
     date.setSeconds(0); // Optional: To ensure seconds are set to 0
 
     // Use toLocaleTimeString to format the time in 12-hour format with AM/PM
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true });
   };
+
 
   return (
     <div className="league-game-auth-container">
@@ -232,7 +235,7 @@ console.log(leagueData)
               </label>
               <label>
                 Time
-                <input type="time" name="time" value={gameForm.time} onChange={handleGameForm} required />
+                <input type="time" name="time" value={gameForm.time} onChange={handleGameForm}  />
               </label>
 
               <button type="submit">Create</button>

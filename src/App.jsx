@@ -22,7 +22,8 @@ import Player from './pages/Player/Player.jsx';
 import GamePage from './pages/Game/GamePage.jsx';
 import SchedulePage from './pages/Schedule/SchedulePage.jsx';
 import GamePeriod from './pages/GamePeriod/GamePeriod.jsx'
-import UserSettings from './pages/UserSettingsPage';
+import UserSettings from './pages/UserSettingsPage.jsx';
+import PlayerAttributes from './pages/PlayerAttribute/PlayerAttributes.jsx';
 
 
 
@@ -57,6 +58,7 @@ function App() {
           <Route path='/stats' element={<StatAuth />} />
           <Route path='/gamePeriod' element={<GamePeriod />} />
           <Route path='/userSettings' element={<UserSettings />} />
+          <Route path='/playerAttributes' element={<PlayerAttributes />} />
         </Routes>
     </div>
     </div>

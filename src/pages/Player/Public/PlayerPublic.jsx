@@ -64,8 +64,6 @@ function PlayerPublic() {
         <div className="placeholder-image">No Image</div>
       )}
       <h2>{player.firstName} {player.lastName}</h2>
-      <p><strong>Age:</strong> {player.age ? player.age : "N/A"}</p>
-      {/* Display Team */}
       <p>
         <strong>Team:</strong>{" "}
         {player.team ? (

@@ -16,8 +16,8 @@ function TeamAuth() {
   // Player Form State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [playerForm, setPlayerForm] = useState({ firstName: '', lastName: '', age: '', teamId: id });
-  const [updateForm, setUpdateForm] = useState({ id: null, firstName: '', lastName: '', age: '' });
+  const [playerForm, setPlayerForm] = useState({ firstName: '', lastName: '', teamId: id });
+  const [updateForm, setUpdateForm] = useState({ id: null, firstName: '', lastName: ''});
 
   // Fetch Team Data (Players & Games)
   useEffect(() => {
@@ -47,7 +47,6 @@ function TeamAuth() {
     const formData = new FormData();
     formData.append("firstName", playerForm.firstName);
     formData.append("lastName", playerForm.lastName);
-    formData.append("age", playerForm.age ? Number(playerForm.age) : "");
     formData.append("teamId", id);
     if (playerForm.image) formData.append("image", playerForm.image); // Append the image to FormData
 
@@ -65,7 +64,7 @@ function TeamAuth() {
       }));
 
       setIsModalOpen(false);
-      setPlayerForm({ firstName: '', lastName: '', age: '', teamId: id, image: null }); // Reset form
+      setPlayerForm({ firstName: '', lastName: '', teamId: id, image: null }); // Reset form
       setMessage("Player created successfully");
       setTimeout(() => setMessage(''), 3000);
     } catch (error) {
@@ -81,7 +80,6 @@ function TeamAuth() {
     const formData = new FormData();
     formData.append("firstName", updateForm.firstName);
     formData.append("lastName", updateForm.lastName);
-    formData.append("age", updateForm.age ? Number(updateForm.age) : "");
     formData.append("teamId", updateForm.teamId ? Number(updateForm.teamId) : "");
 
     // Only append image if it's a new image file
@@ -137,7 +135,7 @@ function TeamAuth() {
 
   // Open Update Modal
   const openUpdateModal = (player) => {
-    setUpdateForm({ id: player.id, firstName: player.firstName, lastName: player.lastName, age: player.age });
+    setUpdateForm({ id: player.id, firstName: player.firstName, lastName: player.lastName, });
     setIsUpdateModalOpen(true);
   };
 
@@ -178,7 +176,6 @@ console.log(team)
             <form onSubmit={handleCreatePlayer}>
               <input type="text" name="firstName" value={playerForm.firstName} onChange={(e) => setPlayerForm({ ...playerForm, firstName: e.target.value })} placeholder="First Name" required />
               <input type="text" name="lastName" value={playerForm.lastName} onChange={(e) => setPlayerForm({ ...playerForm, lastName: e.target.value })} placeholder="Last Name" />
-              <input type="number" name="age" value={playerForm.age} onChange={(e) => setPlayerForm({ ...playerForm, age: e.target.value })} placeholder="Age" />
               <input
                 type="file"
                 accept="image/*"
@@ -197,7 +194,7 @@ console.log(team)
           <tr>
             <th><input type="checkbox" checked={selectedPlayers.length === team.players.length} onChange={handleSelectAll} /></th>
             <th>Name</th>
-            <th>Age</th>
+
             <th></th>
           </tr>
         </thead>
@@ -206,7 +203,6 @@ console.log(team)
             <tr key={player.id}>
               <td><input type="checkbox" checked={selectedPlayers.includes(player.id)} onChange={() => handleCheckboxChange(player.id)} /></td>
               <td><NavLink to={`/players/${player.id}`}>{player.firstName} {player.lastName}</NavLink></td>
-              <td>{player.age}</td>
               <td>
                 <button className="teamAuthPlayer-update-btn" onClick={() => openUpdateModal(player)}>
                   🖊 Edit
@@ -238,13 +234,6 @@ console.log(team)
                 value={updateForm.lastName}
                 onChange={(e) => setUpdateForm({ ...updateForm, lastName: e.target.value })}
                 placeholder="Last Name (optional)"
-              />
-              <input
-                type="number"
-                name="age"
-                value={updateForm.age}
-                onChange={(e) => setUpdateForm({ ...updateForm, age: e.target.value })}
-                placeholder="Age"
               />
               <input
                 type="file"
