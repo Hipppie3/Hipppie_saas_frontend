@@ -23,6 +23,8 @@ function LeagueGameAuth({ leagueInfo }) {
     team1_id: '',
     team2_id: '',
     date: '',
+    location: '',
+    time: '',
     status: 'scheduled',
   });
 
@@ -64,6 +66,8 @@ function LeagueGameAuth({ leagueInfo }) {
         team1_id: '',
         team2_id: '',
         date: '',
+        location: '',
+        time: '',
         status: 'scheduled',
       });
       setIsModalOpen(false);
@@ -150,7 +154,7 @@ function LeagueGameAuth({ leagueInfo }) {
         : leagueData.games.map((game) => game.id)
     );
   };
-
+console.log(leagueData)
 
   const openScoreModal = (game) => {
     setSelectedGame(game);
@@ -170,7 +174,19 @@ function LeagueGameAuth({ leagueInfo }) {
   };
 
 
+  const formatTime = (time) => {
+    // Split the time into hours and minutes
+    const [hours, minutes] = time.split(':');
 
+    // Create a new date object using today's date and the provided time
+    const date = new Date();
+    date.setHours(hours);
+    date.setMinutes(minutes);
+    date.setSeconds(0); // Optional: To ensure seconds are set to 0
+
+    // Use toLocaleTimeString to format the time in 12-hour format with AM/PM
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+  };
 
   return (
     <div className="league-game-auth-container">
@@ -208,7 +224,15 @@ function LeagueGameAuth({ leagueInfo }) {
 
               <label>
                 Date
-                <input type="date" name="date" value={gameForm.date} onChange={handleGameForm} required />
+                <input type="date" name="date" value={gameForm.date} onChange={handleGameForm}  />
+              </label>
+              <label>
+                Location
+                <input type="location" name="location" value={gameForm.location} onChange={handleGameForm}  />
+              </label>
+              <label>
+                Time
+                <input type="time" name="time" value={gameForm.time} onChange={handleGameForm} required />
               </label>
 
               <button type="submit">Create</button>
@@ -235,6 +259,8 @@ function LeagueGameAuth({ leagueInfo }) {
               <th>ID</th>
               <th>Date</th>
               <th>Matchup</th>
+              <th>Location</th>
+              <th>Time</th>
               <th>Status</th>
               <th>Results</th>
               {/* <th></th> */}
@@ -270,6 +296,8 @@ function LeagueGameAuth({ leagueInfo }) {
                         {getTeamNameById(leagueGame.team1_id)} vs {getTeamNameById(leagueGame.team2_id)}
                       </NavLink>
                     </td>
+                    <td>{leagueGame.location}</td>
+                    <td>{formatTime(leagueGame?.time)}</td>
                     <td>{leagueGame.status.charAt(0).toUpperCase() + leagueGame.status.slice(1)}</td>
                     <td>{leagueGame.score_team1 ?? 0} - {leagueGame.score_team2 ?? 0}</td>
                     {/* <td>

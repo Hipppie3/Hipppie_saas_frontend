@@ -12,12 +12,19 @@ function GameAuth() {
   const [statValues, setStatValues] = useState({});
   const [stats, setStats] = useState([]);  // Add stats state
   const [editFinalScores, setEditFinalScores] = useState(false); // New state 
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState({
+    video_url: '',
+    location: '',
+    time: '',
+    // status: ''
+  });
+
   const { id } = useParams();
 
   const fetchGame = async () => {
     try {
       const response = await api.get(`/api/games/${id}`);
-      console.log("Fetched game data:", response.data); // Debug log
 
       const sortedStats = response.data.stats
         .filter(stat => !stat.hidden)
@@ -152,6 +159,47 @@ function GameAuth() {
   };
 
 
+  const handleUpdateGameDetails = async (e) => {
+    e.preventDefault();
+
+    // Convert video URL to embed format
+    let videoUrl = formData.video_url;
+    if (videoUrl.includes('youtube.com')) {
+      const videoId = videoUrl.split('v=')[1]?.split('&')[0]; // Extract video ID
+      videoUrl = `https://www.youtube.com/embed/${videoId}`; // Convert to embed URL
+    }
+
+    try {
+      const { location, time, status } = formData;
+      await api.put(`/api/games/${game.id}/details`, {
+        video_url: videoUrl,
+        location,
+        time,
+        status,
+      });
+
+      alert("Game details updated successfully!");
+      setShowModal(false); // Close modal after updating
+      fetchGame(); // Refresh game data after updating
+    } catch (error) {
+      console.error("Error updating game details:", error);
+      alert("Failed to update game details.");
+    }
+  };
+
+  const formatTime = (time) => {
+    // Split the time into hours and minutes
+    const [hours, minutes] = time.split(':');
+
+    // Create a new date object using today's date and the provided time
+    const date = new Date();
+    date.setHours(hours);
+    date.setMinutes(minutes);
+    date.setSeconds(0); // Optional: To ensure seconds are set to 0
+
+    // Use toLocaleTimeString to format the time in 12-hour format with AM/PM
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+  };
 
 
 
@@ -173,8 +221,8 @@ function GameAuth() {
   if (!game) return <p>Game not found.</p>;
 
 
+  console.log(game)
 
-  console.log(periodScores);
   return (
     <div className="game-container">
       <button className="toggle-button" onClick={() => {
@@ -200,8 +248,42 @@ function GameAuth() {
         </button>
       )}
 
+      <button className="toggle-button" onClick={() => {
+        setShowModal(true);
+        setFormData({
+          video_url: game?.video_url || '',
+          location: game?.location || '',
+          time: game?.time || '',
+          // status: game?.status || ''
+        });
+      }}>
+        Edit Game
+      </button>
+
+
       {/* Home Team Stats */}
       <div className="team-container-home">
+        <div className="game-video-container">
+          {game?.video_url && (
+            <div className="video-box">
+              <iframe
+                width="100%"
+                height="315"
+                src={game.video_url}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title="Game Video"
+                onError={() => alert("There was an error loading the video. Please try again later.")}
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="game-details">
+          <p>Location: {game.location}</p>
+          <p>Game Time: {formatTime(game?.time)}</p>
+        </div>
 
         {!allPeriodsHidden &&
           <table className="gamePeriods-table">
@@ -382,6 +464,54 @@ function GameAuth() {
           </tbody>
         </table>
       </div>
+
+      {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Edit Game Details</h2>
+            <form onSubmit={handleUpdateGameDetails}>
+              <label>
+                Video URL:
+                <input
+                  type="text"
+                  value={formData.video_url}
+                  onChange={(e) => setFormData({ ...formData, video_url: e.target.value })}
+                />
+              </label>
+              <label>
+                Location:
+                <input
+                  type="text"
+                  value={formData.location}
+                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                />
+              </label>
+              <label>
+                Time:
+                <input
+                  type="time"
+                  value={formData.time}
+                  onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                />
+              </label>
+              {/* <label>
+                Status:
+                <select
+                  value={formData.status}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                >
+                  <option value="scheduled">Scheduled</option>
+                  <option value="completed">Completed</option>
+                  <option value="canceled">Canceled</option>
+                </select>
+              </label> */}
+              <button type="submit">Save Changes</button>
+              <button type="button" onClick={() => setShowModal(false)}>Cancel</button>
+            </form>
+          </div>
+        </div>
+      )}
+
 
       {editMode && (
         <button className="submit-button" onClick={handleSubmit}>
