@@ -10,12 +10,15 @@ function TeamPublic() {
   const [searchParams] = useSearchParams();
   const domain = searchParams.get("domain");
   const [error, setError] = useState("");
+  const [playersAttr, setPlayersAttr] = useState([])
 
   useEffect(() => {
     const getTeam = async () => {
       try {
         const response = await api.get(`/api/teams/${id}?domain=${domain}`, { withCredentials: true });
         setTeam(response.data.team);
+        setPlayersAttr(response.data.team.players)
+        console.log(response.data.team.players)
         console.log("Team Data:", response.data.team);
       } catch (error) {
         console.error("Error fetching team:", error.response?.data || error.message);
@@ -24,6 +27,12 @@ function TeamPublic() {
     };
     getTeam();
   }, [id, domain]);
+
+  const uniqueAttributes = Array.from(
+    new Set(playersAttr.flatMap((player) => player.attributeValues.map((att) => att.attribute.attribute_name)))
+  );
+
+
 
   return (
     <div className="teamPublic-container">
@@ -72,36 +81,43 @@ function TeamPublic() {
 
       <div className="teamPublic-players-container">
         <h4 className="teamPublic-players-title">ROSTER</h4>
-      <table className="teamPublic-players-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>#</th>
-            <th>Position</th>
-            <th>Height</th>
-            <th>Age</th>
-          </tr>
-        </thead>
+        <table className="teamPublic-players-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              {uniqueAttributes.map((attrName, index) => (
+                <th key={index}>{attrName}</th>
+              ))}
+            </tr>
+          </thead>
           <tbody>
             {team?.players?.length > 0 ? (
-              team.players.map((player) =>
+              team.players.map((player) => (
                 <tr key={player.id}>
-                  <td><NavLink to={`/players/${player.id}${domain ? `?domain=${domain}` : ""}`}>
-                    {player.firstName}
-                  </NavLink></td>
-                  <td>2</td>
-                  <td>Forward</td>
-                  <td>5'4</td>
-                  <td>24</td>
+                  <td>
+                    <NavLink to={`/players/${player.id}${domain ? `?domain=${domain}` : ""}`}>
+                      {player.firstName.trim()}
+                    </NavLink>
+                  </td>
+
+                  {/* ✅ Display attribute values in the correct order */}
+                  {uniqueAttributes.map((attrName, index) => {
+                    const attributeValue = player.attributeValues.find(
+                      (att) => att.attribute.attribute_name === attrName
+                    );
+                    return <td key={index}>{attributeValue && attributeValue.value.trim() !== "" ? attributeValue.value : "-"}</td>;
+
+                  })}
                 </tr>
-              )
+              ))
             ) : (
               <tr>
-                <td colSpan="5" style={{ textAlign: "center" }}>No players available</td> {/* ✅ Fix: Wrapped in <tr><td> */}
+                <td colSpan={uniqueAttributes.length + 1} style={{ textAlign: "center" }}>
+                  No players available
+                </td>
               </tr>
             )}
           </tbody>
-
         </table>
       </div>
     </div>

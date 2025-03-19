@@ -6,6 +6,40 @@
 }
 
 
+.game-video-container {
+  margin: 40px 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  /* Ensure the container is full width */
+}
+
+.video-box {
+  width: 100%;
+  /* Set to 100% width of the parent container */
+  max-width: 800px;
+  /* Set a max width for larger screens */
+  aspect-ratio: 16 / 9;
+  /* Ensure the aspect ratio of the video stays correct */
+  overflow: hidden;
+}
+
+iframe {
+  width: 100%;
+  /* Make iframe take full width of the container */
+  height: 100%;
+  /* Make iframe take full height of the container */
+  border: none;
+}
+
+
+
+
+
+
+
+
+
 
 .gamePublic-periods-container{
  width: 100%;
