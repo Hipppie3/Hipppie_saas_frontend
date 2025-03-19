@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import api from '@api';
 import { useAuth } from '../../context/AuthContext';
-import './PlayerAttributes.css'
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import { SortableContext, arrayMove, useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import './PlayerAttributes.css';
 
 function PlayerAttributes() {
   const [attributes, setAttributes] = useState([]);
@@ -40,6 +43,7 @@ function PlayerAttributes() {
       console.error("Error toggling visibility", error);
     }
   };
+
   const resetAttributes = async () => {
     try {
       await api.post('/api/playerAttributes/reset', { withCredentials: true });
@@ -49,12 +53,29 @@ function PlayerAttributes() {
     }
   };
 
+  const handleDragEnd = async (event) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = attributes.findIndex(attr => attr.id === active.id);
+    const newIndex = attributes.findIndex(attr => attr.id === over.id);
+
+    const reorderedAttributes = arrayMove(attributes, oldIndex, newIndex);
+    setAttributes(reorderedAttributes);
+
+    try {
+      await api.put('/api/playerAttributes/reorder', {
+        attributes: reorderedAttributes.map((attr, index) => ({ id: attr.id, order: index })),
+      });
+    } catch (error) {
+      console.error("Error updating attribute order:", error);
+    }
+  };
 
   return (
     <div className="player-attributes-container">
       <h2>Player Attributes</h2>
 
-      {/* Add Attribute Form */}
       <form onSubmit={handleAddAttribute}>
         <input
           type="text"
@@ -73,20 +94,38 @@ function PlayerAttributes() {
         <button type="submit">Add Attribute</button>
       </form>
 
-      {/* List of Attributes */}
-      <ul>
-        {attributes.map(attribute => (
-          <li key={attribute.id}>
-            {attribute.attribute_name} ({attribute.attribute_type}) - {attribute.is_visible ? 'Visible' : 'Hidden'}
-            <button onClick={() => toggleVisibility(attribute.id, !attribute.is_visible)}>
-              {attribute.is_visible ? 'Hide' : 'Show'}
-            </button>
-          </li>
-        ))}
-      </ul>
-      <button onClick={resetAttributes}>Reset to Default</button>
+      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SortableContext items={attributes.map(attr => attr.id)}>
+          <ul>
+            {attributes.map(attribute => (
+              <SortableAttribute key={attribute.id} attribute={attribute} onToggle={toggleVisibility} />
+            ))}
+          </ul>
+        </SortableContext>
+      </DndContext>
 
+      <button onClick={resetAttributes}>Reset to Default</button>
     </div>
+  );
+}
+
+function SortableAttribute({ attribute, onToggle }) {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: attribute.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    cursor: "grab",
+    opacity: attribute.is_visible ? 1 : 0.5,
+  };
+
+  return (
+    <li ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      {attribute.attribute_name} ({attribute.attribute_type}) - {attribute.is_visible ? 'Visible' : 'Hidden'}
+      <button onClick={() => onToggle(attribute.id, !attribute.is_visible)}>
+        {attribute.is_visible ? 'Hide' : 'Show'}
+      </button>
+    </li>
   );
 }
 

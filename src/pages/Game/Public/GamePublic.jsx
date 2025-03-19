@@ -37,8 +37,11 @@ function GamePublic() {
   };
 
   // Check if all periods are hidden
-  const allPeriodsHidden = periodScores.every(period => period.gamePeriod?.hidden);
+  const visiblePeriods = periodScores.filter(period => !period.gamePeriod.hidden && period.gamePeriod.name !== "Final");
+  const showPeriodsTable = visiblePeriods.length > 0;
 
+
+  const finalPeriod = periodScores.find(period => period.gamePeriod.name === "Final");
   if (loading) return <p>Loading game details...</p>;
   if (!game) return <p>Game not found.</p>;
 
@@ -47,53 +50,49 @@ function GamePublic() {
       <div className="gamePublic-periods-container">
         <div className="gamePublic-periods-final-score">
           <h5>{game.game.homeTeam?.name}</h5>
-          <h5>{game.game.score_team1}</h5>
+          <h5>{finalPeriod ? finalPeriod.period_score_team1 : game.game.score_team1}</h5>
           <h5>FINAL</h5>
-          <h5>{game.game.score_team2}</h5>
+          <h5>{finalPeriod ? finalPeriod.period_score_team2 : game.game.score_team2}</h5>
           <h5>{game.game.awayTeam?.name}</h5>
         </div>
 
         {/* Conditionally render the table if not all periods are hidden */}
-        {!allPeriodsHidden && (
+        {showPeriodsTable && (
           <table className="gamePublic-periods-table">
             <thead>
               <tr>
                 <th></th>
-                {game.game.periodScores
-                  .filter(period => !period.gamePeriod.hidden) // Exclude hidden periods
-                  .map((period) => (
-                    <th key={period.id}>{period.gamePeriod?.name}</th>
-                  ))}
+                {visiblePeriods.map((period) => (
+                  <th key={period.id}>{period.gamePeriod?.name}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>{game.game.homeTeam?.name}</td>
-                {game.game.periodScores
-                  .filter(period => !period.gamePeriod.hidden) // Exclude hidden periods
-                  .map((period) => (
-                    <td key={period.id}>{period.period_score_team1}</td>
-                  ))}
+                {visiblePeriods.map((period) => (
+                  <td key={period.id}>{period.period_score_team1}</td>
+                ))}
               </tr>
 
               {/* Away Team Row */}
               <tr>
                 <td>{game.game.awayTeam?.name}</td>
-                {game.game.periodScores
-                  .filter(period => !period.gamePeriod.hidden) // Exclude hidden periods
-                  .map((period) => (
-                    <td key={period.id}>{period.period_score_team2}</td>
-                  ))}
+                {visiblePeriods.map((period) => (
+                  <td key={period.id}>{period.period_score_team2}</td>
+                ))}
               </tr>
             </tbody>
           </table>
         )}
+
+
       </div>
 
       {/* Home Team Stats */}
       <div className="teamPublic-container-home">
         <h3 className="teamPublic-header">
-          Home Team: {game.game.homeTeam?.name} ({game.game.team1_id === game.game.homeTeam?.id ? game.game.score_team1 : game.game.score_team2})
+          Home Team: {game.game.homeTeam?.name} ({finalPeriod ? finalPeriod.period_score_team1 : game.game.score_team1})
         </h3>
         <table className="gamePublic-stat-table">
           <thead>
@@ -132,7 +131,7 @@ function GamePublic() {
       {/* Away Team Stats */}
       <div className="teamPublic-container-away">
         <h3 className="teamPublic-header">
-          Away Team: {game.game.awayTeam?.name} ({game.game.team2_id === game.game.awayTeam?.id ? game.game.score_team2 : game.game.score_team1})
+          Away Team: {game.game.awayTeam?.name} ({finalPeriod ? finalPeriod.period_score_team1 : game.game.score_team1})
         </h3>
         <table className="gamePublic-stat-table">
           <thead>

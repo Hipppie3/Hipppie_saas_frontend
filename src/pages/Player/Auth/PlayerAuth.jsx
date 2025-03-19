@@ -117,33 +117,40 @@ function PlayerAuth() {
 
           {!isEditMode ? (
             <div className="player-info-container">
-              {player.attributeValues.map((attr) => (
-                // Only show attributes where is_visible is true
-                attr.attribute.is_visible !== false && (
-                  <div key={attr.id} className="attribute-field">
-                    <p>{attr.attribute.attribute_name}</p>
-                    <p>{attr.value}</p>
-                  </div>
-                )
-              ))}
+              {player.attributeValues &&
+                [...player.attributeValues] // Create a copy to avoid mutating state
+                  .sort((a, b) => a.attribute.order - b.attribute.order) // ✅ Sort by order
+                  .map((attr) => (
+                    attr.attribute.is_visible !== false && (
+                      <div key={attr.id} className="attribute-field">
+                        <p>{attr.attribute.attribute_name}</p>
+                        <p>{attr.value}</p>
+                      </div>
+                    )
+                  ))
+              }
             </div>
           ) : (
             <form onSubmit={handleSubmit}>
-              {player.attributeValues.map((attr) => (
-                // Only show attributes where is_visible is true in edit mode
-                attr.attribute.is_visible !== false && (
-                  <div key={attr.id} className="attribute-field">
-                    <label htmlFor={attr.attribute.attribute_name}>{attr.attribute.attribute_name}</label>
-                    <input
-                      type="text"
-                      id={attr.attribute.attribute_name}
-                      name={attr.attribute.attribute_name}
-                      value={attributes[attr.attribute.attribute_name] || ""}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                )
-              ))}
+                {player.attributeValues &&
+                  [...player.attributeValues]
+                    .sort((a, b) => a.attribute.order - b.attribute.order) // ✅ Ensure sorted order
+                    .map((attr) => (
+                      attr.attribute.is_visible !== false && (
+                        <div key={attr.id} className="attribute-field">
+                          <label htmlFor={attr.attribute.attribute_name}>{attr.attribute.attribute_name}</label>
+                          <input
+                            type="text"
+                            id={attr.attribute.attribute_name}
+                            name={attr.attribute.attribute_name}
+                            value={attributes[attr.attribute.attribute_name] || ""}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                      )
+                    ))
+                }
+
               <button type="submit">Update Attributes</button>
             </form>
           )}
