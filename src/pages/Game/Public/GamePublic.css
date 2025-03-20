@@ -3,24 +3,23 @@
  width: 100%;
  margin-top: 80px;
  font-size: 15px;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
 }
 
 
 .game-video-container {
-  margin: 40px 0;
+  margin: 20px 0;
+  margin-bottom: 40px;
   display: flex;
   justify-content: center;
-  width: 100%;
-  /* Ensure the container is full width */
+  width: 80%;
 }
 
 .video-box {
   width: 100%;
-  /* Set to 100% width of the parent container */
-  max-width: 800px;
-  /* Set a max width for larger screens */
   aspect-ratio: 16 / 9;
-  /* Ensure the aspect ratio of the video stays correct */
   overflow: hidden;
 }
 
@@ -34,21 +33,14 @@ iframe {
 
 
 
-
-
-
-
-
-
-
 .gamePublic-periods-container{
  width: 100%;
- margin-bottom: 4rem;
  padding: 0px 10px;
  display: flex;
  flex-direction: column;
  align-items: center;
- justify-content: center;
+ border-top: 1px solid yellow;
+ border-bottom: 1px solid yellow
 }
 .gamePublic-periods-table {
  width: 90%;
@@ -97,12 +89,6 @@ iframe {
 .gamePublic-periods-table td a:hover {
  text-shadow: 0 0 1px rgba(0, 0, 0, 1);
 }
-
-
-
-
-
-
 
 
 .teamPublic-container-away {
@@ -172,90 +158,102 @@ iframe {
  outline: none;
 }
 
-
-
-
-/* Responsive Styling */
 @media (max-width: 768px) {
- .game-container {
-  width: 100%;
-  margin-left: 0;
-  padding-bottom: 20px;
-  padding-left: 10px;
-  padding-right: 10px;
-  display: flex;
-  flex-direction: column;
-  color: black;
-  padding-top: 5rem;
-  font-size: 10px;
- }
+  .gamePublic-container {
+      width: 100%;
+      margin-top: none;
+      font-size: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
- .statPublic-input {
-  width: 30px;
-  padding: 0px;
-  text-align: center;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  outline: none;
- }
+  .game-video-container {
+    margin: 40px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    /* Ensure the container is full width */
+  }
 
- .gamePublic-stat-table th,
- .gamePublic-stat-table td {
-  text-align: center;
- }
+  .video-box {
+    width: 80%;
+    /* Set to 100% width of the parent container */
+    /* Set a max width for larger screens */
+    aspect-ratio: 16 / 9;
+    /* Ensure the aspect ratio of the video stays correct */
+    overflow: hidden;
+  }
+
+  iframe {
+    width: 100%;
+    /* Make iframe take full width of the container */
+    height: 100%;
+    /* Make iframe take full height of the container */
+    border: none;
+  }
 }
+
 
 @media (max-width: 578px) {
- .delete-gamePublic-btn {
-  padding-left: 1.2%;
- }
+  .gamePublic-periods-table,
+  .gamePublic-stat-table {
+    width: 90%;
+    display: table ;
+    /* Ensure it is visible */
+    overflow-x: auto;
+    /* Allow horizontal scrolling if needed */
+  }
+    .gamePublic-stat-table th,
+    .gamePublic-stat-table td {
+      text-align: center;
+    }
+  }
 
- .gamePublic-container {
-  width: 100%;
-  margin-left: 0;
-  padding-bottom: 20px;
-  padding-left: 10px;
-  padding-right: 10px;
-  display: flex;
-  flex-direction: column;
-  color: black;
-  padding-top: 5rem;
-  font-size: 7px;
- }
-
- .statPublic-input {
-  width: 20px;
-  padding: 0px;
-  text-align: center;
-  font-size: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  outline: none;
- }
-}
+    @media (max-width: 480px) {
+      .gamePublic-periods-table,
+      .gamePublic-stat-table {
+        width: 90%;
+        display: table;
+        overflow-x: auto;
+        font-size: 10px;
+      }
+  
+      .gamePublic-stat-table th,
+      .gamePublic-stat-table td {
+        text-align: center;
+      }
+    }
 
 @media (max-width: 380px) {
- .gamePublic-container {
-  width: 100%;
-  margin-left: 0;
-  padding-bottom: 20px;
-  padding-left: 5px;
-  padding-right: 5px;
-  display: flex;
-  flex-direction: column;
-  color: black;
-  padding-top: 5rem;
-  font-size: 5px;
- }
 
- .stat-input {
-  width: 10px;
-  padding: 0px;
-  text-align: center;
-  font-size: 7px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  outline: none;
- }
+  .gamePublic-periods-table,
+  .gamePublic-stat-table {
+    width: 90%;
+    display: table;
+    overflow-x: auto;
+    font-size: 8px;
+  }
+
+  .gamePublic-stat-table th,
+  .gamePublic-stat-table td {
+    text-align: center;
+  }
+}
+
+@media (max-width: 320px) {
+
+  .gamePublic-periods-table,
+  .gamePublic-stat-table {
+    width: 80%;
+    display: table;
+    overflow-x: auto;
+    font-size: 7px;
+  }
+
+  .gamePublic-stat-table th,
+  .gamePublic-stat-table td {
+    text-align: center;
+  }
 }

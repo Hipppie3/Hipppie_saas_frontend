@@ -18,18 +18,18 @@
 }
 
 .teamPublic-games-container {
-  width: 80%;
+  width: 90%;
   display: flex;
   justify-content: center;
 }
 
 .teamPublic-games-table {
-  width: 80%;
+  width: 90%;
 }
 .teamPublic-games-container {
   margin-top: 2rem;
   padding-top: 1rem;
-  width: 80%;
+  width: 90%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -75,9 +75,9 @@
 }
 
 .teamPublic-games-table td {
-    text-align: center;
-      white-space: nowrap;
-      padding: 5px;
+  text-align: center;
+  white-space: nowrap;
+  padding: 5px;
 }
 
 
@@ -89,7 +89,7 @@
 .teamPublic-players-container {
   margin-top: 2rem;
   padding-top: 1rem;
-  width: 80%;
+  width: 90%;
   display: flex;
   flex-direction: column;
 

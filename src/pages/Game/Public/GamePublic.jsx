@@ -53,6 +53,8 @@ function GamePublic() {
   if (loading) return <p>Loading game details...</p>;
   if (!game) return <p>Game not found.</p>;
 console.log(game.game.video_url)
+
+
   return (
     <div className="gamePublic-container">
       <div className="gamePublic-periods-container">
