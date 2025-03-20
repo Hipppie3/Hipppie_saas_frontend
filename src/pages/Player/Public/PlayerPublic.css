@@ -19,12 +19,11 @@
 .player-public-links-container li {
  padding: 10px;
  cursor: pointer;
- font-size: 20px;
 }
 
 .player-public-links-container {
  border: 1px solid orange;
- height: 60px;
+ height: 
 }
 .player-public-sponsors-container {
  width: 100%;
