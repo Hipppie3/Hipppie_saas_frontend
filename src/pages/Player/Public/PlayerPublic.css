@@ -55,6 +55,7 @@
  width: max-content;
  /* ✅ Forces table to be larger than container */
  min-width: 100%;
+ min-height: auto;
  border-collapse: collapse;
  text-align: center;
 }
@@ -101,7 +102,7 @@
  overflow-x: auto;
  max-width: 100%;
  white-space: nowrap;
- display: flex;
+ display: block !important;
  flex-direction: column;
 }
 .player-public-stats-title {
@@ -111,7 +112,7 @@
 .player-public-stats-table {
  width: max-content;
  /* ✅ Forces table to be larger than container */
- min-width: 100;
+ min-width: 100%;
  border-collapse: collapse;
  text-align: center;
 }
