@@ -40,7 +40,7 @@ function TeamListPublic() {
   };
 
   // ✅ Extract unique leagues with names
-  const uniqueLeagues = [...new Set(teams.map(team => team.league.id))];
+  const uniqueLeagues = [...new Set(teams.map(team => team.league?.id))];
 
   const filteredTeams = selectedLeague
     ? teams.filter(team => team.league.id === Number(selectedLeague)) // ✅ Now matches the correct structure
