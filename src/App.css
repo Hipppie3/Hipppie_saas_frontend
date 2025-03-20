@@ -20,7 +20,6 @@ body,
  /* ✅ Makes Sidebar and content sit side by side */
  width: 100vw;
  /* ✅ Ensure full width */
- min-height: 100vh;
 }
 
 .content_wrapper {
