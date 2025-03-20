@@ -6,51 +6,46 @@ import './TeamListPublic.css';
 function TeamListPublic() {
   const [teams, setTeams] = useState([]);
   const [leagues, setLeagues] = useState([]);
-  const [selectedLeague, setSelectedLeague] = useState("")
+  const [selectedLeague, setSelectedLeague] = useState("");
+  const [loading, setLoading] = useState(true); // ✅ Add loading state
   const [searchParams] = useSearchParams();
   const domain = searchParams.get("domain");
 
   useEffect(() => {
-    const fetchTeams = async () => {
+    const fetchData = async () => {
       try {
-        const response = await api.get(`/api/teams/teamsTest`);
-        setTeams(response.data.teams || []);
+        const [teamsResponse, leaguesResponse] = await Promise.all([
+          api.get(`/api/teams/teamsTest`),
+          api.get(`/api/leagues/leaguesTest`)
+        ]);
+        setTeams(teamsResponse.data.teams || []);
+        setLeagues(leaguesResponse.data.leagues || []);
       } catch (error) {
-        console.error("Error fetching teams:", error);
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // ✅ Set loading to false once both requests finish
       }
     };
 
-    const fetchLeagues = async () => {
-      try {
-        const response = await api.get(`/api/leagues/leaguesTest`);
-        setLeagues(response.data.leagues || []);
-      } catch (error) {
-        console.error("Error fetching leagues:", error);
-      }
-    };
-
-    fetchTeams();
-    fetchLeagues();
+    fetchData();
   }, []);
-
 
   const getLeagueName = (leagueId) => {
     const league = leagues.find((l) => l.id === leagueId);
     return league ? league.name : `League ${leagueId}`;
   };
 
-  // ✅ Extract unique leagues with names
   const uniqueLeagues = [...new Set(teams.map(team => team.league?.id))];
 
   const filteredTeams = selectedLeague
-    ? teams.filter(team => team.league.id === Number(selectedLeague)) // ✅ Now matches the correct structure
+    ? teams.filter(team => team.league.id === Number(selectedLeague))
     : teams;
 
+  // ✅ Completely hide everything until data is loaded
+  if (loading) return null;
 
-  
   return (
     <div className="teamListPublic-container">
-
       <div className='teamPublic-league-name-container'>
         <h2 className="teamPublic-league-title">
           <select id="league-filter" value={selectedLeague} onChange={(e) => setSelectedLeague(e.target.value)}>
@@ -64,11 +59,9 @@ function TeamListPublic() {
         </h2>
       </div>
 
-      {filteredTeams.length === 0 ? (
-        <p>No teams available</p>
-      ) : (
+      {filteredTeams.length > 0 ? (
         <div className="teamPublic-table-container">
-            <table className="teamPublic-table">
+          <table className="teamPublic-table">
             <thead>
               <tr>
                 <th>Position</th>
@@ -78,35 +71,36 @@ function TeamListPublic() {
                 <th>Percentage</th>
               </tr>
             </thead>
-              <tbody>
-                {[...filteredTeams]
-                  .map(team => ({
-                    ...team,
-                    winPercentage: team.wins + team.losses > 0
-                      ? ((team.wins / (team.wins + team.losses)) * 1).toFixed(3) // ✅ Calculate Win %
-                      : "0.00", // ✅ If no games played, set to 0%
-                  }))
-                  .sort((a, b) => b.winPercentage - a.winPercentage) // ✅ Sort by Win %
-                  .map((team, index) => ( // ✅ Assign position based on sorted order
-                    <tr key={team.id}>
-                      <td>{index + 1}</td> {/* ✅ Position based on Win % ranking */}
-                      <td>
-                        <NavLink to={`/teams/${team.id}${domain ? `?domain=${domain}` : ""}`}>
-                          {team.name}
-                        </NavLink>
-                      </td>
-                      <td>{team.wins}</td>
-                      <td>{team.losses}</td>
-                      <td>{team.winPercentage}</td> {/* ✅ Show Win % */}
-                    </tr>
-                  ))}
-              </tbody>
-
-            </table>
+            <tbody>
+              {[...filteredTeams]
+                .map(team => ({
+                  ...team,
+                  winPercentage: team.wins + team.losses > 0
+                    ? ((team.wins / (team.wins + team.losses)) * 1).toFixed(3)
+                    : "0.00",
+                }))
+                .sort((a, b) => b.winPercentage - a.winPercentage)
+                .map((team, index) => (
+                  <tr key={team.id}>
+                    <td>{index + 1}</td>
+                    <td>
+                      <NavLink to={`/teams/${team.id}${domain ? `?domain=${domain}` : ""}`}>
+                        {team.name}
+                      </NavLink>
+                    </td>
+                    <td>{team.wins}</td>
+                    <td>{team.losses}</td>
+                    <td>{team.winPercentage}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
         </div>
+      ) : (
+        <p>No teams available</p>
       )}
-      </div>
+    </div>
   );
 }
 
-export default TeamListPublic
+export default TeamListPublic;
