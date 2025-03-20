@@ -12,26 +12,27 @@ function TeamListPublic() {
 
   useEffect(() => {
     const fetchTeams = async () => {
-    try {
-      const response = await api.get(`/api/teams?domain=${domain}`);
-      setTeams(response.data.teams || []);
-      console.log(response.data.teams)
-    } catch (error) {
-      console.error("Error fetching teams:", error);
-    }
-    };
-    const fetchLeagues = async () => {
       try {
-        const response = await api.get(`/api/leagues?domain=${domain}`); // ✅ Fetch all leagues
-        console.log("Leagues:", response.data.leagues);
-        setLeagues(response.data.leagues); // ✅ Store leagues
+        const response = await api.get(`/api/teams/teamsTest`);
+        setTeams(response.data.teams || []);
       } catch (error) {
-        console.log("Error fetching leagues:", error);
+        console.error("Error fetching teams:", error);
       }
     };
+
+    const fetchLeagues = async () => {
+      try {
+        const response = await api.get(`/api/leagues/leaguesTest`);
+        setLeagues(response.data.leagues || []);
+      } catch (error) {
+        console.error("Error fetching leagues:", error);
+      }
+    };
+
     fetchTeams();
     fetchLeagues();
-  }, [domain])
+  }, []);
+
 
   const getLeagueName = (leagueId) => {
     const league = leagues.find((l) => l.id === leagueId);
