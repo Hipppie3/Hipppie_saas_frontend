@@ -6,6 +6,7 @@
  display: flex;
  flex-direction: column;
  align-items: center;
+ border: 1px solid red;
 }
 
 
@@ -39,8 +40,7 @@ iframe {
  display: flex;
  flex-direction: column;
  align-items: center;
- border-top: 1px solid yellow;
- border-bottom: 1px solid yellow
+
 }
 .gamePublic-periods-table {
  width: 90%;
