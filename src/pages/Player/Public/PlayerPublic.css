@@ -6,7 +6,6 @@
 .player-details-container {
  width: 100%;
  padding: 0 10px;
- height: 300px
 }
 
 .player-public-links-container ul {
@@ -20,10 +19,12 @@
 .player-public-links-container li {
  padding: 10px;
  cursor: pointer;
+ font-size: 20px;
 }
 
 .player-public-links-container {
  border: 1px solid orange;
+ height: 60px;
 }
 .player-public-sponsors-container {
  width: 100%;
@@ -48,7 +49,7 @@
  overflow-x: auto;
  max-width: 100%;
  white-space: nowrap;
-
+  margin-top: 2rem;
 }
 
 .player-public-stats-table {
