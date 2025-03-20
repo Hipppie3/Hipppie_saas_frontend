@@ -11,27 +11,20 @@ function TeamListPublic() {
   const domain = searchParams.get("domain");
 
   useEffect(() => {
-    const fetchTeams = async () => {
+    const fetchData = async () => {
       try {
-        const response = await api.get(`/api/teams/teamsTest`);
+        const response = await api.get(`/api/leagues-teams`);
+        console.log("Optimized response:", response.data);
+        setLeagues(response.data.leagues || []);
         setTeams(response.data.teams || []);
       } catch (error) {
-        console.error("Error fetching teams:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    const fetchLeagues = async () => {
-      try {
-        const response = await api.get(`/api/leagues/leaguesTest`);
-        setLeagues(response.data.leagues || []);
-      } catch (error) {
-        console.error("Error fetching leagues:", error);
-      }
-    };
-
-    fetchTeams();
-    fetchLeagues();
+    fetchData();
   }, []);
+
 
 
   const getLeagueName = (leagueId) => {
