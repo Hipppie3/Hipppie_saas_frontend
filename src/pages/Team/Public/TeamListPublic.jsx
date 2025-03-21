@@ -35,10 +35,11 @@ function TeamListPublic() {
     return league ? league.name : `League ${leagueId}`;
   };
 
-  const uniqueLeagues = [...new Set(teams.map(team => team.league?.id))];
+  const uniqueLeagues = [...new Set(teams.map(team => team.leagueId))];
+  console.log(teams)
 
   const filteredTeams = selectedLeague
-    ? teams.filter(team => team.league.id === Number(selectedLeague))
+    ? teams.filter(team => team.leagueId === Number(selectedLeague))
     : teams;
 
   // ✅ Completely hide everything until data is loaded
