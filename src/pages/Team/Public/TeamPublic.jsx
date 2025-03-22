@@ -15,7 +15,7 @@ function TeamPublic() {
   useEffect(() => {
     const getTeam = async () => {
       try {
-        const response = await api.get(`/api/teams/${id}?domain=${domain}`, { withCredentials: true });
+        const response = await api.get(`/api/teams/${id}/teamPublic?domain=${domain}`, { withCredentials: true });
         setTeam(response.data.team);
         setPlayersAttr(response.data.team.players)
         console.log(response.data.team.players)
