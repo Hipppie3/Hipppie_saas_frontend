@@ -43,9 +43,25 @@ function PlayerPublic() {
       ])
     ).values()
   );
+  const calculateAverage = (gameStats = [], statShortName) => {
+    if (!Array.isArray(gameStats) || gameStats.length === 0) return "0.0";
+    const filtered = gameStats.filter(gs => gs.stat?.shortName === statShortName);
+    const uniqueGameIds = [...new Set(filtered.map(gs => gs.game_id))];
+    const totalGames = uniqueGameIds.length;
+    const total = filtered.reduce((sum, gs) => sum + Number(gs.value), 0);
+    return totalGames > 0 ? (total / totalGames).toFixed(1) : "0.0";
+  };
+
+  const avgPTS = player?.gameStats ? calculateAverage(player.gameStats, "PTS") : "0.0";
+  const avgAST = player?.gameStats ? calculateAverage(player.gameStats, "AST") : "0.0";
+  const avgREB = player?.gameStats ? calculateAverage(player.gameStats, "REB") : "0.0";
+
+
 
 
   if (!player) return <p>Loading...</p>;
+  const numberAttr = player.attributeValues?.find(attr => attr.attribute?.attribute_name === "Number");
+  const positionAttr = player.attributeValues?.find(attr => attr.attribute?.attribute_name === "Position");
 
 
   return (
@@ -57,21 +73,45 @@ function PlayerPublic() {
         <img
           src={player.image}
           alt={`${player.firstName} ${player.lastName}`}
-          className="player-image"
-          style={{ width: "150px", height: "150px", objectFit: "cover", borderRadius: "50%" }}
+          className="player-page-image"
         />
       ) : (
         <div className="placeholder-image">No Image</div>
       )}
-      <h2>{player.firstName} {player.lastName}</h2>
-      <p>
-        <strong>Team:</strong>{" "}
-        {player.team ? (
-          <NavLink to={`/teams/${player.team.id}?domain=${domain}`} className="team-link">{player.team.name}</NavLink>
-        ) : "No team assigned"}
-      </p>
+      <div className="player-details-information">
+          <p className="player-details-team">
+            {player.team ? (
+              <h5>{player.team.name}  {numberAttr ? ` | #${numberAttr.value}` : ""}  {positionAttr ? ` | ${positionAttr.value}` : ""}</h5>
+            ) : "No team assigned"}
+          </p>
+          <div className='player-details-name'>
+          <h2>{player.firstName} </h2>
+          <h2>{player.lastName || "\u00a0"}</h2>  
+          </div>
+
+        </div>
       </div>
-      
+      <div className="players-averages-details">
+            <section className="players-averages-details-left-section">
+            <div className="box"></div>
+            <div className="box">
+            <h4>PPG</h4>
+            <h4><strong>{avgPTS}</strong> </h4>
+            </div>
+            <div className="box">
+            <h4>RPG</h4>
+            <h4><strong>{avgREB}</strong> </h4></div>
+            <div className="box">
+              <h4>APG</h4>
+              <h4><strong>{avgAST}</strong> </h4>
+</div>
+            </section>
+        <section className="players-averages-details-right-section">
+
+            </section>
+      </div>
+
+
       {/* Player links */} 
       <div className="player-public-links-container">
           <ul>

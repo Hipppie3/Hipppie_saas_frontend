@@ -10,8 +10,8 @@ function PlayerListAuth() {
   const [teams, setTeams] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [playerForm, setPlayerForm] = useState({ firstName: '', lastName: '', age: '', teamId: '', image: null});
-  const [updateForm, setUpdateForm] = useState({ id: null, firstName: "", lastName: "", age: "", teamId: "", image: null });
+  const [playerForm, setPlayerForm] = useState({ firstName: '', lastName: '',  teamId: '', image: null});
+  const [updateForm, setUpdateForm] = useState({ id: null, firstName: "", lastName: "",  teamId: "", image: null });
   const [message, setMessage] = useState("");
   const [selectedPlayers, setSelectedPlayers] = useState([]); // ✅ Track selected players for bulk delete
   const {id} = useParams();
@@ -57,7 +57,6 @@ function PlayerListAuth() {
     const formData = new FormData();
     formData.append("firstName", playerForm.firstName);
     formData.append("lastName", playerForm.lastName);
-    formData.append("age", playerForm.age ? Number(playerForm.age) : "");
     formData.append("teamId", Number(playerForm.teamId));
     if (playerForm.image) formData.append("image", playerForm.image);
     try {
@@ -70,7 +69,7 @@ function PlayerListAuth() {
       // ✅ Append new player to state without refetching all players
       setPlayers((prevPlayers) => [...prevPlayers, newPlayer]);
       // Reset Form & Close Modal
-      setPlayerForm({ firstName: "", lastName: "", age: "", teamId: "", image: null });
+      setPlayerForm({ firstName: "", lastName: "",  teamId: "", image: null });
       setMessage("Player created successfully");
       setIsModalOpen(false);
       setTimeout(() => setMessage(''), 3000);
@@ -85,7 +84,6 @@ function PlayerListAuth() {
     const formData = new FormData();
     formData.append("firstName", updateForm.firstName);
     formData.append("lastName", updateForm.lastName);
-    formData.append("age", updateForm.age ? Number(updateForm.age) : "");
     formData.append("teamId", updateForm.teamId ? Number(updateForm.teamId) : "");
     if (updateForm.image && updateForm.image instanceof File) {
       formData.append("image", updateForm.image);
@@ -134,7 +132,6 @@ function PlayerListAuth() {
       id: player.id || "",
       firstName: player.firstName ?? "", 
       lastName: player.lastName ?? "", 
-      age: player.age != null ? Number(player.age) : "",
       teamId: player.teamId != null ? Number(player.teamId) : "",
       image: player.image || null 
     });
@@ -174,7 +171,6 @@ function PlayerListAuth() {
             <form onSubmit={handleCreatePlayer}>
               <input type="text" name="firstName" value={playerForm.firstName} onChange={(e) => setPlayerForm({ ...playerForm, firstName: e.target.value })} placeholder="First Name" required />
               <input type="text" name="lastName" value={playerForm.lastName} onChange={(e) => setPlayerForm({ ...playerForm, lastName: e.target.value })} placeholder="Last Name"  />
-              <input type="number" name="age" value={playerForm.age} onChange={(e) => setPlayerForm({ ...playerForm, age: e.target.value })} placeholder="Age" />
               <input
                 type="file"
                 accept="image/*"
@@ -203,7 +199,6 @@ function PlayerListAuth() {
             <form onSubmit={handleUpdatePlayer}>
               <input type="text" name="firstName" value={updateForm.firstName} onChange={(e) => setUpdateForm({ ...updateForm, firstName: e.target.value })} placholder="Enter first name" />
               <input type="text" name="lastName" value={updateForm.lastName} onChange={(e) => setUpdateForm({ ...updateForm, lastName: e.target.value })}placeholder="Enter last name" />
-              <input type="number" name="age" value={updateForm.age} onChange={(e) => setUpdateForm({ ...updateForm, age: e.target.value })} placeholder="Enter age" />
               <input
                 type="file"
                 accept="image/*"
@@ -232,7 +227,6 @@ function PlayerListAuth() {
             </th>
             <th>ID</th>
             <th>Name</th>
-            <th>Age</th>
             <th>Team</th>
             <th></th>
           </tr>
@@ -250,7 +244,6 @@ function PlayerListAuth() {
                     {player.firstName} {player.lastName}
                   </NavLink>
                 </td>
-                <td>{player.age || "N/A"}</td>
                 <td>
                   <NavLink to={`/teams/${player.team?.id}`}>
                     {player.team?.name || "No Team"}

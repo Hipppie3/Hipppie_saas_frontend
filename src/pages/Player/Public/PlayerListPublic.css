@@ -14,44 +14,46 @@
  display: flex;
  flex-wrap: wrap;
  justify-content: space-evenly;
- gap: 20px;
  width: 100%;
  padding-left: 20px;
  padding-right: 20px;
+ gap: 10px;
   }
 
 /* Individual player card */
 .player-public-card {
- background: white;
- padding: 8px;
- box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+background: #0a192f;
+
+ box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.6);
  text-align: center;
- transition: transform 0.2s;
- border: 2px solid black;
- height: 220px;
- min-width: 150px;
- /* Ensures cards don’t shrink too much */
+transition: transform 0.2s, box-shadow 0.2s;
+border: 2px solid #64ffda;
+/* Neon blue/green accent */
+  height: 180px;
+    /* reduce card height */
+    min-width: 130px;
+    /* optional: shrink card width */
+    padding: 8px;
+color: #e0f7fa;
 }
 
 .player-public-card:hover {
   transform: scale(1.05);
-  /* Slightly enlarges the card */
-  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-  /* Adds more depth */
-  /* Optional: Change border color on hover */
+  box-shadow: 0px 10px 20px rgba(100, 255, 218, 0.4);
+  border-color: #00bcd4;
 }
 
 .player-public-card a {
 text-decoration: none;
-color: black
+color: #64ffda
 }
 /* Player image as a circle */
 .player-public-image {
- width: 160px;
- height: 170px;
+ width: 120px;
+ height: 130px;
  object-fit: cover;
  border-radius: 5%;
- border: 3px solid black;
+ border: 3px solid #64ffda;
  margin-bottom: 2px;
 }
 
@@ -59,8 +61,8 @@ color: black
 .player-public-name {
  font-size: 16px;
  font-weight: bold;
- color:black;
- border: 2px solid black;
+ color:#64ffda;
+ border: 2px solid #64ffda;
  margin-bottom: 10px;
 }
 

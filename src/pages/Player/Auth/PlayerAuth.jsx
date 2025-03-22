@@ -98,7 +98,6 @@ function PlayerAuth() {
         src={player.image ? `${player.image}?${new Date().getTime()}` : DefaultImage}
         alt={`${player.firstName} ${player.lastName}`}
         className="player-image"
-        style={{ width: "150px", height: "150px", objectFit: "cover", borderRadius: "50%" }}
       />
       <h2>{player.firstName} {player.lastName}</h2>
       {/* Display Team & League */}

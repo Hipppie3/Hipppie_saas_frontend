@@ -58,7 +58,7 @@ console.log(user)
             <li><NavLink to="/dashboard" onClick={toggleSidebar} className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>Dashboard</NavLink></li>
             {/* <li><NavLink to="/leagueList" onClick={toggleSidebar} className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>Leagues</NavLink></li> */}
             {/* <li><NavLink to="/teamList" onClick={toggleSidebar} className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>Teams</NavLink></li> */}
-            {/* <li><NavLink to="/playerList" onClick={toggleSidebar} className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>Players</NavLink></li> */}
+            <li><NavLink to="/playerList" onClick={toggleSidebar} className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>Players</NavLink></li>
             <li><NavLink to="/schedule" onClick={toggleSidebar} className={({ isActive }) => isActive ? " active-class" : "inactive-class"}>Schedule</NavLink></li>  
             <li><NavLink to="/stats" onClick={toggleSidebar} className={({ isActive }) => isActive ? " active-class" : "inactive-class"}>Stats</NavLink></li>
             <li><NavLink to="/gamePeriod" onClick={toggleSidebar} className={({ isActive }) => isActive ? " active-class" : "inactive-class"}>Game Period</NavLink></li>
