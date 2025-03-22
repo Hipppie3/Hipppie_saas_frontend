@@ -37,7 +37,7 @@ function GamePublic() {
   };
 
   // Check if all periods are hidden
-  const visiblePeriods = periodScores.filter(period => !period.gamePeriod.hidden && period.gamePeriod.name !== "Final");
+  const visiblePeriods = periodScores.filter(period => !period.gamePeriod.hidden && period.gamePeriod?.name !== "Final");
   const showPeriodsTable = visiblePeriods.length > 0;
   const formatYouTubeEmbedUrl = (url) => {
     if (!url) return "";
@@ -49,7 +49,7 @@ function GamePublic() {
     return url; // If already in correct format
   };
 
-  const finalPeriod = periodScores.find(period => period.gamePeriod.name === "Final");
+  const finalPeriod = periodScores.find(period => period.gamePeriod?.name === "Final");
   if (loading) return <p>Loading game details...</p>;
   if (!game) return <p>Game not found.</p>;
 console.log(game.sport.name)
