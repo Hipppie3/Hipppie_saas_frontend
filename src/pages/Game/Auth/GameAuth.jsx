@@ -123,8 +123,10 @@ function GameAuth() {
     try {
       console.log('Period Scores being sent:', periodScores);
 
-      const finalScoreTeam1 = game.score_team1;
-      const finalScoreTeam2 = game.score_team2;
+      const finalPeriod = periodScores.find(p => p.gamePeriod?.name === "Final");
+      const finalScoreTeam1 = finalPeriod?.period_score_team1 ?? 0;
+      const finalScoreTeam2 = finalPeriod?.period_score_team2 ?? 0;
+
 
 
       // Update game scores based on the period scores and final score editing
