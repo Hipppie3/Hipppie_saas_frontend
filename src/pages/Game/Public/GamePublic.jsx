@@ -52,7 +52,7 @@ function GamePublic() {
   const finalPeriod = periodScores.find(period => period.gamePeriod?.name === "Final");
   if (loading) return <p>Loading game details...</p>;
   if (!game) return <p>Game not found.</p>;
-console.log(game.sport.name)
+
 
 
   return (
