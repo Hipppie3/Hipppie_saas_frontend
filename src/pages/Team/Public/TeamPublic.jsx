@@ -11,18 +11,19 @@ function TeamPublic() {
   const domain = searchParams.get("domain");
   const [error, setError] = useState("");
   const [playersAttr, setPlayersAttr] = useState([])
+  const [loading, setLoading] = useState(true); // 1. Add loading state
 
   useEffect(() => {
     const getTeam = async () => {
       try {
         const response = await api.get(`/api/teams/${id}/teamPublic?domain=${domain}`, { withCredentials: true });
         setTeam(response.data.team);
-        setPlayersAttr(response.data.team.players)
-        console.log(response.data.team.players)
-        console.log("Team Data:", response.data.team);
+        setPlayersAttr(response.data.team.players);
       } catch (error) {
         console.error("Error fetching team:", error.response?.data || error.message);
         setError("Failed to fetch team");
+      } finally {
+        setLoading(false); // 2. Stop loading after fetch (success or fail)
       }
     };
     getTeam();
@@ -33,6 +34,8 @@ function TeamPublic() {
   );
 
 
+  if (loading) return null;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="teamPublic-container">
