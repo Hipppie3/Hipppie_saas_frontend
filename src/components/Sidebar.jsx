@@ -8,6 +8,7 @@ function Sidebar() {
   const navigate = useNavigate();
   const { isAuthenticated, logout, loading, user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
 
 
@@ -53,23 +54,38 @@ console.log(user)
           <FaTimes />
         </button>
 
+        {/* Sidebar Content */}
         {isAuthenticated && (
-          <ul className="sidebar_list">
-            <li><NavLink to="/dashboard" onClick={toggleSidebar} className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>Dashboard</NavLink></li>
-            {/* <li><NavLink to="/leagueList" onClick={toggleSidebar} className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>Leagues</NavLink></li> */}
-            {/* <li><NavLink to="/teamList" onClick={toggleSidebar} className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>Teams</NavLink></li> */}
-            <li><NavLink to="/playerList" onClick={toggleSidebar} className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>Players</NavLink></li>
-            <li><NavLink to="/schedule" onClick={toggleSidebar} className={({ isActive }) => isActive ? " active-class" : "inactive-class"}>Schedule</NavLink></li>  
-            <li><NavLink to="/stats" onClick={toggleSidebar} className={({ isActive }) => isActive ? " active-class" : "inactive-class"}>Stats</NavLink></li>
-            <li><NavLink to="/gamePeriod" onClick={toggleSidebar} className={({ isActive }) => isActive ? " active-class" : "inactive-class"}>Game Period</NavLink></li>
-            <li><NavLink to="/playerAttributes" onClick={toggleSidebar} className={({ isActive }) => isActive ? " active-class" : "inactive-class"}>Player Settings</NavLink></li>
-            <li><NavLink to="/userSettings" onClick={toggleSidebar} className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>Settings</NavLink></li>
-            {user && user?.role === 'super_admin' && (
-              <li><NavLink to="/userList" onClick={toggleSidebar}>Users</NavLink></li>
-            )}
-            <li><button className="sidebar-button" onClick={handleLogout}>Logout</button></li>
-          </ul>
+          <>
+            {/* Main Links */}
+            <ul className="sidebar_list">
+              <li><NavLink to="/dashboard" onClick={toggleSidebar} className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>Dashboard</NavLink></li>
+              <li><NavLink to="/schedule" onClick={toggleSidebar} className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>Schedule</NavLink></li>
+            </ul>
+
+            {/* Settings at bottom */}
+            <div className="settings-section">
+              <button className="sidebar-button settings-toggle" onClick={() => setShowSettings(prev => !prev)}>
+                <span>Settings</span>
+                <span className="dropdown-icon">{showSettings ? '▲' : '▼'}</span>
+              </button>
+
+              {showSettings && (
+                <ul className="sidebar_list sub-settings">
+                  <li><NavLink to="/stats" onClick={toggleSidebar}>Stats</NavLink></li>
+                  <li><NavLink to="/gamePeriod" onClick={toggleSidebar}>Game Period</NavLink></li>
+                  <li><NavLink to="/playerAttributes" onClick={toggleSidebar}>Player</NavLink></li>
+                  <li><NavLink to="/userSettings" onClick={toggleSidebar}>User </NavLink></li>
+                  {user?.role === 'super_admin' && (
+                    <li><NavLink to="/userList" onClick={toggleSidebar}>Users</NavLink></li>
+                  )}
+                  <li><button className="logout-button" onClick={handleLogout}>Logout</button></li>
+                </ul>
+              )}
+            </div>
+          </>
         )}
+
       </div>
     </>
   );
