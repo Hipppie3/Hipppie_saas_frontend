@@ -4,6 +4,7 @@
  display: flex;
  flex-direction: column;
  align-items: center;
+  animation: fadeIn 0.3s ease-in;
 }
 
 .teamPublic-league-name-container {
@@ -12,6 +13,17 @@
  display: flex;
  justify-content: center;
  align-items: center;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .teamPublic-league-title {
