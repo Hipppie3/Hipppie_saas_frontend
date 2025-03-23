@@ -12,48 +12,40 @@ function TeamListPublic() {
   const domain = searchParams.get("domain");
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchTeams = async () => {
       try {
-        const [teamsResponse, leaguesResponse] = await Promise.all([
-          api.get(`/api/teams/teamsTest`),
-          api.get(`/api/leagues/leaguesTest`)
-        ]);
-        setTeams(teamsResponse.data.teams || []);
-        setLeagues(leaguesResponse.data.leagues || []);
+        const response = await api.get(`/api/teams?domain=${domain}`);
+        setTeams(response.data.teams || []);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching teams:", error);
       } finally {
-        setLoading(false); // ✅ Set loading to false once both requests finish
+        setLoading(false);
       }
     };
 
-    fetchData();
-  }, []);
+    fetchTeams();
+  }, [domain]);
 
-  const getLeagueName = (leagueId) => {
-    const league = leagues.find((l) => l.id === leagueId);
-    return league ? league.name : `League ${leagueId}`;
-  };
+  const uniqueLeagues = [...new Map(
+    teams.map(team => [team.league.id, team.league.name])
+  )].map(([id, name]) => ({ id, name }));
 
-  const uniqueLeagues = [...new Set(teams.map(team => team.leagueId))];
-  console.log(teams)
-
-  const filteredTeams = selectedLeague
-    ? teams.filter(team => team.leagueId === Number(selectedLeague))
+const filteredTeams = selectedLeague
+    ? teams.filter(team => team.league?.id === Number(selectedLeague))
     : teams;
 
-  // ✅ Completely hide everything until data is loaded
   if (loading) return null;
 
+  console.log(uniqueLeagues)
   return (
     <div className="teamListPublic-container">
       <div className='teamPublic-league-name-container'>
         <h2 className="teamPublic-league-title">
           <select id="league-filter" value={selectedLeague} onChange={(e) => setSelectedLeague(e.target.value)}>
             <option value="">All Leagues</option>
-            {uniqueLeagues.map((leagueId) => (
-              <option key={leagueId} value={leagueId}>
-                {getLeagueName(leagueId)}
+            {uniqueLeagues.map((league) => (
+              <option key={league.id} value={league.id}>
+                {league.name}
               </option>
             ))}
           </select>
