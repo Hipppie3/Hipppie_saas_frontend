@@ -1,49 +1,51 @@
 import React, { useState, useEffect } from 'react';
-import api from '@api'; // Instead of ../../../utils/api
+import api from '@api';
 import { NavLink, useSearchParams } from 'react-router-dom';
 import './TeamListPublic.css';
 
 function TeamListPublic() {
-  const [teams, setTeams] = useState([]);
   const [leagues, setLeagues] = useState([]);
   const [selectedLeague, setSelectedLeague] = useState("");
-  const [loading, setLoading] = useState(true); // ✅ Add loading state
+  const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
   const domain = searchParams.get("domain");
 
   useEffect(() => {
-    const fetchTeams = async () => {
+    const fetchLeagues = async () => {
       try {
-        const response = await api.get(`/api/teams?domain=${domain}`);
-        setTeams(response.data.teams || []);
+        const response = await api.get(`/api/leagues/leaguesTeam?domain=${domain}`);
+        setLeagues(response.data.leagues || []);
       } catch (error) {
-        console.error("Error fetching teams:", error);
+        console.error("Error fetching leagues with teams:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTeams();
+    fetchLeagues();
   }, [domain]);
 
-  const uniqueLeagues = [...new Map(
-    teams.map(team => [team.league.id, team.league.name])
-  )].map(([id, name]) => ({ id, name }));
+  const selectedLeagueObj = selectedLeague
+    ? leagues.find(l => l.id === Number(selectedLeague))
+    : null;
 
-const filteredTeams = selectedLeague
-    ? teams.filter(team => team.league?.id === Number(selectedLeague))
-    : teams;
+  const teams = selectedLeagueObj
+    ? selectedLeagueObj.teams
+    : leagues.flatMap(league => league.teams);
 
   if (loading) return null;
 
-  console.log(uniqueLeagues)
   return (
     <div className="teamListPublic-container">
-      <div className='teamPublic-league-name-container'>
+      <div className="teamPublic-league-name-container">
         <h2 className="teamPublic-league-title">
-          <select id="league-filter" value={selectedLeague} onChange={(e) => setSelectedLeague(e.target.value)}>
+          <select
+            id="league-filter"
+            value={selectedLeague}
+            onChange={(e) => setSelectedLeague(e.target.value)}
+          >
             <option value="">All Leagues</option>
-            {uniqueLeagues.map((league) => (
+            {leagues.map((league) => (
               <option key={league.id} value={league.id}>
                 {league.name}
               </option>
@@ -52,7 +54,7 @@ const filteredTeams = selectedLeague
         </h2>
       </div>
 
-      {filteredTeams.length > 0 ? (
+      {teams.length > 0 ? (
         <div className="teamPublic-table-container">
           <table className="teamPublic-table">
             <thead>
@@ -65,7 +67,7 @@ const filteredTeams = selectedLeague
               </tr>
             </thead>
             <tbody>
-              {[...filteredTeams]
+              {[...teams]
                 .map(team => ({
                   ...team,
                   winPercentage: team.wins + team.losses > 0
