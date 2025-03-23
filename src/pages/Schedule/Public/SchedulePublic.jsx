@@ -78,7 +78,7 @@ return (
     </thead>
     <tbody>
     {filteredGames.length === 0 ? (
-      <tr><td colSpan="4">No games available</td></tr>
+      <tr><td colSpan="4"></td></tr>
     ) : (
       filteredGames
       .sort((a, b) => new Date(a.date) - new Date(b.date))
