@@ -9,33 +9,19 @@ function PlayerListPublic() {
   const [searchParams] = useSearchParams();
   const domain = searchParams.get("domain");
 
-  // useEffect(() => {
-  //   const fetchPlayers = async () => {
-  //     try {
-  //       const response = await api.get(`/api/players?domain=${domain}`);
-  //       setPlayers(response.data.players || []);
-        
-  //       console.log(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching players:", error);
-  //     }
-  //   };
-  //   if (domain) fetchPlayers(); // Prevents fetching with an empty domain
-  // }, [domain]); // Re-fetch if `domain` changes
-
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
-        const response = await api.get(`/api/players/playerList`);
+        const response = await api.get(`/api/players?domain=${domain}`);
         setPlayers(response.data.players || []);
-
+        
         console.log(response.data);
       } catch (error) {
         console.error("Error fetching players:", error);
       }
     };
-fetchPlayers(); // Prevents fetching with an empty domain
-  }, []); // Re-fetch if `domain` changes
+    if (domain) fetchPlayers(); // Prevents fetching with an empty domain
+  }, [domain]); // Re-fetch if `domain` changes
 
   return (
     <div className="playerList_public">
