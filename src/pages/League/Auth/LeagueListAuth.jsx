@@ -12,9 +12,9 @@ function LeagueListAuth() {
   const [updateForm, setUpdateForm] = useState({ id: null, name: "" });
   const [message, setMessage] = useState("");
   const [selectedLeagues, setSelectedLeagues] = useState([]); // ✅ Track selected leagues for bulk delete
+  const [loading, setLoading] = useState(true);
 
 
-  // Fetch Leagues
   useEffect(() => {
     const fetchLeagues = async () => {
       try {
@@ -22,10 +22,14 @@ function LeagueListAuth() {
         setLeagues(response.data.leagues || []);
       } catch (error) {
         console.error("Error fetching leagues:", error);
+      } finally {
+        setLoading(false); // 👈 Done loading
       }
     };
     fetchLeagues();
   }, [id]);
+
+  if (loading) return null; // 👈 Don't show anything until data is ready
 
 
   // Create League
