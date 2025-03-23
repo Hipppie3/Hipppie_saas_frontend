@@ -18,9 +18,8 @@ function LeagueListAuth() {
   useEffect(() => {
     const fetchLeagues = async () => {
       try {
-        const response = await api.get(`/api/leagues`, { withCredentials: true });
+        const response = await api.get(`/api/leagues/leaguesSummary`, { withCredentials: true });
         setLeagues(response.data.leagues || []);
-        console.log(response.data.leagues)
       } catch (error) {
         console.error("Error fetching leagues:", error);
       }
@@ -28,13 +27,22 @@ function LeagueListAuth() {
     fetchLeagues();
   }, [id]);
 
+
   // Create League
   const handleCreateLeague = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post('/api/leagues', { ...leagueForm}, { withCredentials: true });
-      const newLeague = await api.get(`/api/leagues`, { withCredentials: true });
-      setLeagues(newLeague.data.leagues || []);
+      const response = await api.post('/api/leagues', { ...leagueForm }, { withCredentials: true });
+      // Either this for instant feedback:
+      setLeagues(prev => [...prev, {
+        id: response.data.league.id,
+        name: response.data.league.name,
+        teamsCount: 0
+      }]);
+      // Or this for up-to-date fetch:
+      // const updated = await api.get(`/api/leagues/leaguesSummary`, { withCredentials: true });
+      // setLeagues(updated.data.leagues || []);
+
       setLeagueForm({ name: "" });
       setMessage(`${response.data.league.name} created successfully`);
       setIsModalOpen(false);
@@ -44,13 +52,14 @@ function LeagueListAuth() {
     }
   };
 
+
   // Update League
   const handleUpdateLeague = async (e) => {
     e.preventDefault();
     try {
       const response = await api.put(`/api/leagues/${updateForm.id}`, { name: updateForm.name }, { withCredentials: true });
-      const updatedLeagues = await api.get('/api/leagues', { withCredentials: true });
-      setLeagues(updatedLeagues.data.leagues || []);
+      const updated = await api.get('/api/leagues/leaguesSummary', { withCredentials: true });
+      setLeagues(updated.data.leagues || []);
       setMessage(`${response.data.league.name} updated successfully`);
       setIsUpdateModalOpen(false);
       setTimeout(() => setMessage(''), 3000);
@@ -58,6 +67,7 @@ function LeagueListAuth() {
       console.error('Error updating league:', error);
     }
   };
+
 
   // Bulk Delete Leagues
   const handleDeleteLeagues = async () => {
