@@ -26,7 +26,7 @@ function PlayerListPublic() {
   return (
     <div className="playerList_public">
       {players.length === 0 ? (
-        <p>No players available</p>
+        <p></p>
       ) : (
         <div className="public-player-container">
           {players.map((player) => (
