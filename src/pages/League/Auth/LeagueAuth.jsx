@@ -204,14 +204,11 @@ function LeagueAuth() {
         <h2 className="league_auth_title">{leagueInfo?.name}</h2>
       </div>
 
-      <div className="league-auth-team-list-table">
 
-      </div>
-
-      <>
-        {/* Show buttons and table when toggleTeamForm is true */}
+      <div className="leagueAuth-team-container">
         <div className="leagueAuth-btn-container">
           <button className="delete-leagueAuth-btn" onClick={handleDeleteTeams}>🗑️</button>
+          <h2>Teams</h2>
           <button className="add-leagueAuth-btn" onClick={() => setIsModalOpen(true)}> + Add Team</button>
         </div>
 
@@ -258,6 +255,7 @@ function LeagueAuth() {
         {message && <p>{message}</p>}
 
         {/* Show table when toggleTeamForm is true */}
+    
         <table className="leagueAuthTeam-table">
           <thead>
             <tr>
@@ -304,38 +302,39 @@ function LeagueAuth() {
             )}
           </tbody>
         </table>
-      </>
-      <div className="pagination">
-      <div>
-        <button
-        className="pagination-btn"
-          onClick={() => setCurrentPage(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          ◀ 
-        </button>
+        <div className="pagination">
+          <div>
+            <button
+              className="pagination-btn"
+              onClick={() => setCurrentPage(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              ◀
+            </button>
 
-        <span> Page {currentPage} </span>
+            <span> Page {currentPage} </span>
 
-        <button
-          className="pagination-btn"
-          onClick={() => setCurrentPage(currentPage + 1)}
-          disabled={indexOfLastLeague >= teams.length}
-        >
-          ▶
-        </button>
-        </div>
-        <div>
-        <select
-          value={leaguesPerPage}
-          onChange={(e) => setLeaguesPerPage(Number(e.target.value))}
-        >
-          <option value="10">Show 10</option>
-          <option value="20">Show 20</option>
-          <option value="50">Show 50</option>
-        </select>
+            <button
+              className="pagination-btn"
+              onClick={() => setCurrentPage(currentPage + 1)}
+              disabled={indexOfLastLeague >= teams.length}
+            >
+              ▶
+            </button>
+          </div>
+          <div>
+            <select
+              value={leaguesPerPage}
+              onChange={(e) => setLeaguesPerPage(Number(e.target.value))}
+            >
+              <option value="10">Show 10</option>
+              <option value="20">Show 20</option>
+              <option value="50">Show 50</option>
+            </select>
+          </div>
         </div>
       </div>
+
 
 
 
@@ -346,7 +345,6 @@ function LeagueAuth() {
         </div>
         <div className="league-game-container">
           <LeagueGameAuth leagueInfo={leagueInfo} />
-
         </div>
       </>
     </div>
