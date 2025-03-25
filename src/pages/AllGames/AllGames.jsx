@@ -8,7 +8,15 @@ function AllGames() {
  const [leagues, setLeagues] = useState([]);
  const [showForm, setShowForm] = useState(false);
  const [showEditModal, setShowEditModal] = useState(false);
- const [gameForm, setGameForm] = useState({ leagueId: null, date: '', location: '' });
+ const [gameForm, setGameForm] = useState({
+  leagueId: '',
+  team1_id: '',
+  team2_id: '',
+  date: '',
+  location: '',
+  time: '',
+  status: 'scheduled',
+ });
  const [selectedGame, setSelectedGame] = useState(null);
  const navigate = useNavigate();
 
@@ -28,20 +36,43 @@ function AllGames() {
   fetchLeagues();
  }, []);
 
+
+
+ const handleGameFormChange = (e) => {
+  const { name, value } = e.target;
+
+  setGameForm(prev => ({
+   ...prev,
+   [name]: value,
+   // Reset teams if league is changed
+   ...(name === 'leagueId' ? { team1_id: '', team2_id: '' } : {})
+  }));
+ };
+
+
  const handleCreateGame = async (e) => {
   e.preventDefault();
+  if (gameForm.team1_id === gameForm.team2_id) {
+   return alert('Teams must be different.');
+  }
+
   const res = await api.post('/api/games', gameForm, { withCredentials: true });
   setGames(prev => [...prev, res.data.game]);
   setShowForm(false);
-  setGameForm({ leagueId: null, date: '', location: '' });
- };
-
- const handleUpdateGame = async (e) => {
-  e.preventDefault();
-  await api.put(`/api/games/${selectedGame.id}`, selectedGame, { withCredentials: true });
-  const res = await api.get('/api/games', { withCredentials: true });
-  setGames(res.data.games);
-  setShowEditModal(false);
+  setGameForm({
+   leagueId: '',
+   team1_id: '',
+   team2_id: '',
+   date: '',
+   location: '',
+   time: '',
+   status: 'scheduled',
+  });
+        const refreshGames = async () => {
+          const res = await api.get('/api/games', { withCredentials: true });
+          setGames(res.data.games);
+        };
+        await refreshGames();
  };
 
  const handleDeleteGame = async (id) => {
@@ -49,6 +80,15 @@ function AllGames() {
   await api.delete(`/api/games/${id}`, { withCredentials: true });
   setGames(prev => prev.filter(g => g.id !== id));
  };
+console.log(leagues)
+
+
+
+
+
+
+ const selectedLeague = leagues.find(l => l.id === Number(gameForm.leagueId));
+ const filteredTeams = selectedLeague?.teams || [];
 
  return (
   <div className="seasonList-container">
@@ -57,63 +97,33 @@ function AllGames() {
      <div className="modal-content">
       <h2>New Game</h2>
       <form onSubmit={handleCreateGame}>
-       <input
-        type="date"
-        value={gameForm.date}
-        onChange={(e) => setGameForm({ ...gameForm, date: e.target.value })}
-       />
-       <input
-        type="text"
-        placeholder="Location"
-        value={gameForm.location}
-        onChange={(e) => setGameForm({ ...gameForm, location: e.target.value })}
-       />
-       <select
-        value={gameForm.leagueId || ''}
-        onChange={(e) => setGameForm({ ...gameForm, leagueId: Number(e.target.value) || null })}
-       >
-        <option value="">No League</option>
+       <select name="leagueId" value={gameForm.leagueId} onChange={handleGameFormChange} required>
+        <option value="">Select League</option>
         {leagues.map(l => (
          <option key={l.id} value={l.id}>{l.name}</option>
         ))}
        </select>
+
+       <select name="team1_id" value={gameForm.team1_id} onChange={handleGameFormChange} required>
+        <option value="">Home Team</option>
+        {filteredTeams.map(t => (
+         <option key={t.id} value={t.id}>{t.name}</option>
+        ))}
+       </select>
+
+       <select name="team2_id" value={gameForm.team2_id} onChange={handleGameFormChange} required>
+        <option value="">Away Team</option>
+        {filteredTeams.map(t => (
+         <option key={t.id} value={t.id}>{t.name}</option>
+        ))}
+       </select>
+
+       <input type="date" name="date" value={gameForm.date} onChange={handleGameFormChange} required />
+       <input type="text" name="location" placeholder="Location" value={gameForm.location} onChange={handleGameFormChange} />
+       <input type="time" name="time" value={gameForm.time} onChange={handleGameFormChange} />
        <div className="modal-update-cancel-button">
         <button type="submit">Create</button>
         <button type="button" onClick={() => setShowForm(false)}>Cancel</button>
-       </div>
-      </form>
-     </div>
-    </div>
-   )}
-
-   {showEditModal && selectedGame && (
-    <div className="modal">
-     <div className="modal-content">
-      <h2>Edit Game</h2>
-      <form onSubmit={handleUpdateGame}>
-       <input
-        type="date"
-        value={selectedGame.date}
-        onChange={(e) => setSelectedGame({ ...selectedGame, date: e.target.value })}
-       />
-       <input
-        type="text"
-        placeholder="Location"
-        value={selectedGame.location}
-        onChange={(e) => setSelectedGame({ ...selectedGame, location: e.target.value })}
-       />
-       <select
-        value={selectedGame.leagueId || ''}
-        onChange={(e) => setSelectedGame({ ...selectedGame, leagueId: Number(e.target.value) || null })}
-       >
-        <option value="">No League</option>
-        {leagues.map(l => (
-         <option key={l.id} value={l.id}>{l.name}</option>
-        ))}
-       </select>
-       <div className="modal-update-cancel-button">
-        <button type="submit">Update</button>
-        <button type="button" onClick={() => setShowEditModal(false)}>Cancel</button>
        </div>
       </form>
      </div>
@@ -128,26 +138,24 @@ function AllGames() {
      </div>
     </div>
 
-    {games.map(game => (
-     <div key={game.id} className="season-card" onClick={() => navigate(`/games/${game.id}`)}>
+{games
+  .filter(game => game && game.date) // ✅ prevent crashing
+  .map(game => (
+    <div key={game.id} className="season-card" onClick={() => navigate(`/games/${game.id}`)}>
       <h3>{new Date(game.date).toLocaleDateString()}</h3>
       <p>Location: {game.location}</p>
-      <p>League: {game.leagueName || "N/A"}</p>
+      <p>Match: {game.homeTeam?.name || 'Home'} vs {game.awayTeam?.name || 'Away'}</p>
+      <p>Time: {game.time}</p>
+      <p>Status: {game.status}</p>
       <button
-       onClick={(e) => {
-        e.stopPropagation();
-        setSelectedGame(game);
-        setShowEditModal(true);
-       }}
-      >Edit</button>
-      <button
-       onClick={(e) => {
-        e.stopPropagation();
-        handleDeleteGame(game.id);
-       }}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleDeleteGame(game.id);
+        }}
       >Delete</button>
-     </div>
-    ))}
+    </div>
+))}
+
    </div>
   </div>
  );

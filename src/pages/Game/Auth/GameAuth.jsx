@@ -302,11 +302,11 @@ function GameAuth() {
             <tbody>
               {/* Team 1 Row */}
               <tr>
-                <td>{game?.homeTeam?.name}</td>
+                <td>{game?.homeTeam?.name || "Unknown Team"}</td>
                 {periodScores.map((period) => (
                   <td key={period.id}>
                     {!editModeScores ? (
-                      <span>{period.period_score_team1}</span>
+                      <span>{period.period_score_team1 || 0}</span>
                     ) : (
                       <input
                         type="number"
@@ -320,11 +320,11 @@ function GameAuth() {
 
               {/* Team 2 Row */}
               <tr>
-                <td>{game?.awayTeam.name}</td>
+                <td>{game?.awayTeam?.name || "Unknown Team"}</td>
                 {periodScores.map((period) => (
                   <td key={period.id}>
                     {!editModeScores ? (
-                      <span>{period?.period_score_team2}</span>
+                      <span>{period?.period_score_team2 || 0}</span>
                     ) : (
                       <input
                         type="number"
@@ -347,7 +347,7 @@ function GameAuth() {
 
 
         <h3 className="team-header">
-          Home Team: {game?.homeTeam?.name} 
+          Home Team: {game?.homeTeam?.name || "Unknown Team"} 
             ({finalScoreTeam1})
         </h3>
 
@@ -398,7 +398,7 @@ function GameAuth() {
       {/* Away Team Stats */}
       <div className="team-container-away">
         <h3 className="team-header">
-          Away Team: {game?.awayTeam?.name} ({finalScoreTeam2})
+          Away Team: {game?.awayTeam?.name || "Unknown Team"} ({finalScoreTeam2})
         </h3>
         <table className="gameAuth-stat-table">
           <thead>

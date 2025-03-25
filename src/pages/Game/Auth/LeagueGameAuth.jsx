@@ -88,6 +88,12 @@ function LeagueGameAuth() {
       });
       setTeams([]);
       setIsModalOpen(false);
+      const refreshGames = async () => {
+        const res = await api.get('/api/games', { withCredentials: true });
+        setGames(res.data.games);
+      };
+      await refreshGames();
+
     } catch (error) {
       console.log('Error creating game:', error);
     }
