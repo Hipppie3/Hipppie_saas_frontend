@@ -142,7 +142,12 @@ function AllGames() {
           .filter(game => game && game.date) // ✅ prevent crashing
           .map(game => (
             <div key={game.id} className="season-card" onClick={() => navigate(`/games/${game.id}`)}>
-              <h3>{new Date(game.date).toLocaleDateString()}</h3>
+              <h3>{new Date(game.date).toLocaleDateString('en-US', {
+                timeZone: 'America/Los_Angeles',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}</h3>
               <p>Location: {game.location}</p>
               <p>Match: {game.homeTeam?.name || 'Home'} vs {game.awayTeam?.name || 'Away'}</p>
               <p>Time: {game.time}</p>

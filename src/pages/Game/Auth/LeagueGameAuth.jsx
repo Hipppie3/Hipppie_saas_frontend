@@ -284,7 +284,10 @@ function LeagueGameAuth() {
                       </td>
                       <td>{index + 1}</td>
                       <td>{new Date(game.date).toLocaleDateString('en-US', {
-                        year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Los_Angeles'
+                        timeZone: 'America/Los_Angeles',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
                       })}</td>
                       <td>
                         <NavLink to={`/games/${game.id}`}>
