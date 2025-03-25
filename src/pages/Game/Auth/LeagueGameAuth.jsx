@@ -283,12 +283,15 @@ function LeagueGameAuth() {
                         />
                       </td>
                       <td>{index + 1}</td>
-                      <td>{new Date(game.date).toLocaleDateString('en-US', {
-                        timeZone: 'America/Los_Angeles',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })}</td>
+                      <td>
+                        {new Intl.DateTimeFormat('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          timeZone: 'UTC',
+                        }).format(new Date(game.date))}
+                      </td>
+
                       <td>
                         <NavLink to={`/games/${game.id}`}>
                           {game.homeTeam?.name ?? getTeamNameById(game.team1_id)} vs {game.awayTeam?.name ?? getTeamNameById(game.team2_id)}

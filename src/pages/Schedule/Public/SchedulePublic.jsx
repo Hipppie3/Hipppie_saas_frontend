@@ -90,7 +90,12 @@ return (
 
         return (
         <tr key={game.id}>
-          <td>{new Date(game.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</td>
+            <td>  {new Intl.DateTimeFormat('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              timeZone: 'UTC',
+            }).format(new Date(game.date))}</td>
           <td>
           <NavLink to={`/games/${game.id}?domain=${domain}`}>
             {homeTeam?.name} vs {awayTeam?.name}
