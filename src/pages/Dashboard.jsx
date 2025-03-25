@@ -1,23 +1,25 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import LeagueAuthList from '../pages/League/LeagueList';
-import TeamAuthList from '../pages/Team/TeamList';
-import PlayerAuthList from '../pages/Player/PlayerList';
+import api from '@api';
+import DashboardStatCard from './DashboardCards/DashboardStatCard';
 import './Dashboard.css'
+import { useViewToggle } from '../context/ViewToggleContext'; // or wherever it's located
+
 
 function Dashboard() {
   const { user, loading } = useAuth(); // ✅ Also get loading state
   const navigate = useNavigate();
-  const [leagues, setLeagues] = useState([]);
-  const [successDeleteMessage, setSuccessDeleteMessage] = useState('')
+  const [dashboardStats, setDashboardStats] = useState(null);
+  const [successDeleteMessage, setSuccessDeleteMessage] = useState('');
+  const { viewMode, toggleViewMode } = useViewToggle();
+
 
   // Redirect to login if user is not authenticated
   useEffect(() => {
     if (!loading && !user) {
       const currentUrl = new URL(window.location.href);
       const domain = currentUrl.searchParams.get("domain");
-
       if (domain) {
         navigate(`/site?domain=${domain}`, { replace: true }); // ✅ Redirect to public site instead of login
       } else {
@@ -25,6 +27,24 @@ function Dashboard() {
       }
     }
   }, [user, loading, navigate]);
+
+
+
+  useEffect(() => {
+    const fetchDashboardStats = async () => {
+      try {
+        const response = await api.get('/api/users/dashboardStats', { withCredentials: true });
+        setDashboardStats(response.data);
+        console.log(response.data)
+      } catch (error) {
+        console.error("Failed to fetch dashboard stats", error);
+      }
+    };
+
+    if (user) {
+      fetchDashboardStats();
+    }
+  }, [user]);
 
 
   // ✅ Prevent error by showing loading state before rendering
@@ -41,9 +61,29 @@ function Dashboard() {
   return (
     <div className="dashboard_container">
       <h2 className="dashboard_welcome_msg">WELCOME {user.username}!</h2>
-      <LeagueAuthList />
-      {/* <TeamAuthList />
-      <PlayerAuthList /> */}
+      <div className="view-toggle-buttons">
+        <button
+          className={viewMode === 'card' ? 'active' : ''}
+          onClick={() => toggleViewMode('card')}
+        >
+          🧩 Card View
+        </button>
+        <button
+          className={viewMode === 'table' ? 'active' : ''}
+          onClick={() => toggleViewMode('table')}
+        >
+          📄 Table View
+        </button>
+      </div>
+
+      <div className="dashboard_stats_wrapper">
+      {/* <DashboardStatCard title="Sports" count={user?.sports?.length || 0} /> */}
+      <DashboardStatCard title="Seasons" count={dashboardStats?.seasonCount} onClick={() => navigate('/seasonList')} />
+        <DashboardStatCard title="Leagues" count={dashboardStats?.leagueCount} onClick={() => navigate('/dashboard/leagueToggle')}/>
+      <DashboardStatCard title="Teams" count={dashboardStats?.teamCount} onClick={() => navigate('/dashboard/teams')} />
+        <DashboardStatCard title="Players" count={dashboardStats?.playerCount} onClick={() => navigate('/dashboard/players')} />
+        <DashboardStatCard title="Games" count={dashboardStats?.gameCount} onClick={() => navigate('/dashboard/games')} />
+      </div>
     </div>
   );
 }

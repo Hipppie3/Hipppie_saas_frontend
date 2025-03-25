@@ -8,17 +8,18 @@ function LeagueListAuth() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const {id} = useParams();
-  const [leagueForm, setLeagueForm] = useState({ name: ""});
-  const [updateForm, setUpdateForm] = useState({ id: null, name: "" });
+  const [leagueForm, setLeagueForm] = useState({ name: "", seasonId: null});
+  const [updateForm, setUpdateForm] = useState({ id: null, name: "", seasonId: null });
   const [message, setMessage] = useState("");
   const [selectedLeagues, setSelectedLeagues] = useState([]); // ✅ Track selected leagues for bulk delete
   const [loading, setLoading] = useState(true);
+  const [seasons, setSeasons] = useState([])
 
 
   useEffect(() => {
     const fetchLeagues = async () => {
       try {
-        const response = await api.get(`/api/leagues/leaguesSummary`, { withCredentials: true });
+        const response = await api.get(`/api/leagues`, { withCredentials: true });
         setLeagues(response.data.leagues || []);
       } catch (error) {
         console.error("Error fetching leagues:", error);
@@ -28,6 +29,18 @@ function LeagueListAuth() {
     };
     fetchLeagues();
   }, [id]);
+console.log(leagues)
+  useEffect(() => {
+    const fetchSeasons = async () => {
+      try {
+        const res = await api.get('/api/seasons', { withCredentials: true });
+        setSeasons(res.data.seasons || []);
+      } catch (err) {
+        console.error("Error fetching seasons:", err);
+      }
+    };
+    fetchSeasons();
+  }, []);
 
   if (loading) return null; // 👈 Don't show anything until data is ready
 
@@ -61,7 +74,7 @@ function LeagueListAuth() {
   const handleUpdateLeague = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.put(`/api/leagues/${updateForm.id}`, { name: updateForm.name }, { withCredentials: true });
+      const response = await api.put(`/api/leagues/${updateForm.id}`, { name: updateForm.name, seasonId: updateForm.seasonId }, { withCredentials: true });
       const updated = await api.get('/api/leagues/leaguesSummary', { withCredentials: true });
       setLeagues(updated.data.leagues || []);
       setMessage(`${response.data.league.name} updated successfully`);
@@ -92,7 +105,7 @@ function LeagueListAuth() {
 
   // Open Update Modal
   const openUpdateModal = (league) => {
-    setUpdateForm({ id: league.id, name: league.name });
+    setUpdateForm({ id: league.id, name: league.name, seasonId: league.seasonId || null });
     setIsUpdateModalOpen(true);
   };
 
@@ -138,6 +151,18 @@ function LeagueListAuth() {
                 placeholder="Enter league name"
                 required
               />
+              <select
+                value={leagueForm.seasonId || ''}
+                onChange={(e) =>
+                  setLeagueForm({ ...leagueForm, seasonId: e.target.value ? Number(e.target.value) : null })
+                }
+              >
+                <option value="">No Season</option>
+                {seasons.map(season => (
+                  <option key={season.id} value={season.id}>{season.name}</option>
+                ))}
+              </select>
+
               <button type="submit">Create</button>
               <button type="button" onClick={() => setIsModalOpen(false)}>Cancel</button>
             </form>
@@ -158,6 +183,18 @@ function LeagueListAuth() {
                 onChange={(e) => setUpdateForm({ ...updateForm, name: e.target.value })}
                 required
               />
+              <select
+                value={updateForm.seasonId || ''}
+                onChange={(e) =>
+                  setUpdateForm({ ...updateForm, seasonId: e.target.value ? Number(e.target.value) : null })
+                }
+              >
+                <option value="">No Season</option>
+                {seasons.map(season => (
+                  <option key={season.id} value={season.id}>{season.name}</option>
+                ))}
+              </select>
+
               <button type="submit">Update</button>
               <button type="button" onClick={() => setIsUpdateModalOpen(false)}>Cancel</button>
             </form>

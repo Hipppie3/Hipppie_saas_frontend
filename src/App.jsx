@@ -19,12 +19,23 @@ import TeamList from './pages/Team/TeamList.jsx';
 import Team from './pages/Team/Team.jsx';
 import PlayerList from './pages/Player/PlayerList.jsx';
 import Player from './pages/Player/Player.jsx';
+
 import GamePage from './pages/Game/GamePage.jsx';
-import SchedulePage from './pages/Schedule/SchedulePage.jsx';
+
 import GamePeriod from './pages/GamePeriod/GamePeriod.jsx'
 import UserSettings from './pages/UserSettingsPage.jsx';
 import PlayerAttributes from './pages/PlayerAttribute/PlayerAttributes.jsx';
 
+import SchedulePage from './pages/Schedule/SchedulePage.jsx';
+import SeasonList from './pages/Season/SeasonList.jsx';
+import SeasonLeagues from './pages/Season/Leagues/SeasonLeagues.jsx';
+import AllLeagues from './pages/AllLeagues/AllLeagues.jsx';
+import AllTeams from './pages/AllTeams/AllTeams.jsx';
+import AllPlayers from './pages/AllPlayers/AllPlayers.jsx';
+import AllGames from './pages/AllGames/AllGames.jsx';
+import SingleLeague from './pages/AllLeagues/SingleLeague.jsx';
+import SingleTeam from './pages/AllTeams/SingleTeam.jsx';
+import LeagueToggle from './pages/LeagueToggle/LeagueToggle.jsx'
 
 
 
@@ -59,6 +70,15 @@ function App() {
           <Route path='/gamePeriod' element={<GamePeriod />} />
           <Route path='/userSettings' element={<UserSettings />} />
           <Route path='/playerAttributes' element={<PlayerAttributes />} />
+          <Route path='/seasonList' element={<SeasonList />} />
+          <Route path='/seasonLeagues/:seasonId' element={<SeasonLeagues />} />
+          <Route path='/dashboard/leagues' element={<AllLeagues />} />
+          <Route path='/dashboard/teams' element={<AllTeams />} />
+          <Route path='/dashboard/players' element={<AllPlayers/>} />
+          <Route path='/dashboard/games' element={<AllGames />} />
+          <Route path='/dashboard/leagues/:id' element={<SingleLeague />} />
+          <Route path='/dashboard/teams/:id' element={<SingleTeam /> } />
+          <Route path='/dashboard/leagueToggle' element={<LeagueToggle />} />
         </Routes>
     </div>
     </div>
