@@ -344,7 +344,7 @@ function LeagueAuth() {
         <div className="show-team-list-table">
         </div>
         <div className="league-game-container">
-          <LeagueGameAuth leagueInfo={leagueInfo} />
+          {/* <LeagueGameAuth leagueInfo={leagueInfo} /> */}
         </div>
       </>
     </div>
