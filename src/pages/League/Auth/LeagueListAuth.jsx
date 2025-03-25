@@ -240,7 +240,7 @@ function LeagueListAuth() {
                 </td>
                 <td>{index + 1}</td>
                 <td>
-                  <NavLink to={`/leagues/${league.id}`}>{league.name}</NavLink>
+                  <NavLink to={`/dashboard/singleLeagueToggle/${league.id}`}>{league.name}</NavLink>
                 </td>
                 <td>{seasons.find(s => s.id === league.seasonId)?.name || "No Season"}</td>
                 <td>{league.teamsCount}</td>

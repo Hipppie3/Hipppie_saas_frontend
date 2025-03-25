@@ -225,7 +225,7 @@ console.log(teams)
                 </td>
                 <td>{index + 1}</td>
                 <td>
-                  <NavLink to={`/teams/${team.id}`}>{team.name}</NavLink>
+                  <NavLink to={`/dashboard/singleTeamToggle/${team.id}`}>{team.name}</NavLink>
                 </td>
                 <td>{team.league?.name}</td>
                 <td>{team.players?.length || 0}</td>

@@ -3,7 +3,7 @@ import { Routes, Route, useSearchParams } from 'react-router-dom';
 import './App.css';
 
 import Navbar from './components/Navbar.jsx';
-import Sidebar from './components/Sidebar.jsx'; 
+import Sidebar from './components/Sidebar.jsx';
 
 import StatAuth from './pages/Stat/StatAuth.jsx'
 import Home from './pages/Home.jsx';
@@ -27,31 +27,36 @@ import UserSettings from './pages/UserSettingsPage.jsx';
 import PlayerAttributes from './pages/PlayerAttribute/PlayerAttributes.jsx';
 
 import SchedulePage from './pages/Schedule/SchedulePage.jsx';
-import SeasonList from './pages/Season/SeasonList.jsx';
-import SeasonLeagues from './pages/Season/Leagues/SeasonLeagues.jsx';
+import SeasonList from './pages/AllSeason/SeasonList.jsx';
+import SeasonLeagues from './pages/AllSeason/Leagues/SeasonLeagues.jsx';
 import AllLeagues from './pages/AllLeagues/AllLeagues.jsx';
 import AllTeams from './pages/AllTeams/AllTeams.jsx';
 import AllPlayers from './pages/AllPlayers/AllPlayers.jsx';
 import AllGames from './pages/AllGames/AllGames.jsx';
 import SingleLeague from './pages/AllLeagues/SingleLeague.jsx';
+import Season from './pages/Season/Auth/Season.jsx';
 import SingleTeam from './pages/AllTeams/SingleTeam.jsx';
+import SeasonToggle from './pages/SeasonToggle/SeasonToggle.jsx';
 import LeagueToggle from './pages/LeagueToggle/LeagueToggle.jsx';
 import TeamToggle from './pages/TeamToggle/TeamToggle.jsx';
 import PlayerToggle from './pages/PlayerToggle/PlayerToggle.jsx';
 import GameToggle from './pages/GameToggle/GameToggle.jsx';
+import SingleLeagueToggle from './pages/SingleLeagueToggle/SingleLeagueToggle.jsx';
+import SingleTeamToggle from './pages/SingleTeamToggle/SingleTeamToggle.jsx';
+import SingleSeasonToggle from './pages/SingleSeasonToggle/SingleSeasonToggle';
 
 
 
 
 function App() {
   const [searchParams] = useSearchParams();
-  const domain = searchParams.get("domain");  
+  const domain = searchParams.get("domain");
   const isPublicView = domain || window.location.pathname === "/"; // ✅ Also use UserNavbar for Home
   const isLoginPage = location.pathname === "/login"
-  
+
   return (
     <div className="app_container">
-  {isPublicView || isLoginPage ?  <Navbar /> : <Sidebar />}
+      {isPublicView || isLoginPage ? <Navbar /> : <Sidebar />}
       <div className={isPublicView ? "content_wrapper_public" : "content_wrapper"}>
         <Routes>
           <Route path='/' element={<Home />} />
@@ -75,18 +80,23 @@ function App() {
           <Route path='/playerAttributes' element={<PlayerAttributes />} />
           <Route path='/seasonList' element={<SeasonList />} />
           <Route path='/seasonLeagues/:seasonId' element={<SeasonLeagues />} />
+          <Route path='/season/:seasonId' element={<Season />} />
           <Route path='/dashboard/leagues' element={<AllLeagues />} />
           <Route path='/dashboard/teams' element={<AllTeams />} />
-          <Route path='/dashboard/players' element={<AllPlayers/>} />
+          <Route path='/dashboard/players' element={<AllPlayers />} />
           <Route path='/dashboard/games' element={<AllGames />} />
           <Route path='/dashboard/leagues/:id' element={<SingleLeague />} />
-          <Route path='/dashboard/teams/:id' element={<SingleTeam /> } />
+          <Route path='/dashboard/teams/:id' element={<SingleTeam />} />
+          <Route path='/dashboard/seasonToggle' element={<SeasonToggle />} />
           <Route path='/dashboard/leagueToggle' element={<LeagueToggle />} />
           <Route path='/dashboard/teamToggle' element={<TeamToggle />} />
           <Route path='/dashboard/playerToggle' element={<PlayerToggle />} />
           <Route path='/dashboard/gameToggle' element={<GameToggle />} />
+          <Route path='/dashboard/singleLeagueToggle/:id' element={<SingleLeagueToggle />} />
+          <Route path='/dashboard/singleTeamToggle/:id' element={<SingleTeamToggle />} />
+          <Route path='/dashboard/singleSeasonToggle/:id' element={<SingleSeasonToggle />} />
         </Routes>
-    </div>
+      </div>
     </div>
   );
 }

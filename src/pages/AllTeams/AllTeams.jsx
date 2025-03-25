@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from '@api';
-import '../Season/SeasonList.css';
+import '../AllSeason/SeasonList.css';
 import { useNavigate } from "react-router-dom";
 
 function AllTeams() {
@@ -77,7 +77,7 @@ function AllTeams() {
    console.error("Error deleting team:", error);
   }
  };
-console.log(teams)
+ console.log(teams)
  return (
   <div className="seasonList-container">
    {showForm && (
@@ -151,7 +151,7 @@ console.log(teams)
     </div>
 
     {teams.map((team) => (
-     <div key={team.id} className="season-card" onClick={() => navigate(`/dashboard/teams/${team.id}`)}>
+     <div key={team.id} className="season-card" onClick={() => navigate(`/dashboard/singleTeamToggle/${team.id}`)}>
       <h3>{team.name}</h3>
       <p>League: {team.league?.name || "No League"} </p>
       <p>Players: {team.players?.length || 0}</p>

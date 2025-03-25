@@ -9,7 +9,7 @@ function SeasonLeagues() {
  const [leagueForm, setLeagueForm] = useState({ name: '' });
  const [showEditModal, setShowEditModal] = useState(false);
  const [selectedLeague, setSelectedLeague] = useState(null);
- const { seasonId } = useParams();
+ const { id: seasonId } = useParams();
  const navigate = useNavigate();
 
  useEffect(() => {
@@ -117,14 +117,18 @@ console.log(numericSeasonId)
     </div>
 
     {filteredLeagues.map((league) => (
-     <div key={league.id} className="season-card" onClick={() => navigate(`/dashboard/leagues/${league.id}`)}>
+     <div key={league.id} className="season-card" onClick={() => navigate(`/dashboard/singleLeagueToggle/${league.id}`)}>
       <h3>{league.name}</h3>
       <p>Teams: {league.teamsCount} </p>
-      <button onClick={() => {
+      <button onClick={(e) => {
+       e.stopPropagation(); // 👈 stops card click
        setSelectedLeague(league);
        setShowEditModal(true);
       }}>Edit</button>
-      <button onClick={() => handleDeleteLeague(league.id)}>Delete</button>
+      <button onClick={(e) => {
+       e.stopPropagation(); // 👈 stops card click
+       handleDeleteLeague(league.id)}
+      }>Delete</button>
      </div>
     ))}
    </div>

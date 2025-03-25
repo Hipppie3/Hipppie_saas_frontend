@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from '@api';
-import '../Season/SeasonList.css';
+import '../AllSeason/SeasonList.css';
 import { useNavigate, useParams } from "react-router-dom";
 import DefaultImage from '../../images/default_image.png';
 
@@ -14,14 +14,13 @@ function SingleTeam() {
  const [selectedImage, setSelectedImage] = useState(null);
  const navigate = useNavigate();
 
- useEffect(() => {
-  const fetchPlayers = async () => {
-   const res = await api.get(`/api/teams/${teamId}`, { withCredentials: true });
-   setTeam(res.data.team);
+ const fetchTeam = async () => {
+  const res = await api.get(`/api/teams/${teamId}`, { withCredentials: true });
+  setTeam(res.data.team);
+ };
 
-   console.log(res.data)
-  };
-  fetchPlayers();
+ useEffect(() => {
+  fetchTeam();
  }, [teamId]);
 
  const handleCreatePlayer = async (e) => {
@@ -32,11 +31,12 @@ function SingleTeam() {
   formData.append('teamId', teamId);
   if (playerForm.image) formData.append('image', playerForm.image);
 
-  const res = await api.post('/api/players', formData, {
+  await api.post('/api/players', formData, {
    withCredentials: true,
    headers: { 'Content-Type': 'multipart/form-data' },
   });
-  setPlayers(prev => [...prev, res.data.player]);
+
+  await fetchTeam();
   setShowForm(false);
   setPlayerForm({ firstName: '', lastName: '', image: null });
  };
@@ -54,8 +54,7 @@ function SingleTeam() {
    headers: { 'Content-Type': 'multipart/form-data' },
   });
 
-  const updated = await api.get(`/api/teams/${teamId}`, { withCredentials: true });
-  setPlayers(updated.data?.team?.players || []);
+  await fetchTeam();
   setShowEditModal(false);
   setSelectedImage(null);
  };
@@ -63,7 +62,7 @@ function SingleTeam() {
  const handleDeletePlayer = async (id) => {
   if (!window.confirm("Delete this player?")) return;
   await api.delete(`/api/players/${id}`, { withCredentials: true });
-  setPlayers(prev => prev.filter(p => p.id !== id));
+  await fetchTeam();
  };
 
  return (
@@ -73,23 +72,12 @@ function SingleTeam() {
      <div className="modal-content">
       <h2>New Player</h2>
       <form onSubmit={handleCreatePlayer}>
-       <input
-        type="text"
-        placeholder="First Name"
-        value={playerForm.firstName}
-        onChange={(e) => setPlayerForm({ ...playerForm, firstName: e.target.value })}
-       />
-       <input
-        type="text"
-        placeholder="Last Name"
-        value={playerForm.lastName}
-        onChange={(e) => setPlayerForm({ ...playerForm, lastName: e.target.value })}
-       />
-       <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => setPlayerForm({ ...playerForm, image: e.target.files[0] })}
-       />
+       <input type="text" placeholder="First Name" value={playerForm.firstName}
+        onChange={(e) => setPlayerForm({ ...playerForm, firstName: e.target.value })} />
+       <input type="text" placeholder="Last Name" value={playerForm.lastName}
+        onChange={(e) => setPlayerForm({ ...playerForm, lastName: e.target.value })} />
+       <input type="file" accept="image/*"
+        onChange={(e) => setPlayerForm({ ...playerForm, image: e.target.files[0] })} />
        <div className="modal-update-cancel-button">
         <button type="submit">Create</button>
         <button type="button" onClick={() => setShowForm(false)}>Cancel</button>
@@ -104,23 +92,12 @@ function SingleTeam() {
      <div className="modal-content">
       <h2>Edit Player</h2>
       <form onSubmit={handleUpdatePlayer}>
-       <input
-        type="text"
-        placeholder="First Name"
-        value={selectedPlayer.firstName}
-        onChange={(e) => setSelectedPlayer({ ...selectedPlayer, firstName: e.target.value })}
-       />
-       <input
-        type="text"
-        placeholder="Last Name"
-        value={selectedPlayer.lastName}
-        onChange={(e) => setSelectedPlayer({ ...selectedPlayer, lastName: e.target.value })}
-       />
-       <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => setSelectedImage(e.target.files[0])}
-       />
+       <input type="text" placeholder="First Name" value={selectedPlayer.firstName}
+        onChange={(e) => setSelectedPlayer({ ...selectedPlayer, firstName: e.target.value })} />
+       <input type="text" placeholder="Last Name" value={selectedPlayer.lastName}
+        onChange={(e) => setSelectedPlayer({ ...selectedPlayer, lastName: e.target.value })} />
+       <input type="file" accept="image/*"
+        onChange={(e) => setSelectedImage(e.target.files[0])} />
        <div className="modal-update-cancel-button">
         <button type="submit">Update</button>
         <button type="button" onClick={() => setShowEditModal(false)}>Cancel</button>
@@ -138,7 +115,7 @@ function SingleTeam() {
      </div>
     </div>
 
-    {team?.players.map(player => (
+    {team?.players?.map(player => (
      <div key={player.id} className="season-card" onClick={() => navigate(`/players/${player.id}`)}>
       <h3>{player.firstName} {player.lastName}</h3>
       <p>Team: {team.name || "Unassigned"}</p>

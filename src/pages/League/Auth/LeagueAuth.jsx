@@ -288,7 +288,7 @@ function LeagueAuth() {
                   </td>
                   <td>{team.rank}</td>
                   <td>
-                    <NavLink to={`/teams/${team.id}`}>{team.name}</NavLink>
+                    <NavLink to={`/dashboard/singleTeamToggle/${team.id}`}>{team.name}</NavLink>
                   </td>
                   <td>{team.wins}</td>
                   <td>{team.losses}</td>

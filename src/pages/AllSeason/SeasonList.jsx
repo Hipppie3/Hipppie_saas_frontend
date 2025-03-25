@@ -184,7 +184,7 @@ function SeasonList() {
 
 
     {seasons.map((season) => (
-     <div className="season-card" onClick={() => navigate(`/seasonLeagues/${season.id}`)} key={season.id}>
+     <div className="season-card" onClick={() => navigate(`/dashboard/singleSeasonToggle/${season.id}`)} key={season.id}>
       <h3>{season.name}</h3>
       <p>Start Date: {new Date(season.startDate).toLocaleDateString('en-US', { timeZone: 'UTC', month: 'short', day: 'numeric', year: 'numeric' })}</p>
       <p>Finish Date: {new Date(season.finishDate).toLocaleDateString('en-US', { timeZone: 'UTC', month: 'short', day: 'numeric', year: 'numeric' })}</p>
@@ -194,7 +194,7 @@ function SeasonList() {
       </p>
 
       {/* Edit Button */}
-      <button onClick={() => {
+      <button onClick={(e) => {
        e.stopPropagation();
        setSelectedSeason(season);
        setShowEditModal(true);

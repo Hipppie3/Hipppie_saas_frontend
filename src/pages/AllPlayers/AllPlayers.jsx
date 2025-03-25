@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from '@api';
-import '../Season/SeasonList.css';
+import '../AllSeason/SeasonList.css';
 import { useNavigate } from "react-router-dom";
 import DefaultImage from '../../images/default_image.png'
 
@@ -10,7 +10,7 @@ function AllPlayers() {
  const [teams, setTeams] = useState([]);
  const [showForm, setShowForm] = useState(false);
  const [showEditModal, setShowEditModal] = useState(false);
- const [playerForm, setPlayerForm] = useState({ firstName: '', lastName: '', teamId: null , image: null });
+ const [playerForm, setPlayerForm] = useState({ firstName: '', lastName: '', teamId: null, image: null });
  const [selectedPlayer, setSelectedPlayer] = useState(null);
  const [selectedImage, setSelectedImage] = useState(null);
 

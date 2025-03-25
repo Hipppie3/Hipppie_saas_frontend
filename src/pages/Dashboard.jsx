@@ -78,7 +78,7 @@ function Dashboard() {
 
       <div className="dashboard_stats_wrapper">
       {/* <DashboardStatCard title="Sports" count={user?.sports?.length || 0} /> */}
-      <DashboardStatCard title="Seasons" count={dashboardStats?.seasonCount} onClick={() => navigate('/seasonList')} />
+      <DashboardStatCard title="Seasons" count={dashboardStats?.seasonCount} onClick={() => navigate('/dashboard/seasonToggle')} />
         <DashboardStatCard title="Leagues" count={dashboardStats?.leagueCount} onClick={() => navigate('/dashboard/leagueToggle')}/>
       <DashboardStatCard title="Teams" count={dashboardStats?.teamCount} onClick={() => navigate('/dashboard/teamToggle')} />
         <DashboardStatCard title="Players" count={dashboardStats?.playerCount} onClick={() => navigate('/dashboard/playerToggle')} />

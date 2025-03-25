@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from '@api';
-import '../Season/SeasonList.css';
+import '../AllSeason/SeasonList.css';
 import { useNavigate, useParams } from "react-router-dom";
 
 function SingleLeague() {
@@ -96,7 +96,7 @@ function SingleLeague() {
     </div>
 
     {teams.map(team => (
-     <div key={team.id} className="season-card" onClick={() => navigate(`/dashboard/teams/${team.id}`)}>
+     <div key={team.id} className="season-card" onClick={() => navigate(`/dashboard/singleTeamToggle/${team.id}`)}>
       <h3>{team.name}</h3>
       <button
        onClick={(e) => {
