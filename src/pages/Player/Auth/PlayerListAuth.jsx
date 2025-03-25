@@ -51,13 +51,15 @@ function PlayerListAuth() {
   const handleCreatePlayer = async (e) => {
     e.preventDefault();
     if (!playerForm.teamId) {
-      setMessage("Please select a team for the player.");
-      return;
+      const confirm = window.confirm("This player has no team. Are you sure you want to create it?");
+      if (!confirm) return;
     }
     const formData = new FormData();
     formData.append("firstName", playerForm.firstName);
     formData.append("lastName", playerForm.lastName);
-    formData.append("teamId", Number(playerForm.teamId));
+    if (playerForm.teamId) {
+      formData.append("teamId", Number(playerForm.teamId));
+    }
     if (playerForm.image) formData.append("image", playerForm.image);
     try {
       const response = await api.post(`/api/players`, formData, {
@@ -65,10 +67,13 @@ function PlayerListAuth() {
         withCredentials: true
       });
       // ✅ Ensure API returns the newly created player
-      const newPlayer = response.data.player; // Adjust this if API returns differently
-      // ✅ Append new player to state without refetching all players
-      setPlayers((prevPlayers) => [...prevPlayers, newPlayer]);
-      // Reset Form & Close Modal
+      const newPlayer = response.data.player;
+      const playerTeam = teams.find(team => team.id === newPlayer.teamId);
+      setPlayers((prevPlayers) => [
+        ...prevPlayers,
+        { ...newPlayer, team: playerTeam || null }
+      ]);
+
       setPlayerForm({ firstName: "", lastName: "",  teamId: "", image: null });
       setMessage("Player created successfully");
       setIsModalOpen(false);
@@ -179,7 +184,7 @@ function PlayerListAuth() {
                 value={playerForm.teamId}
                 onChange={(e) => setPlayerForm({ ...playerForm, teamId: Number(e.target.value) })}
               >
-                <option value="" disabled>Select a team</option>
+                <option value="" >No Team</option>
                 {teams.map((team) => (
                   <option key={team.id} value={team.id}>{team.name}</option>
                 ))}
@@ -204,7 +209,7 @@ function PlayerListAuth() {
                 accept="image/*"
                 onChange={(e) => setUpdateForm({ ...updateForm, image: e.target.files[0] })} />
               <select value={updateForm.teamId} onChange={(e) => setUpdateForm({ ...updateForm, teamId: e.target.value })} required>
-                <option value="" disabled>Select a team</option>
+                <option value="">No Team</option>
                 {teams.map((team) => <option key={team.id} value={team.id}>{team.name}</option>)}
               </select>
               <button type="submit">Update</button>

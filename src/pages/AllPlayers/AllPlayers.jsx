@@ -34,7 +34,10 @@ function AllPlayers() {
 
  const handleCreatePlayer = async (e) => {
   e.preventDefault();
-
+  if (!playerForm.teamId) {
+   const confirm = window.confirm("This player has no team. Are you sure you want to create it?");
+   if (!confirm) return;
+  }
   const formData = new FormData();
   formData.append('firstName', playerForm.firstName);
   formData.append('lastName', playerForm.lastName);
