@@ -35,7 +35,10 @@ import AllPlayers from './pages/AllPlayers/AllPlayers.jsx';
 import AllGames from './pages/AllGames/AllGames.jsx';
 import SingleLeague from './pages/AllLeagues/SingleLeague.jsx';
 import SingleTeam from './pages/AllTeams/SingleTeam.jsx';
-import LeagueToggle from './pages/LeagueToggle/LeagueToggle.jsx'
+import LeagueToggle from './pages/LeagueToggle/LeagueToggle.jsx';
+import TeamToggle from './pages/TeamToggle/TeamToggle.jsx';
+import PlayerToggle from './pages/PlayerToggle/PlayerToggle.jsx';
+import GameToggle from './pages/GameToggle/GameToggle.jsx';
 
 
 
@@ -79,6 +82,9 @@ function App() {
           <Route path='/dashboard/leagues/:id' element={<SingleLeague />} />
           <Route path='/dashboard/teams/:id' element={<SingleTeam /> } />
           <Route path='/dashboard/leagueToggle' element={<LeagueToggle />} />
+          <Route path='/dashboard/teamToggle' element={<TeamToggle />} />
+          <Route path='/dashboard/playerToggle' element={<PlayerToggle />} />
+          <Route path='/dashboard/gameToggle' element={<GameToggle />} />
         </Routes>
     </div>
     </div>

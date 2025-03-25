@@ -80,9 +80,9 @@ function Dashboard() {
       {/* <DashboardStatCard title="Sports" count={user?.sports?.length || 0} /> */}
       <DashboardStatCard title="Seasons" count={dashboardStats?.seasonCount} onClick={() => navigate('/seasonList')} />
         <DashboardStatCard title="Leagues" count={dashboardStats?.leagueCount} onClick={() => navigate('/dashboard/leagueToggle')}/>
-      <DashboardStatCard title="Teams" count={dashboardStats?.teamCount} onClick={() => navigate('/dashboard/teams')} />
-        <DashboardStatCard title="Players" count={dashboardStats?.playerCount} onClick={() => navigate('/dashboard/players')} />
-        <DashboardStatCard title="Games" count={dashboardStats?.gameCount} onClick={() => navigate('/dashboard/games')} />
+      <DashboardStatCard title="Teams" count={dashboardStats?.teamCount} onClick={() => navigate('/dashboard/teamToggle')} />
+        <DashboardStatCard title="Players" count={dashboardStats?.playerCount} onClick={() => navigate('/dashboard/playerToggle')} />
+        <DashboardStatCard title="Games" count={dashboardStats?.gameCount} onClick={() => navigate('/dashboard/gameToggle')} />
       </div>
     </div>
   );

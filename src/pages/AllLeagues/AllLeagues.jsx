@@ -45,7 +45,11 @@ function AllLeagues() {
 
   try {
    const res = await api.post('/api/leagues', leagueForm, { withCredentials: true });
-   setLeagues(prev => [...prev, res.data.league]);
+
+   // 🔁 Re-fetch the full list (which includes teamsCount)
+   const updatedLeagues = await api.get('/api/leagues', { withCredentials: true });
+   setLeagues(updatedLeagues.data.leagues || []);
+
    setShowForm(false);
    setLeagueForm({ name: '', seasonId: null });
   } catch (error) {
@@ -80,6 +84,7 @@ function AllLeagues() {
   }
  };
 console.log(leagues)
+console.log(seasons)
 
  return (
   <div className="seasonList-container">
@@ -156,6 +161,9 @@ console.log(leagues)
     {leagues.map((league) => (
      <div key={league.id} className="season-card" onClick={() => navigate(`/dashboard/leagues/${league.id}`)}>
       <h3>{league.name}</h3>
+      <p>Season: {seasons.find(s => s.id === league.seasonId)?.name || "No Season"}
+      </p>
+
       <p>Teams: {league.teamsCount}</p>
       <button
        onClick={(e) => {

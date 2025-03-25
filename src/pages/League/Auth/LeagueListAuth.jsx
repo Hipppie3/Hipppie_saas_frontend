@@ -29,7 +29,7 @@ function LeagueListAuth() {
     };
     fetchLeagues();
   }, [id]);
-console.log(leagues)
+
   useEffect(() => {
     const fetchSeasons = async () => {
       try {
@@ -48,6 +48,10 @@ console.log(leagues)
   // Create League
   const handleCreateLeague = async (e) => {
     e.preventDefault();
+    if (!leagueForm.seasonId) {
+      const confirm = window.confirm("This league has no season. Are you sure you want to create it?");
+      if (!confirm) return;
+    }
     try {
       const response = await api.post('/api/leagues', { ...leagueForm }, { withCredentials: true });
       // Either this for instant feedback:
@@ -75,7 +79,7 @@ console.log(leagues)
     e.preventDefault();
     try {
       const response = await api.put(`/api/leagues/${updateForm.id}`, { name: updateForm.name, seasonId: updateForm.seasonId }, { withCredentials: true });
-      const updated = await api.get('/api/leagues/leaguesSummary', { withCredentials: true });
+      const updated = await api.get('/api/leagues', { withCredentials: true });
       setLeagues(updated.data.leagues || []);
       setMessage(`${response.data.league.name} updated successfully`);
       setIsUpdateModalOpen(false);
@@ -216,6 +220,7 @@ console.log(leagues)
             </th>
             <th>ID</th>
             <th>Leagues</th>
+            <th>Season</th>
             <th># Teams</th>
             <th></th>
           </tr>
@@ -237,6 +242,7 @@ console.log(leagues)
                 <td>
                   <NavLink to={`/leagues/${league.id}`}>{league.name}</NavLink>
                 </td>
+                <td>{seasons.find(s => s.id === league.seasonId)?.name || "No Season"}</td>
                 <td>{league.teamsCount}</td>
                 <td>
                   <button className="leagueList-update-btn" onClick={() => openUpdateModal(league)}>

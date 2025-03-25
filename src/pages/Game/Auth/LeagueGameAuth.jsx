@@ -1,25 +1,22 @@
-import api from '@api'; // Instead of ../../../utils/api
+import api from '@api';
 import React, { useEffect, useState } from 'react';
 import './LeagueGameAuth.css';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 
-function LeagueGameAuth({ leagueInfo }) {
+function LeagueGameAuth() {
   const { user } = useAuth();
   const [games, setGames] = useState([]);
-  const [leagueData, setLeagueData] = useState(leagueInfo);
-  const [isModalOpen, setIsModalOpen] = useState(false); // ✅ Manage modal state
+  const [leagues, setLeagues] = useState([]);
+  const [teams, setTeams] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedGames, setSelectedGames] = useState([]);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [isScoreModalOpen, setIsScoreModalOpen] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
-  const [scoreForm, setScoreForm] = useState({
-    score_team1: '',
-    score_team2: ''
-  });
 
   const [gameForm, setGameForm] = useState({
-    leagueId: leagueInfo?.id,
+    leagueId: '',
     team1_id: '',
     team2_id: '',
     date: '',
@@ -28,41 +25,60 @@ function LeagueGameAuth({ leagueInfo }) {
     status: 'scheduled',
   });
 
+  const [scoreForm, setScoreForm] = useState({
+    score_team1: '',
+    score_team2: ''
+  });
+
   useEffect(() => {
-    if (leagueInfo?.id) {
-      setGameForm((prevForm) => ({
-        ...prevForm,
-        leagueId: leagueInfo.id,
-      }));
-      setLeagueData(leagueInfo);
-    }
-  }, [leagueInfo]);
+    const fetchData = async () => {
+      const [gamesRes, leaguesRes] = await Promise.all([
+        api.get('/api/games', { withCredentials: true }),
+        api.get('/api/leagues', { withCredentials: true }),
+      ]);
+      setGames(gamesRes.data.games);
+      setLeagues(leaguesRes.data.leagues);
+    };
+    fetchData();
+  }, []);
+
+  const fetchTeamsForLeague = async (leagueId) => {
+    if (!leagueId) return setTeams([]);
+    const res = await api.get(`/api/leagues/${leagueId}`, { withCredentials: true });
+    setTeams(res.data.league.teams || []);
+  };
 
   const handleCreateGame = async (e) => {
     e.preventDefault();
     if (gameForm.team1_id === gameForm.team2_id) {
-      alert('Teams must be different.');
-      return;
+      return alert('Teams must be different.');
     }
 
-    // ✅ Convert the date to PST before sending it to the backend
     const dateInPST = new Date(gameForm.date + "T00:00:00-08:00").toISOString();
 
     try {
-      await api.post('/api/games', {
+      const res = await api.post('/api/games', {
         ...gameForm,
         userId: user.id,
-        date: dateInPST // ✅ Ensure correct timezone
+        date: dateInPST,
       }, { withCredentials: true });
 
-      // ✅ Refetch league info after creating game
-      const leagueResponse = await api.get(`/api/leagues/${gameForm.leagueId}`, { withCredentials: true });
-      setLeagueData(leagueResponse.data.league);
-      setGames(leagueResponse.data.league.games);
+      // Find team objects to attach
+      const homeTeam = teams.find(team => team.id === Number(res.data.game?.team1_id));
+      const awayTeam = teams.find(team => team.id === Number(res.data.game?.team2_id));
 
-      // ✅ Reset form & close modal
+      setGames(prev => [
+        ...prev,
+        {
+          ...res.data.game,
+          homeTeam,
+          awayTeam,
+        }
+      ]);
+
+
       setGameForm({
-        leagueId: leagueInfo?.id,
+        leagueId: '',
         team1_id: '',
         team2_id: '',
         date: '',
@@ -70,50 +86,27 @@ function LeagueGameAuth({ leagueInfo }) {
         time: '',
         status: 'scheduled',
       });
+      setTeams([]);
       setIsModalOpen(false);
     } catch (error) {
       console.log('Error creating game:', error);
     }
   };
 
-
-  const handleUpdateScore = async (e) => {
-    e.preventDefault();
-    if (!selectedGame) return;
-
-    try {
-      const response = await api.put(`/api/games/${selectedGame.id}/scores`, scoreForm, { withCredentials: true });
-
-      // ✅ Update the local state with the new score
-      setLeagueData((prevLeagueData) => ({
-        ...prevLeagueData,
-        games: prevLeagueData.games.map((game) =>
-          game.id === selectedGame.id ? { ...game, ...response.data } : game
-        )
+  const handleGameForm = async (e) => {
+    const { name, value } = e.target;
+    if (name === 'leagueId') {
+      await fetchTeamsForLeague(value);
+      setGameForm(prev => ({
+        ...prev,
+        leagueId: value,
+        team1_id: '',
+        team2_id: ''
       }));
-
-      setMessage("Score updated successfully");
-      setTimeout(() => setMessage(""), 3000);
-      setIsScoreModalOpen(false);
-    } catch (error) {
-      console.error("Error updating score:", error.response?.data || error);
+    } else {
+      setGameForm(prev => ({ ...prev, [name]: value }));
     }
   };
-
-
-  const handleGameForm = (e) => {
-    const { name, value } = e.target;
-    setGameForm((prevForm) => ({
-      ...prevForm,
-      [name]: value,
-    }));
-  };
-
-  const getTeamNameById = (teamId) => {
-    const team = leagueData?.teams?.find((team) => team.id === teamId);
-    return team ? team.name : 'Unknown Team';
-  };
-
 
   const handleDeleteGames = async () => {
     if (!selectedGames.length) {
@@ -123,14 +116,8 @@ function LeagueGameAuth({ leagueInfo }) {
 
     try {
       await Promise.all(selectedGames.map(id => api.delete(`/api/games/${id}`, { withCredentials: true })));
-
-      // ✅ Update state instantly by removing the deleted games
-      setLeagueData((prevLeagueData) => ({
-        ...prevLeagueData,
-        games: prevLeagueData.games.filter(game => !selectedGames.includes(game.id))
-      }));
-
-      setSelectedGames([]); // Clear selection after deletion
+      setGames(prev => prev.filter(game => !selectedGames.includes(game.id)));
+      setSelectedGames([]);
       setMessage("Games deleted successfully");
       setTimeout(() => setMessage(""), 3000);
     } catch (error) {
@@ -138,23 +125,17 @@ function LeagueGameAuth({ leagueInfo }) {
     }
   };
 
-
   const handleCheckboxChange = (id) => {
-    setSelectedGames((prevSelected) =>
-      prevSelected.includes(id) ? prevSelected.filter((item) => item !== id) : [...prevSelected, id]
+    setSelectedGames(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
     );
   };
 
-
-  // Select All Games
   const handleSelectAll = () => {
-    setSelectedGames((prevSelected) =>
-      prevSelected.length === (leagueData.games?.length || 0)
-        ? []
-        : leagueData.games.map((game) => game.id)
+    setSelectedGames(prev =>
+      prev.length === games.length ? [] : games.map(g => g.id)
     );
   };
-console.log(leagueData)
 
   const openScoreModal = (game) => {
     setSelectedGame(game);
@@ -167,49 +148,70 @@ console.log(leagueData)
 
   const handleScoreChange = (e) => {
     const { name, value } = e.target;
-    setScoreForm((prevForm) => ({
-      ...prevForm,
-      [name]: value
-    }));
+    setScoreForm(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleUpdateScore = async (e) => {
+    e.preventDefault();
+    if (!selectedGame) return;
+
+    try {
+      const res = await api.put(`/api/games/${selectedGame.id}/scores`, scoreForm, { withCredentials: true });
+      setGames(prev =>
+        prev.map(game => (game.id === selectedGame.id ? { ...game, ...res.data } : game))
+      );
+      setMessage("Score updated successfully");
+      setTimeout(() => setMessage(""), 3000);
+      setIsScoreModalOpen(false);
+    } catch (error) {
+      console.error("Error updating score:", error);
+    }
+  };
+
+  const getTeamNameById = (id) => {
+    const team = teams.find(team => team.id === id);
+    return team ? team.name : 'Unknown Team';
+  };
 
   const formatTime = (time) => {
-    if (!time) return "TBD"; // ✅ Return "TBD" or any default value if time is null
-
-    // Split the time into hours and minutes
+    if (!time) return "TBD";
     const [hours, minutes] = time.split(":");
-
-    // Create a new date object using today's date and the provided time
     const date = new Date();
     date.setHours(hours);
     date.setMinutes(minutes);
-    date.setSeconds(0); // Optional: To ensure seconds are set to 0
-
-    // Use toLocaleTimeString to format the time in 12-hour format with AM/PM
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true });
   };
 
 
+ console.log(teams)
+
   return (
     <div className="league-game-auth-container">
-
       <div className="league-game-auth-btn-container">
         <button className="delete-league-game-auth-btn" onClick={handleDeleteGames}>🗑️</button>
-        <button className="add-league-game-auth-btn" onClick={() => setIsModalOpen(true)}> + Add Game</button>
+        <button className="add-league-game-auth-btn" onClick={() => setIsModalOpen(true)}>+ Add Game</button>
       </div>
 
-      {/* Create Game Modal */}
       {isModalOpen && (
         <div className="game-schedule-modal-overlay">
           <div className="game-schedule-modal-content">
             <h3>Create Game</h3>
             <form onSubmit={handleCreateGame}>
               <label>
+                League
+                <select name="leagueId" value={gameForm.leagueId} onChange={handleGameForm} required>
+                  <option value="">Select a league</option>
+                  {leagues.map(league => (
+                    <option key={league.id} value={league.id}>{league.name}</option>
+                  ))}
+                </select>
+              </label>
+
+              <label>
                 Home Team
                 <select name="team1_id" value={gameForm.team1_id} onChange={handleGameForm} required>
                   <option value="">Select a team</option>
-                  {leagueData?.teams?.map((team) => (
+                  {teams.map(team => (
                     <option key={team.id} value={team.id}>{team.name}</option>
                   ))}
                 </select>
@@ -219,23 +221,20 @@ console.log(leagueData)
                 Away Team
                 <select name="team2_id" value={gameForm.team2_id} onChange={handleGameForm} required>
                   <option value="">Select a team</option>
-                  {leagueData?.teams?.map((team) => (
+                  {teams.map(team => (
                     <option key={team.id} value={team.id}>{team.name}</option>
                   ))}
                 </select>
               </label>
 
-              <label>
-                Date
-                <input type="date" name="date" value={gameForm.date} onChange={handleGameForm}  />
+              <label>Date
+                <input type="date" name="date" value={gameForm.date} onChange={handleGameForm} />
               </label>
-              <label>
-                Location
-                <input type="location" name="location" value={gameForm.location} onChange={handleGameForm}  />
+              <label>Location
+                <input type="text" name="location" value={gameForm.location} onChange={handleGameForm} />
               </label>
-              <label>
-                Time
-                <input type="time" name="time" value={gameForm.time} onChange={handleGameForm}  />
+              <label>Time
+                <input type="time" name="time" value={gameForm.time} onChange={handleGameForm} />
               </label>
 
               <button type="submit">Create</button>
@@ -245,20 +244,13 @@ console.log(leagueData)
         </div>
       )}
 
-      {/* Games List */}
       <div className="game-schedule-container">
-
         {message && <p className="message">{message}</p>}
+
         <table className="game-schedule-table">
           <thead>
             <tr>
-              <th>
-                <input 
-                type="checkbox"
-                checked={selectedGames.length > 0 && selectedGames.length === (leagueData.games?.length || 0)}
-                onChange={handleSelectAll}
-                />
-              </th>
+              <th><input type="checkbox" checked={selectedGames.length === games.length} onChange={handleSelectAll} /></th>
               <th>ID</th>
               <th>Date</th>
               <th>Matchup</th>
@@ -266,55 +258,42 @@ console.log(leagueData)
               <th>Time</th>
               <th>Status</th>
               <th>Results</th>
-              {/* <th></th> */}
             </tr>
           </thead>
           <tbody>
-            {leagueData?.games?.length === 0 ? (
-              <tr><td colSpan="7">No games available</td></tr>
+            {games.length === 0 ? (
+              <tr><td colSpan="8">No games available</td></tr>
             ) : (
-              (leagueData?.games ?? []) // ✅ Ensure games exist, default to empty array if undefined
-                .slice() // ✅ Create a copy to prevent modifying the original array
-                .sort((a, b) => new Date(a.date) - new Date(b.date)) // ✅ Sort by earliest date
-                .map((leagueGame, index) => (
-                  <tr key={leagueGame.id}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={selectedGames.includes(leagueGame.id)}
-                        onChange={() => handleCheckboxChange(leagueGame.id)}
-                      />
-                    </td>
-                    <td>{index + 1}</td>
-                    <td>
-                      {new Date(leagueGame.date).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        timeZone: 'America/Los_Angeles'
-                      })}
-                    </td>
-                    <td>
-                      <NavLink to={`/games/${leagueGame.id}`}>
-                        {getTeamNameById(leagueGame.team1_id)} vs {getTeamNameById(leagueGame.team2_id)}
-                      </NavLink>
-                    </td>
-                    <td>{leagueGame.location}</td>
-                    <td>{formatTime(leagueGame?.time)}</td>
-                    <td>{leagueGame.status.charAt(0).toUpperCase() + leagueGame.status.slice(1)}</td>
-                    <td>{leagueGame.score_team1 ?? 0} - {leagueGame.score_team2 ?? 0}</td>
-                    {/* <td>
-                      <button className="game-schedule-update-btn" onClick={() => openScoreModal(leagueGame)}>
-                        🖊 Update Score
-                      </button>
-                    </td> */}
-                  </tr>
-                ))
+                [...games]
+                  .filter(game => game && game.id) // ✅ Make sure each game exists and has an id
+                  .sort((a, b) => new Date(a.date) - new Date(b.date))
+                  .map((game, index) => (
+                    <tr key={game.id}>
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={selectedGames.includes(game.id)}
+                          onChange={() => handleCheckboxChange(game.id)}
+                        />
+                      </td>
+                      <td>{index + 1}</td>
+                      <td>{new Date(game.date).toLocaleDateString('en-US', {
+                        year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Los_Angeles'
+                      })}</td>
+                      <td>
+                        <NavLink to={`/games/${game.id}`}>
+                          {game.homeTeam?.name ?? getTeamNameById(game.team1_id)} vs {game.awayTeam?.name ?? getTeamNameById(game.team2_id)}
+                        </NavLink>
+                      </td>
+                      <td>{game.location}</td>
+                      <td>{formatTime(game.time)}</td>
+                      <td>{game.status.charAt(0).toUpperCase() + game.status.slice(1)}</td>
+                      <td>{game.score_team1 ?? 0} - {game.score_team2 ?? 0}</td>
+                    </tr>
+                  ))
             )}
           </tbody>
-
         </table>
-
 
         {isScoreModalOpen && selectedGame && (
           <div className="game-schedule-modal-overlay">
@@ -323,23 +302,11 @@ console.log(leagueData)
               <form onSubmit={handleUpdateScore}>
                 <label>
                   {getTeamNameById(selectedGame.team1_id)}
-                  <input
-                    type="number"
-                    name="score_team1"
-                    value={scoreForm.score_team1}
-                    onChange={handleScoreChange}
-                    required
-                  />
+                  <input type="number" name="score_team1" value={scoreForm.score_team1} onChange={handleScoreChange} required />
                 </label>
                 <label>
                   {getTeamNameById(selectedGame.team2_id)}
-                  <input
-                    type="number"
-                    name="score_team2"
-                    value={scoreForm.score_team2}
-                    onChange={handleScoreChange}
-                    required
-                  />
+                  <input type="number" name="score_team2" value={scoreForm.score_team2} onChange={handleScoreChange} required />
                 </label>
                 <button type="submit">Update</button>
                 <button type="button" onClick={() => setIsScoreModalOpen(false)}>Cancel</button>
@@ -347,10 +314,6 @@ console.log(leagueData)
             </div>
           </div>
         )}
-
-
-
-
       </div>
     </div>
   );

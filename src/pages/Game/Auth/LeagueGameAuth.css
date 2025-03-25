@@ -1,5 +1,6 @@
 .league-game-auth-container {
  width: calc(100vw - 150px);
+ margin-left: 150px;
  padding-top: 20px;
  padding-bottom: 2rem;
 

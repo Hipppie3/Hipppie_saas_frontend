@@ -1,3 +1,5 @@
-.view-toggle-buttons {
+.view-toggle-dropdown {
+ display: flex;
+ justify-content: flex-end;
  margin-left: 150px;
 }
