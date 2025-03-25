@@ -48,11 +48,11 @@ useEffect(() => {
   const handleCreateTeam = async (e) => {
     e.preventDefault();
     if (!teamForm.leagueId) {
-      setMessage("Please select a league for the team.");
-      return;
+      const confirm = window.confirm("This team has no league. Are you sure you want to create it?");
+      if (!confirm) return;
     }
     try {
-      await api.post(`/api/leagues/${teamForm.leagueId}/teams`, teamForm, { withCredentials: true });
+      await api.post(`/api/teams`, teamForm, { withCredentials: true });
       const updatedTeams = await api.get('/api/teams', { withCredentials: true });
       setTeams(updatedTeams.data.teams || []);
       setTeamForm({ name: "", leagueId: "" });
@@ -98,9 +98,14 @@ console.log(teams)
 
   // Open Update Modal
   const openUpdateModal = (team) => {
-    setUpdateForm({ id: team.id, name: team.name, leagueId: team.leagueId });
+    setUpdateForm({
+      id: team.id,
+      name: team.name,
+      leagueId: team.leagueId || team.league?.id || ""
+    });
     setIsUpdateModalOpen(true);
   };
+
 
   // Handle Checkbox Selection
   const handleCheckboxChange = (id) => {
@@ -143,9 +148,8 @@ console.log(teams)
               <select
                 value={teamForm.leagueId}
                 onChange={(e) => setTeamForm({ ...teamForm, leagueId: e.target.value })}
-                required
               >
-                <option value="" disabled>Select a league</option>
+                <option value="">No League</option>
                 {leagues.map((league) => (
                   <option key={league.id} value={league.id}>{league.name}</option>
                 ))}
@@ -175,7 +179,7 @@ console.log(teams)
                 onChange={(e) => setUpdateForm({ ...updateForm, leagueId: e.target.value })}
                 required
               >
-                <option value="" disabled>Select a league</option>
+                <option value="">No League</option>
                 {leagues.map((league) => (
                   <option key={league.id} value={league.id}>{league.name}</option>
                 ))}

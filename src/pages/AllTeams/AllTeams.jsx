@@ -153,11 +153,15 @@ console.log(teams)
     {teams.map((team) => (
      <div key={team.id} className="season-card" onClick={() => navigate(`/dashboard/teams/${team.id}`)}>
       <h3>{team.name}</h3>
+      <p>League: {team.league?.name || "No League"} </p>
       <p>Players: {team.players?.length || 0}</p>
       <button
        onClick={(e) => {
         e.stopPropagation();
-        setSelectedTeam(team);
+        setSelectedTeam({
+         ...team,
+         leagueId: team.leagueId ?? team.league?.id ?? null
+        });
         setShowEditModal(true);
        }}
       >Edit</button>
