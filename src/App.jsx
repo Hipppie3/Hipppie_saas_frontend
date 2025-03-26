@@ -44,7 +44,7 @@ import GameToggle from './pages/GameToggle/GameToggle.jsx';
 import SingleLeagueToggle from './pages/SingleLeagueToggle/SingleLeagueToggle.jsx';
 import SingleTeamToggle from './pages/SingleTeamToggle/SingleTeamToggle.jsx';
 import SingleSeasonToggle from './pages/SingleSeasonToggle/SingleSeasonToggle';
-import { useAuth } from 'context/AuthContext';
+import { useAuth } from './context/AuthContext';
 
 
 
