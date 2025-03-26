@@ -18,7 +18,7 @@ const UserHomepage = () => {
         const response = await api.get(`/api/users/domain/${domain}`);
         console.log("Domain response:", response.data);
         setUser(response.data.user);
-      } catch (error) {pi/test
+      } catch (error) {
         console.error("Error fetching domain:", error.response?.data || error.message);
         setUser(null); // ✅ Set user to null on error
       } finally {

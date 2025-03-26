@@ -48,8 +48,8 @@ function Dashboard() {
 
 
   // ✅ Prevent error by showing loading state before rendering
-  if (loading) {
-    return <p>Loading...</p>;
+  if (loading || !dashboardStats) {
+    return <p></p>; // or a spinner
   }
 
   if (!user) {
