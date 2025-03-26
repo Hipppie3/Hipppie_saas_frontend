@@ -9,6 +9,7 @@ function SchedulePublic() {
  const [leagues, setLeagues] = useState([]); // ✅ Store leagues
  const [selectedLeague, setSelectedLeague] = useState("");
 const [searchParams] = useSearchParams();
+const [loading, setLoading] = useState(true)
 const domain = searchParams.get("domain");
 
  useEffect(() => {
@@ -19,6 +20,8 @@ const domain = searchParams.get("domain");
     setGames(response.data.games); // ✅ Store only games array
    } catch (error) {
     console.log("Error fetching games:", error);
+   } finally {
+    setLoading(false)
    }
   };
 
@@ -29,6 +32,8 @@ const domain = searchParams.get("domain");
     setLeagues(response.data.leagues); // ✅ Store leagues
    } catch (error) {
     console.log("Error fetching leagues:", error);
+   } finally {
+    setLoading(false)
    }
   };
 
@@ -51,7 +56,7 @@ const filteredGames = selectedLeague
   : games; // Show all games if no league is selected
 
 
-  if (!games || !leagues) return null;
+  if (loading) return null;
 
 return (
   <div className="schedulePublic-container">
