@@ -45,8 +45,8 @@ function GameAuth() {
       initializeStatValues(response.data);
     } catch (error) {
       console.error("Error fetching game:", error);
+    } finally {setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -220,7 +220,7 @@ function GameAuth() {
   };
   const allPeriodsHidden = Object.values(periodScores).every(period => period.gamePeriod?.hidden);
 
-  if (loading) return <p>Loading game details...</p>;
+  if (loading) return null;
   if (!game) return <p>Game not found.</p>;
 
 

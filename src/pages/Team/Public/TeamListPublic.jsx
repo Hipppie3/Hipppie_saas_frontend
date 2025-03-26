@@ -44,7 +44,6 @@ function TeamListPublic() {
             value={selectedLeague}
             onChange={(e) => setSelectedLeague(e.target.value)}
           >
-            <option value="">All Leagues</option>
             {leagues.map((league) => (
               <option key={league.id} value={league.id}>
                 {league.name}

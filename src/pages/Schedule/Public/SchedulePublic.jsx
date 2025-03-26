@@ -65,7 +65,6 @@ return (
     <div className='schedulePublic-league-name-container'>
       <h2 className="schedulePublic-league-title">
         <select id="league-filter" value={selectedLeague} onChange={(e) => setSelectedLeague(e.target.value)}>
-          <option value="">All Leagues</option>
           {uniqueLeagues.map((leagueId) => (
             <option key={leagueId} value={leagueId}>
               {getLeagueName(leagueId)}
