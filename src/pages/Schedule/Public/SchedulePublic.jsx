@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import api from '@api'; // Instead of ../../../utils/api
 import { NavLink, useSearchParams } from 'react-router-dom';
 import './SchedulePublic.css'
+import { format } from 'date-fns';
 
 function SchedulePublic() {
  const [games, setGames] = useState([]);
@@ -90,12 +91,7 @@ return (
 
         return (
         <tr key={game.id}>
-            <td>  {new Intl.DateTimeFormat('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              timeZone: 'UTC',
-            }).format(new Date(game.date))}</td>
+            <td> {format(new Date(game.date), 'MMMM d, yyyy')}</td>
           <td>
           <NavLink to={`/games/${game.id}?domain=${domain}`}>
             {homeTeam?.name} vs {awayTeam?.name}

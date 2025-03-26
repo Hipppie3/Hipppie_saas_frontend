@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import './LeagueGameAuth.css';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { format } from 'date-fns';
 
 function LeagueGameAuth() {
   const { user } = useAuth();
@@ -284,12 +285,7 @@ function LeagueGameAuth() {
                       </td>
                       <td>{index + 1}</td>
                       <td>
-                        {new Intl.DateTimeFormat('en-US', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                          timeZone: 'UTC',
-                        }).format(new Date(game.date))}
+                        {format(new Date(game.date), 'MMMM d, yyyy')}
                       </td>
 
                       <td>
