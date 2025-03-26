@@ -44,6 +44,7 @@ import GameToggle from './pages/GameToggle/GameToggle.jsx';
 import SingleLeagueToggle from './pages/SingleLeagueToggle/SingleLeagueToggle.jsx';
 import SingleTeamToggle from './pages/SingleTeamToggle/SingleTeamToggle.jsx';
 import SingleSeasonToggle from './pages/SingleSeasonToggle/SingleSeasonToggle';
+import { useAuth } from 'context/AuthContext';
 
 
 
@@ -52,7 +53,12 @@ function App() {
   const [searchParams] = useSearchParams();
   const domain = searchParams.get("domain");
   const isPublicView = domain || window.location.pathname === "/"; // ✅ Also use UserNavbar for Home
-  const isLoginPage = location.pathname === "/login"
+  const isLoginPage = location.pathname === "/login";
+  const { loading } = useAuth();
+
+  if (loading) {
+    return <p></p>
+  }
 
   return (
     <div className="app_container">
