@@ -53,11 +53,6 @@ function GameAuth() {
     fetchGame();
   }, [id]);
 
-
-  useEffect(() => {
-    fetchGame();
-  }, [id]);
-
   // Initialize stat values from existing player stats
   const initializeStatValues = (data) => {
     if (!data || !data.playerStats) return;
@@ -79,11 +74,78 @@ function GameAuth() {
   // Submit updated stats
   const handleSubmit = async () => {
     if (!game || !game.id) {
-      console.error("Error: game_id is missing");
-      console.log("Game ID (submit):", game.game.id); // Ad
       alert("Game ID is missing. Cannot update stats.");
       return;
     }
+    for (const stat of stats) {
+      const shortName = stat.shortName;
+
+      // Validation rules for each stat
+      if (shortName === 'FTM') {
+        const ftaId = getStatId('FTA');
+        const allPlayers = [
+          ...(game.homeTeam?.players || []),
+          ...(game.awayTeam?.players || [])
+        ];
+
+        for (const player of allPlayers) {
+          const ftm = statValues[`${player.id}-${stat.id}`] || 0;
+          const fta = statValues[`${player.id}-${ftaId}`] || 0;
+          if (ftm > fta) {
+            alert(`${player.firstName} ${player.lastName}: FTM cannot be greater than FTA.`);
+            return;
+          }
+        }
+      }
+      if (shortName === 'FGM') {
+        const fgaId = getStatId('FGA');
+        const allPlayers = [
+          ...(game.homeTeam?.players || []),
+          ...(game.awayTeam?.players || [])
+        ];
+
+        for (const player of allPlayers) {
+          const fgm = statValues[`${player.id}-${stat.id}`] || 0;
+          const fga = statValues[`${player.id}-${fgaId}`] || 0;
+          if (fgm > fga) {
+            alert(`${player.firstName} ${player.lastName}: FGM cannot be greater than FGA.`);
+            return;
+          }
+        }
+      }
+      if (shortName === '2PM') {
+        const twoPAId = getStatId('2PA');
+        const allPlayers = [
+          ...(game.homeTeam?.players || []),
+          ...(game.awayTeam?.players || [])
+        ];
+
+        for (const player of allPlayers) {
+          const twoPM = statValues[`${player.id}-${stat.id}`] || 0;
+          const twoPA = statValues[`${player.id}-${twoPAId}`] || 0;
+          if (twoPM > twoPA) {
+            alert(`${player.firstName} ${player.lastName}: 2PM cannot be greater than 2PA.`);
+            return;
+          }
+        }
+      }
+      if (shortName === '3PM') {
+        const threePAId = getStatId('3PA');
+        const allPlayers = [
+          ...(game.homeTeam?.players || []),
+          ...(game.awayTeam?.players || [])
+        ];
+
+        for (const player of allPlayers) {
+          const threePM = statValues[`${player.id}-${stat.id}`] || 0;
+          const threePA = statValues[`${player.id}-${threePAId}`] || 0;
+          if (threePM > threePA) {
+            alert(`${player.firstName} ${player.lastName}: 3PM cannot be greater than 3PA.`);
+            return;
+          }
+        }
+      }
+    };
 
     // Get the actual stat_id for PTS (points)
     const ptsStatId = game.stats?.find(stat => stat.shortName === "PTS")?.id;
@@ -231,9 +293,22 @@ function GameAuth() {
   // Extract the Final period score for team 1
   const finalScoreTeam1 = finalPeriod ? finalPeriod.period_score_team1 : game?.score_team1;
   const finalScoreTeam2 = finalPeriod ? finalPeriod.period_score_team2 : game?.score_team2;
+  const getStatId = (shortName) => stats.find(s => s.shortName === shortName)?.id;
 
+  
+
+  const has2PM = !!getStatId('2PM');
+  const has3PM = !!getStatId('3PM');
+  const has2PA = !!getStatId('2PA');
+  const has3PA = !!getStatId('3PA');
+
+  const allowFGMInput = !(has2PM || has3PM);
+  const allowFGAInput = !(has2PA || has3PA);
+
+  
   return (
     <div className="game-container">
+      
       <button className="toggle-button" onClick={() => {
   setEditMode(!editMode);
   console.log("Edit Mode: ", !editMode);  // Check if editMode is toggling
@@ -345,13 +420,10 @@ function GameAuth() {
           </button>
         )}
 
-
         <h3 className="team-header">
           Home Team: {game?.homeTeam?.name || "Unknown Team"} 
             ({finalScoreTeam1})
         </h3>
-
-
         <table className="gameAuth-stat-table">
           <thead>
             <tr>
@@ -367,8 +439,75 @@ function GameAuth() {
                 <td className="player-name">{player.firstName} {player.lastName}</td>
                 {stats.map((stat) => (
                   <td key={stat.id}>
-                    {!editMode ? (
-                      <span className="stat-value">{statValues[`${player.id}-${stat.id}`] || 0}</span>
+                    {!editMode ||
+                      (stat.shortName === 'FGM' && !allowFGMInput) ||
+                      (stat.shortName === 'FGA' && !allowFGAInput) ||
+                      ['FG%', 'FT%', '2P%', '3P%'].includes(stat.shortName) ? (
+                      <span className="stat-value">
+                        {(() => {
+                          //FGM
+                          if (stat.shortName === 'FGM') {
+                            const twoPMId = getStatId('2PM');
+                            const threePMId = getStatId('3PM');
+                            const has2P = !!twoPMId;
+                            const has3P = !!threePMId;
+                            if (has2P || has3P) {
+                              const twoPM = has2P ? (statValues[`${player.id}-${twoPMId}`] || 0) : 0;
+                              const threePM = has3P ? (statValues[`${player.id}-${threePMId}`] || 0) : 0;
+                              return twoPM + threePM;
+                            } else {
+                              return statValues[`${player.id}-${stat.id}`] || 0;
+                            }
+                          }
+                          // FGA
+                          if (stat.shortName === 'FGA') {
+                            const twoPAId = getStatId('2PA');
+                            const threePAId = getStatId('3PA');
+                            const has2PA = !!twoPAId;
+                            const has3PA = !!threePAId;
+
+                            if (has2PA || has3PA) {
+                              const twoPA = has2PA ? (statValues[`${player.id}-${twoPAId}`] || 0) : 0;
+                              const threePA = has3PA ? (statValues[`${player.id}-${threePAId}`] || 0) : 0;
+                              return twoPA + threePA;
+                            } else {
+                              return statValues[`${player.id}-${stat.id}`] || 0;
+                            }
+                          }
+
+                          // FG%
+                          if (stat.shortName === 'FG%') {
+                            const fgm = statValues[`${player.id}-${getStatId('FGM')}`] || 0;
+                            const fga = statValues[`${player.id}-${getStatId('FGA')}`] || 0;
+                            return fga ? ((fgm / fga) * 100).toFixed(1) + '%' : 0;
+                          }
+
+                          // FT%
+                          if (stat.shortName === 'FT%') {
+                            const ftm = statValues[`${player.id}-${getStatId('FTM')}`] || 0;
+                            const fta = statValues[`${player.id}-${getStatId('FTA')}`] || 0;
+                            return fta ? ((ftm / fta) * 100).toFixed(1) + '%' : 0;
+                          }
+
+                          // 2P%
+                          if (stat.shortName === '2P%') {
+                            const made = statValues[`${player.id}-${getStatId('2PM')}`] || 0;
+                            const attempted = statValues[`${player.id}-${getStatId('2PA')}`] || 0;
+                            return attempted ? ((made / attempted) * 100).toFixed(1) + '%' : 0;
+                          }
+
+                          // 3P%
+                          if (stat.shortName === '3P%') {
+                            const made = statValues[`${player.id}-${getStatId('3PM')}`] || 0;
+                            const attempted = statValues[`${player.id}-${getStatId('3PA')}`] || 0;
+                            return attempted ? ((made / attempted) * 100).toFixed(1) + '%' : 0;
+                          }
+
+                          // Default stat
+                          return statValues[`${player.id}-${stat.id}`] || 0;
+                        })()}
+                      </span>
+
                     ) : (
                       <input
                         type="number"
@@ -385,10 +524,53 @@ function GameAuth() {
             <tr className="total-row">
               <td className="player-name"><strong>Total</strong></td>
               {stats.map((stat) => {
+                let validPercents = 0;
                 const total = game?.homeTeam?.players.reduce((sum, player) => {
-                  return sum + (statValues[`${player.id}-${stat.id}`] || 0);
+                  let val;
+                  if (stat.shortName === 'FGM') {
+                    const twoPM = statValues[`${player.id}-${getStatId('2PM')}`] || 0;
+                    const threePM = statValues[`${player.id}-${getStatId('3PM')}`] || 0;
+                    val = twoPM + threePM;
+                    return sum + val;
+                  }
+
+                  if (stat.shortName === 'FGA') {
+                    const twoPA = statValues[`${player.id}-${getStatId('2PA')}`] || 0;
+                    const threePA = statValues[`${player.id}-${getStatId('3PA')}`] || 0;
+                    val = twoPA + threePA;
+                    return sum + val;
+                  }
+                  if (['FG%', 'FT%', '2P%', '3P%'].includes(stat.shortName)) {
+                    const get = (short) => statValues[`${player.id}-${getStatId(short)}`] || 0;
+                    let percent = 0;
+                    if (stat.shortName === 'FG%') percent = get('FGA') ? (get('FGM') / get('FGA')) * 100 : null;
+                    if (stat.shortName === 'FT%') percent = get('FTA') ? (get('FTM') / get('FTA')) * 100 : null;
+                    if (stat.shortName === '2P%') percent = get('2PA') ? (get('2PM') / get('2PA')) * 100 : null;
+                    if (stat.shortName === '3P%') percent = get('3PA') ? (get('3PM') / get('3PA')) * 100 : null;
+
+                    if (percent !== null) {
+                      validPercents++;
+                      return sum + percent;
+                    }
+                    return sum;
+                  } else {
+                    val = statValues[`${player.id}-${stat.id}`] || 0;
+                    return sum + val;
+                  }
                 }, 0);
-                return <td key={stat.id}><strong>{total}</strong></td>;
+
+
+                return <td key={stat.id}>
+                  <strong>
+                    {['FG%', 'FT%', '2P%', '3P%'].includes(stat.shortName)
+                      ? validPercents > 0
+                        ? (total / validPercents).toFixed(1) + '%'
+                        : ''
+                      : total}
+                  </strong>
+                </td>
+
+
               })}
             </tr>
           </tbody>
@@ -412,11 +594,80 @@ function GameAuth() {
           <tbody>
             {game?.awayTeam?.players.map((player) => (
               <tr key={player.id}>
-                <td className="player-name">{player.firstName} {player.lastName}</td>
+                <td className="player-name">{player.firstName} {player.lastName} </td>
                 {stats.map((stat) => (
                   <td key={stat.id}>
-                    {!editMode ? (
-                      <span className="stat-value">{statValues[`${player.id}-${stat.id}`] || 0}</span>
+                    {!editMode ||
+                      (stat.shortName === 'FGM' && !allowFGMInput) ||
+                      (stat.shortName === 'FGA' && !allowFGAInput) ||
+                      ['FG%', 'FT%', '2P%', '3P%'].includes(stat.shortName) ? (
+                      <span className="stat-value">
+                        {(() => {
+                          //FGM
+                          if (stat.shortName === 'FGM') {
+                            const twoPMId = getStatId('2PM');
+                            const threePMId = getStatId('3PM');
+                            const has2P = !!twoPMId;
+                            const has3P = !!threePMId;
+
+                            if (has2P || has3P) {
+                              const twoPM = has2P ? (statValues[`${player.id}-${twoPMId}`] || 0) : 0;
+                              const threePM = has3P ? (statValues[`${player.id}-${threePMId}`] || 0) : 0;
+                              return twoPM + threePM;
+                            } else {
+                              return statValues[`${player.id}-${stat.id}`] || 0;
+                            }
+                          }
+
+
+                          // FGA
+                          if (stat.shortName === 'FGA') {
+                            const twoPAId = getStatId('2PA');
+                            const threePAId = getStatId('3PA');
+                            const has2PA = !!twoPAId;
+                            const has3PA = !!threePAId;
+
+                            if (has2PA || has3PA) {
+                              const twoPA = has2PA ? (statValues[`${player.id}-${twoPAId}`] || 0) : 0;
+                              const threePA = has3PA ? (statValues[`${player.id}-${threePAId}`] || 0) : 0;
+                              return twoPA + threePA;
+                            } else {
+                              return statValues[`${player.id}-${stat.id}`] || 0;
+                            }
+                          }
+
+                          // FG%
+                          if (stat.shortName === 'FG%') {
+                            const fgm = statValues[`${player.id}-${getStatId('FGM')}`] || 0;
+                            const fga = statValues[`${player.id}-${getStatId('FGA')}`] || 0;
+                            return fga ? ((fgm / fga) * 100).toFixed(1) + '%' : 0;
+                          }
+
+                          // FT%
+                          if (stat.shortName === 'FT%') {
+                            const ftm = statValues[`${player.id}-${getStatId('FTM')}`] || 0;
+                            const fta = statValues[`${player.id}-${getStatId('FTA')}`] || 0;
+                            return fta ? ((ftm / fta) * 100).toFixed(1) + '%' : 0;
+                          }
+
+                          // 2P%
+                          if (stat.shortName === '2P%') {
+                            const made = statValues[`${player.id}-${getStatId('2PM')}`] || 0;
+                            const attempted = statValues[`${player.id}-${getStatId('2PA')}`] || 0;
+                            return attempted ? ((made / attempted) * 100).toFixed(1) + '%' : 0;
+                          }
+
+                          // 3P%
+                          if (stat.shortName === '3P%') {
+                            const made = statValues[`${player.id}-${getStatId('3PM')}`] || 0;
+                            const attempted = statValues[`${player.id}-${getStatId('3PA')}`] || 0;
+                            return attempted ? ((made / attempted) * 100).toFixed(1) + '%' : 0;
+                          }
+
+                          // Default stat
+                          return statValues[`${player.id}-${stat.id}`] || 0;
+                        })()}
+                      </span>
                     ) : (
                       <input
                         type="number"
@@ -433,10 +684,54 @@ function GameAuth() {
             <tr className="total-row">
               <td className="player-name"><strong>Total</strong></td>
               {stats.map((stat) => {
+                let validPercents = 0;
                 const total = game?.awayTeam?.players.reduce((sum, player) => {
-                  return sum + (statValues[`${player.id}-${stat.id}`] || 0);
+                  let val;
+                  if (stat.shortName === 'FGM') {
+                    const twoPM = statValues[`${player.id}-${getStatId('2PM')}`] || 0;
+                    const threePM = statValues[`${player.id}-${getStatId('3PM')}`] || 0;
+                    val = twoPM + threePM;
+                    return sum + val;
+                  }
+
+                  if (stat.shortName === 'FGA') {
+                    const twoPA = statValues[`${player.id}-${getStatId('2PA')}`] || 0;
+                    const threePA = statValues[`${player.id}-${getStatId('3PA')}`] || 0;
+                    val = twoPA + threePA;
+                    return sum + val;
+                  }
+                  if (['FG%', 'FT%', '2P%', '3P%'].includes(stat.shortName)) {
+                    const get = (short) => statValues[`${player.id}-${getStatId(short)}`] || 0;
+                    let percent = 0;
+                    
+                    if (stat.shortName === 'FG%') percent = get('FGA') ? (get('FGM') / get('FGA')) * 100 : null;
+                    if (stat.shortName === 'FT%') percent = get('FTA') ? (get('FTM') / get('FTA')) * 100 : null;
+                    if (stat.shortName === '2P%') percent = get('2PA') ? (get('2PM') / get('2PA')) * 100 : null;
+                    if (stat.shortName === '3P%') percent = get('3PA') ? (get('3PM') / get('3PA')) * 100 : null;
+
+                    if (percent !== null) {
+                      validPercents++;
+                      return sum + percent;
+                    }
+                    return sum;
+                  } else {
+                    val = statValues[`${player.id}-${stat.id}`] || 0;
+                    return sum + val;
+                  }
                 }, 0);
-                return <td key={stat.id}><strong>{total}</strong></td>;
+
+
+                return <td key={stat.id}>
+                  <strong>
+                    {['FG%', 'FT%', '2P%', '3P%'].includes(stat.shortName)
+                      ? validPercents > 0
+                        ? (total / validPercents).toFixed(1) + '%'
+                        : ''
+                      : total}
+                  </strong>
+                </td>
+
+
               })}
             </tr>
           </tbody>

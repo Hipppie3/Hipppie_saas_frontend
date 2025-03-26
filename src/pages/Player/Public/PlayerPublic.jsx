@@ -150,7 +150,41 @@ function PlayerPublic() {
                 <td>{new Date(game.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</td>
                 <td>{game.homeTeam} vs {game.awayTeam}</td>
                 {game.stats?.map((statValue, idx) => (
-                  <td key={idx}>{statValue.value}</td>
+                  
+                  <td key={idx}>
+                    {(() => {
+                      const shortName = allStats[idx]?.shortName;
+
+                      const getStat = (code) => game.stats.find(s => s.shortName === code)?.value || 0;
+
+                      if (shortName === 'FG%') {
+                        const fgm = getStat('FGM');
+                        const fga = getStat('FGA');
+                        return fga ? ((fgm / fga) * 1).toFixed(3) : '0';
+                      }
+
+                      if (shortName === 'FT%') {
+                        const ftm = getStat('FTM');
+                        const fta = getStat('FTA');
+                        return fta ? ((ftm / fta) * 1).toFixed(3) : '0';
+                      }
+
+                      if (shortName === '2P%') {
+                        const twoPM = getStat('2PM');
+                        const twoPA = getStat('2PA');
+                        return twoPA ? ((twoPM / twoPA) * 1).toFixed(3)  : '0';
+                      }
+
+                      if (shortName === '3P%') {
+                        const threePM = getStat('3PM');
+                        const threePA = getStat('3PA');
+                        return threePA ? ((threePM / threePA) * 1).toFixed(3) : '0';
+                      }
+
+                      return statValue.value; // raw stats
+                    })()}
+                  </td>
+
                 ))}
               </tr>
             ))}

@@ -45,32 +45,7 @@ function LeagueAuth() {
         const leagueData = response.data.league;
         console.log("League Data:", leagueData);
 
-        // ✅ Calculate wins and losses dynamically on the frontend
-        const teamsMap = {};
-        leagueData.teams.forEach(team => {
-          teamsMap[team.id] = {
-            ...team,
-            wins: 0,
-            losses: 0
-          };
-        });
-
-        leagueData.games.forEach(game => {
-          if (game.status === "completed") {
-            if (teamsMap[game.team1_id] && teamsMap[game.team2_id]) {
-              if (game.score_team1 > game.score_team2) {
-                teamsMap[game.team1_id].wins += 1;
-                teamsMap[game.team2_id].losses += 1;
-              } else if (game.score_team2 > game.score_team1) {
-                teamsMap[game.team2_id].wins += 1;
-                teamsMap[game.team1_id].losses += 1;
-              }
-            }
-          }
-        });
-
-        // ✅ Update teams with dynamically calculated wins/losses
-        setTeams(Object.values(teamsMap));
+        setTeams(leagueData.teams)
         setLeagueInfo(leagueData);
 
       } catch (error) {
