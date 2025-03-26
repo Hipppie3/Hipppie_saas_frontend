@@ -13,7 +13,15 @@ align-items: center;
  justify-content: center;
  align-items: center;
 }
+@keyframes fadeIn {
+ from {
+  opacity: 0;
+ }
 
+ to {
+  opacity: 1;
+ }
+}
 .schedulePublic-league-title {
  width: 100%;
  height: 50px;

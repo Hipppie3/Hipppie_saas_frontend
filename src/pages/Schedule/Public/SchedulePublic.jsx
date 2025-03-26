@@ -50,6 +50,9 @@ const filteredGames = selectedLeague
   ? games.filter(game => game.leagueId === Number(selectedLeague))
   : games; // Show all games if no league is selected
 
+
+  if (!games || !leagues) return null;
+
 return (
   <div className="schedulePublic-container">
 
