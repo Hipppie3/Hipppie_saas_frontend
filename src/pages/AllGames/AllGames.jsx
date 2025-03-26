@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from '@api';
 import '../AllSeason/SeasonList.css';
 import { useNavigate } from "react-router-dom";
+import { format } from 'date-fns';
 
 function AllGames() {
   const [games, setGames] = useState([]);
@@ -80,7 +81,7 @@ function AllGames() {
     await api.delete(`/api/games/${id}`, { withCredentials: true });
     setGames(prev => prev.filter(g => g.id !== id));
   };
-  console.log(leagues)
+  console.log(games)
 
 
 
@@ -142,13 +143,7 @@ function AllGames() {
           .filter(game => game && game.date) // ✅ prevent crashing
           .map(game => (
             <div key={game.id} className="season-card" onClick={() => navigate(`/games/${game.id}`)}>
-              <h3>  {new Intl.DateTimeFormat('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                timeZone: 'UTC',
-              }).format(new Date(game.date))}
-              </h3>
+              <h3>{format(new Date(game.date), 'MMMM d, yyyy')}</h3>
               <p>Location: {game.location}</p>
               <p>Match: {game.homeTeam?.name || 'Home'} vs {game.awayTeam?.name || 'Away'}</p>
               <p>Time: {game.time}</p>
