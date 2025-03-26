@@ -1,7 +1,7 @@
-import React from 'react';
-import { Routes, Route, useSearchParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Routes, Route, useSearchParams, useLocation } from 'react-router-dom';
 import './App.css';
-
+import NProgress from 'nprogress';
 import Navbar from './components/Navbar.jsx';
 import Sidebar from './components/Sidebar.jsx';
 
@@ -52,9 +52,19 @@ import { useAuth } from './context/AuthContext';
 function App() {
   const [searchParams] = useSearchParams();
   const domain = searchParams.get("domain");
+  const location = useLocation();
   const isPublicView = domain || window.location.pathname === "/"; // ✅ Also use UserNavbar for Home
   const isLoginPage = location.pathname === "/login";
   const { loading } = useAuth();
+
+
+  useEffect(() => {
+    NProgress.start();
+    return () => {
+      NProgress.done();
+    };
+  }, [location]);
+
 
   if (loading) {
     return <p></p>
