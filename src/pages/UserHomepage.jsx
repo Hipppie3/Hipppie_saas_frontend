@@ -33,7 +33,7 @@ const UserHomepage = () => {
   return (
     <div className="user_homepage">
       {loading ? (
-        <p>Loading...</p>
+        <p></p>
       ) : (
         <h1>Welcome to {user ? user.username : domain}</h1>
       )}
