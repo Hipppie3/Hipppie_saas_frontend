@@ -76,7 +76,7 @@ function PlayerPublic() {
           className="player-page-image"
         />
       ) : (
-        <div className="placeholder-image">No Image</div>
+        <div className="placeholder-image"></div>
       )}
       <div className="player-details-information">
           <p className="player-details-team">

@@ -10,13 +10,13 @@
 .teamPublic-banner {
   height: 100px;
   width: 100%; 
-  border: 1px solid red;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 30px;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
 }
-
 .teamPublic-games-container {
   width: 90%;
   display: flex;
@@ -178,9 +178,9 @@ border-bottom: 1px solid #c6daed;
 
 /* Banner */
 .light-theme .teamPublic-banner {
-  background-color: #f4f4f4;
   color: #000;
-  border: 1px solid #ccc;
+  border-top: 1px solid#ccc;
+    border-bottom: 1px solid #ccc;
 }
 
 /* Games Table */
@@ -216,7 +216,7 @@ border-bottom: 1px solid #c6daed;
 }
 
 .light-theme .teamPublic-players-table td a {
-  color: #1e60c4;
+  color: black;
 }
 
 /* Hover row highlight */
