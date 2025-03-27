@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import { FaUser, FaLock } from "react-icons/fa";  // ✅ Import icons
 
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -13,9 +13,16 @@ function Login() {
   const [searchParams] = useSearchParams();
   const domain = searchParams.get("domain");
   const [errorMessage, setErrorMessage] = useState("")
-  const { login, register } = useAuth();  
+  const { login, register, isAuthenticated, loading } = useAuth();  
   const navigate = useNavigate()
 
+
+  useEffect(() => {
+    if (!loading && isAuthenticated) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [isAuthenticated, loading, navigate]);
+  
   const handleInput = (e) => {
     const { name, value } = e.target;
     setFormData((prevForm) => ({
@@ -42,6 +49,7 @@ const handleLogin = async (e) => {
   setLocalLoading(false);
 };
 
+  if (loading) return <p></p>;
 
   return (
     <div className='login_container'>
