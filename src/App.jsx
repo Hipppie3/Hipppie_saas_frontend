@@ -57,10 +57,13 @@ function App() {
   const [userForDomain, setUserForDomain] = useState(null);
   const [loadingDomain, setLoadingDomain] = useState(true);
   const location = useLocation();
-  const isPublicView = domain || window.location.pathname === "/"; // ✅ Also use UserNavbar for Home
+  const { loading, isAuthenticated } = useAuth();
+
+  const isPublicView = (domain || location.pathname === "/") && !isAuthenticated;
+
   
   const isLoginPage = location.pathname === "/login";
-  const {  loading } = useAuth();
+
 
   useEffect(() => {
     const fetchDomainUser = async () => {
@@ -96,6 +99,7 @@ function App() {
     <div className="app_container">
       {isPublicView || isLoginPage ? <Navbar userForDomain={userForDomain} /> : <Sidebar />}
       <div className={isPublicView ? `content_wrapper_public ${userForDomain?.theme}-theme` : "content_wrapper"}>
+
 
 
         <Routes>
