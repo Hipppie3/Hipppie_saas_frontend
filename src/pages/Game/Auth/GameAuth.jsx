@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '@api';
+import { format } from 'date-fns';
 import './GameAuth.css';
 
 function GameAuth() {
@@ -16,6 +17,7 @@ function GameAuth() {
   const [formData, setFormData] = useState({
     video_url: '',
     location: '',
+    date: '',
     time: '',
     // status: ''
   });
@@ -232,11 +234,14 @@ function GameAuth() {
     }
 
     try {
-      const { location, time, status } = formData;
+      const { location, time, status, date } = formData;
+      const dateInPST = new Date(date + "T00:00:00-08:00").toISOString(); // 👈 match creation logic
+
       await api.put(`/api/games/${game.id}/details`, {
         video_url: videoUrl,
         location,
         time,
+        date: dateInPST,
         status,
       });
 
@@ -333,6 +338,7 @@ function GameAuth() {
           video_url: game?.video_url || '',
           location: game?.location || '',
           time: game?.time || '',
+          date: game?.date ? formatInTimeZone(new Date(game.date), 'America/Los_Angeles', 'yyyy-MM-dd') : '',
           // status: game?.status || ''
         });
       }}>
@@ -362,6 +368,7 @@ function GameAuth() {
         <div className="game-details">
           <p>Location: {game.location}</p>
           <p>Game Time: {formatTime(game?.time)}</p>
+          <p>Date: {game?.date ? format(new Date(game.date), 'MMMM d, yyyy') : 'N/A'}</p>
         </div>
 
         {!allPeriodsHidden &&
@@ -767,17 +774,15 @@ function GameAuth() {
                   onChange={(e) => setFormData({ ...formData, time: e.target.value })}
                 />
               </label>
-              {/* <label>
-                Status:
-                <select
-                  value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                >
-                  <option value="scheduled">Scheduled</option>
-                  <option value="completed">Completed</option>
-                  <option value="canceled">Canceled</option>
-                </select>
-              </label> */}
+              <label>
+              Date
+                <input
+                  type="date"
+                  value={formData.date || ''}
+                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                />
+
+              </label>
               <button type="submit">Save Changes</button>
               <button type="button" onClick={() => setShowModal(false)}>Cancel</button>
             </form>

@@ -254,7 +254,7 @@ function GameInLeagueAuth({ leagueId }) {
           </td>
           <td>{game.location}</td>
           <td>{formatTime(game.time)}</td>
-          <td>{game.status.charAt(0).toUpperCase() + game.status.slice(1)}</td>
+          <td>{game.status?.charAt(0).toUpperCase() + game.status.slice(1)}</td>
           <td>{game.score_team1 ?? 0} - {game.score_team2 ?? 0}</td>
          </tr>
         ))

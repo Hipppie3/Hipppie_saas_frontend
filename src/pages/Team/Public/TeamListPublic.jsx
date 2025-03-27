@@ -14,7 +14,12 @@ function TeamListPublic() {
     const fetchLeagues = async () => {
       try {
         const response = await api.get(`/api/leagues/leaguesTeam?domain=${domain}`);
-        setLeagues(response.data.leagues || []);
+        const filteredLeagues = response.data.leagues.filter(
+          (league) => league.season && league.season.isActive
+        );
+
+        setLeagues(filteredLeagues || []);
+        console.log(response.data.leagues)
       } catch (error) {
         console.error("Error fetching leagues with teams:", error);
       } finally {
