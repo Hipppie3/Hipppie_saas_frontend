@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "@api";
 import "./SeasonList.css";
+import { NavLink, useNavigate } from "react-router-dom";
 
 function SeasonList() {
  const [seasons, setSeasons] = useState([]);
@@ -10,7 +11,8 @@ function SeasonList() {
  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
  const [selectedSeasons, setSelectedSeasons] = useState([]);
  const [message, setMessage] = useState("");
-
+ const navigate = useNavigate();
+ 
  useEffect(() => {
   const fetchSeasons = async () => {
    try {
@@ -178,7 +180,7 @@ function SeasonList() {
        <tr key={season.id}>
         <td><input type="checkbox" checked={selectedSeasons.includes(season.id)} onChange={() => handleCheckboxChange(season.id)} /></td>
         <td>{i + 1}</td>
-        <td>{season.name}</td>
+        <td className='season-name-link' onClick={() => navigate(`/dashboard/singleSeasonToggle/${season.id}`)}>{season.name}</td>
         <td>{new Date(season.startDate).toLocaleDateString()}</td>
         <td>{new Date(season.finishDate).toLocaleDateString()}</td>
         <td>{season.isActive ? "✅" : "❌"}</td>

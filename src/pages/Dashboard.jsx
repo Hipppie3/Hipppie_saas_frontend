@@ -61,7 +61,7 @@ function Dashboard() {
   return (
     <div className="dashboard_container">
       <h2 className="dashboard_welcome_msg">WELCOME {user.username}!</h2>
-      <div className="view-toggle-buttons">
+      {/* <div className="view-toggle-buttons">
         <button
           className={viewMode === 'card' ? 'active' : ''}
           onClick={() => toggleViewMode('card')}
@@ -74,15 +74,15 @@ function Dashboard() {
         >
           📄 Table View
         </button>
-      </div>
+      </div> */}
 
       <div className="dashboard_stats_wrapper">
       {/* <DashboardStatCard title="Sports" count={user?.sports?.length || 0} /> */}
       <DashboardStatCard title="Seasons" count={dashboardStats?.seasonCount} onClick={() => navigate('/dashboard/seasonToggle')} />
-        <DashboardStatCard title="Leagues" count={dashboardStats?.leagueCount} onClick={() => navigate('/dashboard/leagueToggle')}/>
+        {/* <DashboardStatCard title="Leagues" count={dashboardStats?.leagueCount} onClick={() => navigate('/dashboard/leagueToggle')}/>
       <DashboardStatCard title="Teams" count={dashboardStats?.teamCount} onClick={() => navigate('/dashboard/teamToggle')} />
         <DashboardStatCard title="Players" count={dashboardStats?.playerCount} onClick={() => navigate('/dashboard/playerToggle')} />
-        <DashboardStatCard title="Games" count={dashboardStats?.gameCount} onClick={() => navigate('/dashboard/gameToggle')} />
+        <DashboardStatCard title="Games" count={dashboardStats?.gameCount} onClick={() => navigate('/dashboard/gameToggle')} /> */}
       </div>
     </div>
   );

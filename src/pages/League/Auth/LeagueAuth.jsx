@@ -4,6 +4,7 @@ import { useParams, NavLink, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import './LeagueAuth.css';
 import LeagueGameAuth from '../../Game/Auth/LeagueGameAuth';
+import GameInLeagueAuth from './GameInLeagueAuth';
 
 function LeagueAuth() {
   const { isAuthenticated, loading, user } = useAuth(); // ✅ Add auth state
@@ -183,7 +184,6 @@ function LeagueAuth() {
       <div className="leagueAuth-team-container">
         <div className="leagueAuth-btn-container">
           <button className="delete-leagueAuth-btn" onClick={handleDeleteTeams}>🗑️</button>
-          <h2>Teams</h2>
           <button className="add-leagueAuth-btn" onClick={() => setIsModalOpen(true)}> + Add Team</button>
         </div>
 
@@ -308,6 +308,25 @@ function LeagueAuth() {
             </select>
           </div>
         </div>
+
+
+
+<GameInLeagueAuth leagueId={id}/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       </div>
 
 

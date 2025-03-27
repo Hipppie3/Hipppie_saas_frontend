@@ -150,7 +150,7 @@ function Season() {
        <tr key={league.id}>
         <td><input type="checkbox" checked={selectedLeagues.includes(league.id)} onChange={() => handleCheckboxChange(league.id)} /></td>
         <td>{i + 1}</td>
-        <td onClick={() => navigate(`/dashboard/singleLeagueToggle/${league.id}`)} style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }}>
+        <td className='season-name-link' onClick={() => navigate(`/dashboard/singleLeagueToggle/${league.id}`)} >
          {league.name}
         </td>
         <td>{league.teamsCount || 0}</td>

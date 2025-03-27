@@ -248,7 +248,7 @@ console.log(team)
         </div>
       )}
 
-      {/* Games Table */}
+      {/* Games Table
       <h3 className="games_title">Games</h3>
       <table className="teamAuthGame-table">
         <thead>
@@ -280,7 +280,7 @@ console.log(team)
               ))
           )}
         </tbody>
-      </table>
+      </table> */}
     </div>
   );
 }

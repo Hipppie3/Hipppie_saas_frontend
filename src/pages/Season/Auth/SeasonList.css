@@ -2,7 +2,8 @@
  width: calc(100vw - 150px);
  margin-left: 150px;
  padding: 0 20px 2rem;
- border: 3px solid black;
+ border: none;
+ padding-top: 30px;
 }
 
 .season-btn-container {
@@ -60,6 +61,12 @@
  font-size: 12px;
 }
 
+.season-name-link {
+cursor: pointer;
+}
+.season-name-link:hover {
+   text-shadow: 0 0 1px rgba(0, 0, 0, 1)
+}
 /* Modal Styling */
 .modal-overlay {
  position: fixed;
