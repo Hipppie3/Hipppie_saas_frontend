@@ -46,7 +46,7 @@ function SingleTeam() {
   const formData = new FormData();
   formData.append('firstName', selectedPlayer.firstName);
   formData.append('lastName', selectedPlayer.lastName);
-  formData.append('teamId', teamId);
+  formData.append('teamId', selectedPlayer.teamId || teamId);
   if (selectedImage) formData.append('image', selectedImage);
 
   await api.put(`/api/players/${selectedPlayer.id}`, formData, {

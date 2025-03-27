@@ -120,12 +120,20 @@ function SortableAttribute({ attribute, onToggle }) {
   };
 
   return (
-    <li ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      {attribute.attribute_name} ({attribute.attribute_type}) - {attribute.is_visible ? 'Visible' : 'Hidden'}
-      <button onClick={() => onToggle(attribute.id, !attribute.is_visible)}>
+    <li ref={setNodeRef} style={style}>
+      <span {...attributes} {...listeners}>
+        {attribute.attribute_name} ({attribute.attribute_type})
+      </span>
+      <button
+        onClick={() => {
+          console.log("Sending ID to toggle:", attribute.id);
+          onToggle(attribute.id, !attribute.is_visible);
+        }}
+      >
         {attribute.is_visible ? 'Hide' : 'Show'}
       </button>
     </li>
+
   );
 }
 

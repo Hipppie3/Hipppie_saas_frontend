@@ -1,29 +1,106 @@
 .playerAuth_profile {
- height: 100vh;
- width: calc(100vw - 150px);
- margin-left: 150px;
- border: 1px solid red;
- display: flex;
- flex-direction: column;
- align-items: center;
+   width: calc(100vw - 150px);
+   margin-left: 150px;
+   padding: 2rem;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   box-sizing: border-box;
 }
 
-
-.loading-message,
-.error-message {
- font-size: 18px;
- color: red;
+.playerAuth_header {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   margin-bottom: 2rem;
 }
 
 .player-image {
- width: 150px;
- height: 150px;
- object-fit: cover;
- border-radius: 50%;
- margin: 10px 0;
- border: 2px solid #ddd;
+   width: 150px;
+   height: 150px;
+   object-fit: cover;
+   border-radius: 50%;
+   margin-bottom: 1rem;
+   border: 2px solid #ddd;
 }
 
+.edit-button {
+   margin-top: 0.5rem;
+   padding: 6px 12px;
+   font-size: 0.85rem;
+   background-color: #2563eb;
+   color: white;
+   border: none;
+   border-radius: 5px;
+   cursor: pointer;
+}
+
+.edit-button:hover {
+   background-color: #1d4ed8;
+}
+
+.player-info-container {
+   width: 100%;
+   max-width: 500px;
+   display: flex;
+   flex-direction: column;
+   gap: 1rem;
+}
+
+.attribute-field {
+   display: flex;
+   flex-direction: column;
+}
+
+.attribute-field label {
+   margin-bottom: 4px;
+   font-weight: 500;
+   font-size: 0.9rem;
+}
+
+.attribute-field input {
+   padding: 8px;
+   border-radius: 5px;
+   border: 1px solid #ccc;
+}
+
+.attr-label {
+   font-weight: bold;
+   font-size: 0.9rem;
+   color: #333;
+}
+
+.attr-value {
+   font-size: 0.9rem;
+   color: #555;
+}
+
+.player-form {
+   display: flex;
+   flex-direction: column;
+   gap: 1rem;
+}
+
+.player-form-actions {
+   display: flex;
+   justify-content: space-between;
+   gap: 10px;
+   margin-top: 1rem;
+}
+
+.player-form-actions button {
+   flex: 1;
+   padding: 10px;
+   background-color: #2563eb;
+   color: white;
+   border: none;
+   border-radius: 6px;
+   cursor: pointer;
+}
+
+.player-form-actions button:hover {
+   background-color: #1d4ed8;
+}
 
 
 .team-link,
@@ -36,6 +113,23 @@
 .team-link:hover,
 .league-link:hover {
  text-decoration: underline;
+}
+.attribute-inline {
+   display: flex;
+   justify-content: flex-start;
+   font-size: 0.9rem;
+   padding: 4px 0;
+   border-bottom: 1px solid #f0f0f0;
+}
+
+.attr-label {
+   font-weight: 500;
+   color: #333;
+}
+
+.attr-value {
+   color: #555;
+   padding-left: 10px;
 }
 
 @media (max-width: 768px) {

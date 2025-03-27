@@ -135,7 +135,7 @@ function TeamAuth() {
 
   // Open Update Modal
   const openUpdateModal = (player) => {
-    setUpdateForm({ id: player.id, firstName: player.firstName, lastName: player.lastName, });
+    setUpdateForm({ id: player.id, firstName: player.firstName, lastName: player.lastName, teamId: player.teamId });
     setIsUpdateModalOpen(true);
   };
 

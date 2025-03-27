@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import api from '@api'; // Ensure this is your API import path
+import api from '@api';
 import './UserSettingsPage.css';
-import { useAuth } from '../context/AuthContext'; // Use your AuthContext
+import { useAuth } from '../context/AuthContext';
 
 function UserSettingsPage() {
- const { user } = useAuth(); // Get user from context
+ const { user } = useAuth();
  const [username, setUsername] = useState('');
  const [email, setEmail] = useState('');
  const [oldPassword, setOldPassword] = useState('');
@@ -12,28 +12,24 @@ function UserSettingsPage() {
  const [message, setMessage] = useState('');
  const [error, setError] = useState('');
  const [isEditMode, setIsEditMode] = useState(false);
- const [theme, setTheme] = useState(null); // Default or load from user
+ const [theme, setTheme] = useState(null);
 
-
- // Fetch user details when the component loads (only if user exists)
  useEffect(() => {
-  if (user?.id) { // Ensure user is not null or undefined
+  if (user?.id) {
    const fetchUserDetails = async () => {
     try {
-     const response = await api.get(`/api/users/${user.id}`, { withCredentials: true });
-     setUsername(response.data.user.username);
-     setTheme(response.data.user.theme );
-     setEmail(response.data.user.email);
+     const res = await api.get(`/api/users/${user.id}`, { withCredentials: true });
+     setUsername(res.data.user.username);
+     setEmail(res.data.user.email);
+     setTheme(res.data.user.theme);
     } catch (err) {
      setError('Failed to fetch user details');
     }
    };
-
    fetchUserDetails();
   }
- }, [user?.id]); // Re-fetch if user ID changes
+ }, [user?.id]);
 
- // Handle form submit for updating user details
  const handleSubmit = async (e) => {
   e.preventDefault();
   setError('');
@@ -41,134 +37,110 @@ function UserSettingsPage() {
 
   const updatedUserData = {
    username: username || user.username,
-   email: email ? email : null,
-   oldPassword: oldPassword || null, // If no old password, send null
-   newPassword: newPassword ? newPassword: null,
-   theme: theme ? theme : 'light',
+   email: email || null,
+   oldPassword: oldPassword || null,
+   newPassword: newPassword || null,
+   theme: theme || 'light',
   };
 
   try {
-   const response = await api.put(`/api/users/${user.id}`, updatedUserData, {
+   const res = await api.put(`/api/users/${user.id}`, updatedUserData, {
     withCredentials: true,
    });
 
    setMessage('User updated successfully');
-   setUsername(response.data.user.username); // Update username
-   setEmail(response.data.user.email); // Update email
-   setIsEditMode(false); // Exit edit mode
+   setUsername(res.data.user.username);
+   setEmail(res.data.user.email);
+   setIsEditMode(false);
   } catch (err) {
    setError(err.response?.data?.error || 'Failed to update user');
   }
  };
 
- // Handle edit mode toggle
  const handleEditClick = () => {
-  setIsEditMode(!isEditMode); // Toggle edit mode when button is clicked
-  if(!isEditMode) {
+  setIsEditMode(!isEditMode);
+  if (!isEditMode) {
    setOldPassword('');
    setNewPassword('');
   }
  };
 
- if (!user) {
-  return <div>Loading...</div>; // Optionally show a loading message if user data isn't ready yet
- }
+ if (!user) return <div>Loading...</div>;
 
  return (
   <div className="user-settings-container">
    <h2>User Settings</h2>
+   <div className="user-settings-circle">{user.username}</div>
+
+   {!isEditMode && (
+    <button className="user-settings-button" onClick={handleEditClick}>
+     Edit Settings
+    </button>
+   )}
 
    {error && <div style={{ color: 'red' }}>{error}</div>}
    {message && <div style={{ color: 'green' }}>{message}</div>}
 
-   <form onSubmit={handleSubmit}>
-    <div>
-     <label htmlFor="username">Username: </label>
-     {isEditMode ? (
+   {isEditMode && (
+    <form className="user-settings-form" onSubmit={handleSubmit}>
+     <div className="user-settings-field">
+      <label htmlFor="username">Username:</label>
       <input
        type="text"
        id="username"
-       value={username || ''}
+       value={username}
        onChange={(e) => setUsername(e.target.value)}
       />
-     ) : (
-      <span>{username}</span>
-     )}
-    </div>
+     </div>
 
-    <div>
-     <label htmlFor="email">Email: </label>
-     {isEditMode ? (
+     <div className="user-settings-field">
+      <label htmlFor="email">Email:</label>
       <input
        type="email"
        id="email"
-       value={email || ''}
+       value={email}
        onChange={(e) => setEmail(e.target.value)}
       />
-
-     ) : (
-      <span>{email}</span>
-     )}
-    </div>
-
-    {isEditMode && (
-     <>
-      <div>
-       <label htmlFor="oldPassword">Old Password</label>
-       <input
-        type="password"
-        id="oldPassword"
-        value={oldPassword || ''} // Make sure the value is empty if no old password
-        onChange={(e) => setOldPassword(e.target.value)}
-        placeholder="Enter old password (if applicable)"
-       />
-      </div>
-
-      <div>
-       <label htmlFor="newPassword">New Password</label>
-       <input
-        type="password"
-        id="newPassword"
-        value={newPassword || ''} // Make sure the value is empty
-        onChange={(e) => setNewPassword(e.target.value)}
-        placeholder="Enter new password"
-       />
-      </div>
-
-      <div>
-       <label htmlFor="theme">Theme: </label>
-       {isEditMode ? (
-        <select id="theme" value={theme} onChange={(e) => setTheme(e.target.value)}>
-         <option value="light">Light</option>
-         <option value="dark">Dark</option>
-        </select>
-       ) : (
-        <span>{theme}</span>
-       )}
-      </div>
-     </>
-    )}
-
-
-    {/* Button inside the form to submit */}
-    {isEditMode && (
-     <div>
-      <button type="submit">Save Changes</button>
      </div>
-    )}
-   </form>
 
-   {/* Button to toggle edit mode */}
-   {!isEditMode && (
-    <button onClick={handleEditClick}>Edit Settings</button>
+     <div className="user-settings-field">
+      <label htmlFor="oldPassword">Old Password</label>
+      <input
+       type="password"
+       id="oldPassword"
+       value={oldPassword}
+       onChange={(e) => setOldPassword(e.target.value)}
+       placeholder="Enter old password (if applicable)"
+      />
+     </div>
+
+     <div className="user-settings-field">
+      <label htmlFor="newPassword">New Password</label>
+      <input
+       type="password"
+       id="newPassword"
+       value={newPassword}
+       onChange={(e) => setNewPassword(e.target.value)}
+       placeholder="Enter new password"
+      />
+     </div>
+
+     <div className="user-settings-field">
+      <label htmlFor="theme">Theme:</label>
+      <select id="theme" value={theme} onChange={(e) => setTheme(e.target.value)}>
+       <option value="light">Light</option>
+       <option value="dark">Dark</option>
+      </select>
+     </div>
+
+     <div className="user-settings-actions">
+      <button className='user-settings-button' type="submit">Save Changes</button>
+      <button className='user-settings-button' type="button" onClick={() => setIsEditMode(false)}>Cancel Edit</button>
+     </div>
+    </form>
    )}
-
-   {/* Cancel Edit button to exit edit mode */}
-   {isEditMode && (
-    <button type="button" onClick={() => setIsEditMode(false)}>Cancel Edit</button>
-   )}
-
   </div>
+
  );
 }
 

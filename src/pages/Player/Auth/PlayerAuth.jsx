@@ -58,33 +58,21 @@ function PlayerAuth() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Send the updated attributes to the backend
       await api.put(`/api/players/${id}`, { attributes }, { withCredentials: true });
 
-      // Update the player state with the new values directly
-      const updatedAttributes = player.attributeValues.map((attr) => {
-        if (attributes[attr.attribute.attribute_name]) {
-          return {
-            ...attr,
-            value: attributes[attr.attribute.attribute_name], // Update the value
-          };
-        }
-        return attr;
-      });
+      // ✅ Fresh fetch includes updated attributes and correct team
+      const refreshed = await api.get(`/api/players/${id}`, { withCredentials: true });
+      setPlayer(refreshed.data.player);
 
-      setPlayer((prevPlayer) => ({
-        ...prevPlayer,
-        attributeValues: updatedAttributes,
-      }));
-
+      setIsEditMode(false);
       setError("");
-      setIsEditMode(!isEditMode);
       console.log("Player updated successfully");
     } catch (error) {
       setError("Error updating player");
       console.error("Error updating player:", error);
     }
   };
+
 
 
   const toggleEditMode = () => {
@@ -94,70 +82,74 @@ function PlayerAuth() {
 
   return (
     <div className="playerAuth_profile">
-      <img
-        src={player.image ? `${player.image}?${new Date().getTime()}` : DefaultImage}
-        alt={`${player.firstName} ${player.lastName}`}
-        className="player-image"
-      />
-      <h2>{player.firstName} {player.lastName}</h2>
-      {/* Display Team & League */}
-      <p>
-        <strong>Team:</strong>{" "}
-        {player.team ? (
-          <NavLink to={`/teams/${player.team.id}`} className="team-link">{player.team.name}</NavLink>
-        ) : "No team assigned"}
-      </p>
-
-      {player.attributeValues && (
-        <div>
-          <button onClick={toggleEditMode}>
-            {!isEditMode ? "Edit" : "Cancel Edit"}
-          </button>
-
-          {!isEditMode ? (
-            <div className="player-info-container">
-              {player.attributeValues &&
-                [...player.attributeValues] // Create a copy to avoid mutating state
-                  .sort((a, b) => a.attribute.order - b.attribute.order) // ✅ Sort by order
-                  .map((attr) => (
-                    attr.attribute.is_visible !== false && (
-                      <div key={attr.id} className="attribute-field">
-                        <p>{attr.attribute.attribute_name}</p>
-                        <p>{attr.value}</p>
-                      </div>
-                    )
-                  ))
-              }
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit}>
-                {player.attributeValues &&
-                  [...player.attributeValues]
-                    .sort((a, b) => a.attribute.order - b.attribute.order) // ✅ Ensure sorted order
-                    .map((attr) => (
-                      attr.attribute.is_visible !== false && (
-                        <div key={attr.id} className="attribute-field">
-                          <label htmlFor={attr.attribute.attribute_name}>{attr.attribute.attribute_name}</label>
-                          <input
-                            type="text"
-                            id={attr.attribute.attribute_name}
-                            name={attr.attribute.attribute_name}
-                            value={attributes[attr.attribute.attribute_name] || ""}
-                            onChange={handleInputChange}
-                          />
-                        </div>
-                      )
-                    ))
-                }
-
-              <button type="submit">Update Attributes</button>
-            </form>
-          )}
-        </div>
-      )}
+      {/* Profile Header */}
+      <div className="playerAuth_header">
+        <img
+          src={player.image ? `${player.image}?${new Date().getTime()}` : DefaultImage}
+          alt={`${player.firstName} ${player.lastName}`}
+          className="player-image"
+        />
+        <h2>{player.firstName} {player.lastName}</h2>
+        <p>
+          <strong>Team:</strong>{" "}
+          {player.team ? (
+            <NavLink to={`/teams/${player.team.id}`} className="team-link">{player.team.name}</NavLink>
+          ) : "No team assigned"}
+        </p>
+        {player.attributeValues && !isEditMode && (
+          <button className="edit-button" onClick={toggleEditMode}>Edit</button>
+        )}
+      </div>
 
       {error && <p className="error-message">{error}</p>}
+
+      {/* Attribute Section */}
+      <div className="player-info-container">
+        {!isEditMode ? (
+          <>
+            {player.attributeValues &&
+              [...player.attributeValues]
+                .sort((a, b) => a.attribute.order - b.attribute.order)
+                .map((attr) =>
+                  attr.attribute.is_visible !== false && (
+                    <div key={attr.id} className="attribute-field">
+                      <div className="attribute-inline">
+                        <span className="attr-label">{attr.attribute.attribute_name}:</span>
+                        <span className="attr-value">{attr.value}</span>
+                      </div>
+
+                    </div>
+                  )
+                )}
+          </>
+        ) : (
+          <form onSubmit={handleSubmit} className="player-form">
+            {[...player.attributeValues]
+              .sort((a, b) => a.attribute.order - b.attribute.order)
+              .map((attr) =>
+                attr.attribute.is_visible !== false && (
+                  <div key={attr.id} className="attribute-field">
+                    <label htmlFor={attr.attribute.attribute_name}>{attr.attribute.attribute_name}</label>
+                    <input
+                      type="text"
+                      id={attr.attribute.attribute_name}
+                      name={attr.attribute.attribute_name}
+                      value={attributes[attr.attribute.attribute_name] || ""}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                )
+              )}
+
+            <div className="player-form-actions">
+              <button type="submit">Update</button>
+              <button type="button" onClick={() => setIsEditMode(false)}>Cancel</button>
+            </div>
+          </form>
+        )}
+      </div>
     </div>
+
   );
 }
 
