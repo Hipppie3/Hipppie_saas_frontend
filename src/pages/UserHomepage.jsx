@@ -29,6 +29,8 @@ const UserHomepage = () => {
     fetchDomain();
   }, [domain]); // ✅ Fetch again when domain changes
 
+  if (loading) return null;
+  
   console.log(isAuthenticated)
   return (
     <div className="user_homepage">
