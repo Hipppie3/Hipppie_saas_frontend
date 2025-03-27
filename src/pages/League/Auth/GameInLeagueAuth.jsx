@@ -58,15 +58,10 @@ function GameInLeagueAuth({ leagueId }) {
 
    const homeTeam = teams.find(team => team.id === Number(res.data.game?.team1_id));
    const awayTeam = teams.find(team => team.id === Number(res.data.game?.team2_id));
+    const response = await api.get(`/api/leagues/${leagueId}`, { withCredentials: true });
+    setGames(response.data.league?.games || []);
+    setTeams(response.data.league?.teams || []);
 
-   setGames(prev => [
-    ...prev,
-    {
-     ...res.data.game,
-     homeTeam,
-     awayTeam,
-    }
-   ]);
 
    setGameForm({
     team1_id: '',
@@ -232,7 +227,7 @@ function GameInLeagueAuth({ leagueId }) {
      </thead>
      <tbody>
       {games.length === 0 ? (
-       <tr><td colSpan="8">No games available</td></tr>
+       <tr><td colSpan="8"></td></tr>
       ) : (
        [...games]
         .sort((a, b) => new Date(a.date) - new Date(b.date))
@@ -254,7 +249,7 @@ function GameInLeagueAuth({ leagueId }) {
           </td>
           <td>{game.location}</td>
           <td>{formatTime(game.time)}</td>
-          <td>{game.status?.charAt(0).toUpperCase() + game.status.slice(1)}</td>
+          <td>{game.status?.charAt(0).toUpperCase() + game.status?.slice(1)}</td>
           <td>{game.score_team1 ?? 0} - {game.score_team2 ?? 0}</td>
          </tr>
         ))

@@ -13,7 +13,10 @@ function PlayerListPublic() {
     const fetchPlayers = async () => {
       try {
         const response = await api.get(`/api/players?domain=${domain}`);
-        setPlayers(response.data.players || []);
+        const filteredPlayers = response.data.players.filter(
+          (player) => player.league
+        );
+        setPlayers(filteredPlayers || []);
         
         console.log(response.data);
       } catch (error) {

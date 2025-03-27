@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '@api';
 import { format } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
+
 import './GameAuth.css';
 
 function GameAuth() {

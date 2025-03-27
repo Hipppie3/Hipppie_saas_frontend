@@ -19,7 +19,9 @@ function TeamListPublic() {
         );
 
         setLeagues(filteredLeagues || []);
-        console.log(response.data.leagues)
+        if (filteredLeagues.length > 0) {
+          setSelectedLeague(String(filteredLeagues[0].id)); // Set default selected league
+        }
       } catch (error) {
         console.error("Error fetching leagues with teams:", error);
       } finally {
@@ -29,6 +31,7 @@ function TeamListPublic() {
 
     fetchLeagues();
   }, [domain]);
+
 
   const selectedLeagueObj = selectedLeague
     ? leagues.find(l => l.id === Number(selectedLeague))
