@@ -119,6 +119,33 @@ animation: fadeIn 0.3s ease-in;
  text-shadow: 0 0 1px rgba(0, 0, 0, 1)
 }
 
+/* Light theme overrides */
+.light-theme .schedulePublic-game-container-table thead tr {
+ background-color: #f0f0f0;
+ color: #000;
+}
+
+.light-theme .schedulePublic-game-container-table tbody tr:nth-child(even) {
+ background-color: #ffffff;
+}
+
+.light-theme .schedulePublic-game-container-table tbody tr:nth-child(odd) {
+ background-color: #e6e6e6;
+}
+
+.light-theme .schedulePublic-game-container-table td a {
+ color: #1e60c4;
+}
+
+.light-theme .schedulePublic-league-title {
+ background-color: #1e60c4;
+}
+
+.light-theme .schedulePublic-league-title select {
+ color: white;
+ background: transparent;
+}
+
 @media (max-width:760px) {
  .schedulePublic-game-container-table {
   width: 100%;

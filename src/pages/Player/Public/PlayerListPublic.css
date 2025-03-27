@@ -19,6 +19,39 @@
  padding-right: 20px;
  gap: 10px;
   }
+  /* ✅ Light Theme Overrides for Player Cards */
+.light-theme .player-public-card {
+  background: #ffffff;
+  color: #1a1a1a;
+  border: 1px solid #1e60c4;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .player-public-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+  border-color: #1e60c4;
+}
+
+.light-theme .player-public-card a {
+  color: #1e60c4;
+}
+
+.light-theme .player-public-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #1e60c4;
+  border: 1px solid #1e60c4;
+  margin-bottom: 10px;
+  background-color: #f0f0f0;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.light-theme .player-public-image {
+  border: 2px solid #1e60c4;
+}
+
 
 /* Individual player card */
 .player-public-card {

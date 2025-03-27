@@ -22,7 +22,7 @@ function UserSettingsPage() {
     try {
      const response = await api.get(`/api/users/${user.id}`, { withCredentials: true });
      setUsername(response.data.user.username);
-     setTheme(response.data.user.theme || 'light');
+     setTheme(response.data.user.theme );
      setEmail(response.data.user.email);
     } catch (err) {
      setError('Failed to fetch user details');
@@ -44,7 +44,7 @@ function UserSettingsPage() {
    email: email ? email : null,
    oldPassword: oldPassword || null, // If no old password, send null
    newPassword: newPassword ? newPassword: null,
-   theme,
+   theme: theme ? theme : 'light',
   };
 
   try {

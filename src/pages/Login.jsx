@@ -50,11 +50,7 @@ const handleLogin = async (e) => {
   }
   setLocalLoading(false);
 };
-  if (import.meta.hot) {
-    console.log("🔥 Vite HMR triggered!");
-  }
 
-  console.log("🌀 Login component mounted");
 
   return (
     <div className='login_container'>

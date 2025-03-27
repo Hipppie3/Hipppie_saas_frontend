@@ -171,7 +171,63 @@ border-bottom: 1px solid #c6daed;
 .teamPublic-players-table td a:hover {
   text-shadow: 0 0 1px rgba(0, 0, 0, 1)
 }
+/* ✅ Light Theme Overrides */
+.light-theme .teamPublic-container {
+  color: black;
+}
 
+/* Banner */
+.light-theme .teamPublic-banner {
+  background-color: #f4f4f4;
+  color: #000;
+  border: 1px solid #ccc;
+}
+
+/* Games Table */
+.light-theme .teamPublic-games-table thead tr {
+  background-color: #e6e6e6;
+  color: #000;
+}
+
+.light-theme .teamPublic-games-table tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+.light-theme .teamPublic-games-table tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+.light-theme .teamPublic-games-table td a {
+  color: #1e60c4;
+}
+
+/* Players Table */
+.light-theme .teamPublic-players-table thead tr {
+  background-color: #e6e6e6;
+  color: #000;
+}
+
+.light-theme .teamPublic-players-table tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+.light-theme .teamPublic-players-table tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+.light-theme .teamPublic-players-table td a {
+  color: #1e60c4;
+}
+
+/* Hover row highlight */
+.light-theme .teamPublic-players-table tbody tr:hover td {
+  background-color: #dce5f1;
+}
+
+.light-theme .teamPublic-players-title,
+.light-theme .teamPublic-games-title {
+  border-bottom: 1px solid #999;
+}
 @media (max-width:480px) {
   .teamPublic-table {
     width: 100%;

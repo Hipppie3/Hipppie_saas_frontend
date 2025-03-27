@@ -14,7 +14,32 @@
  justify-content: center;
  align-items: center;
 }
+/* Light theme overrides */
+.light-theme .teamPublic-table thead tr {
+  background-color: #f0f0f0;
+  color: #000;
+}
 
+.light-theme .teamPublic-table tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+.light-theme .teamPublic-table tbody tr:nth-child(odd) {
+  background-color: #e6e6e6;
+}
+
+.light-theme .teamPublic-table td a {
+  color: #1e60c4;
+}
+
+.light-theme .teamPublic-league-title {
+  background-color: #1e60c4;
+}
+
+.light-theme .teamPublic-league-title select {
+  color: white;
+  background: transparent;
+}
 
 @keyframes fadeIn {
   from {
