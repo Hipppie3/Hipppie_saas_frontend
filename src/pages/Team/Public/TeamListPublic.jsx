@@ -15,7 +15,7 @@ function TeamListPublic() {
       try {
         const response = await api.get(`/api/leagues/leaguesTeam?domain=${domain}`);
         const filteredLeagues = response.data.leagues.filter(
-          (league) => league.season && league.season.isActive
+          (league) => league.season && league.season.isActive && league.teams.length > 0
         );
 
         setLeagues(filteredLeagues || []);
@@ -42,7 +42,7 @@ function TeamListPublic() {
     : leagues.flatMap(league => league.teams);
 
   if (loading) return null;
-
+console.log(leagues)
   return (
     <div className="teamListPublic-container">
       <div className="teamPublic-league-name-container">
