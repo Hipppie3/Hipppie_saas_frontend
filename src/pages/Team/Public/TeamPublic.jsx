@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './TeamPublic.css';
-import { NavLink, useParams, useSearchParams } from 'react-router-dom';
+import { NavLink, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import api from '@api'; // Instead of ../../../utils/api
 
 
@@ -12,6 +12,7 @@ function TeamPublic() {
   const [error, setError] = useState("");
   const [playersAttr, setPlayersAttr] = useState([])
   const [loading, setLoading] = useState(true); // 1. Add loading state
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getTeam = async () => {
@@ -60,7 +61,7 @@ function TeamPublic() {
               <tr
                 key={index}
                 className="clickable-row"
-                onClick={() => window.location.href = `/games/${game.id}?domain=${domain}`}
+                onClick={() => navigate(`/games/${game.id}?domain=${domain}`)}
               >
                 <td>
                   {new Date(game.date).toLocaleDateString("en-US", {
