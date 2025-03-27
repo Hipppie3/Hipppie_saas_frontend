@@ -58,8 +58,9 @@ function App() {
   const [loadingDomain, setLoadingDomain] = useState(true);
   const location = useLocation();
   const isPublicView = domain || window.location.pathname === "/"; // ✅ Also use UserNavbar for Home
+  
   const isLoginPage = location.pathname === "/login";
-  const { loading } = useAuth();
+  const {  loading } = useAuth();
 
   useEffect(() => {
     const fetchDomainUser = async () => {
@@ -77,7 +78,8 @@ function App() {
     fetchDomainUser();
   }, [domain]);
 
-console.log(userForDomain)
+  console.count('App rendered');
+
   useEffect(() => {
     NProgress.start();
     return () => {

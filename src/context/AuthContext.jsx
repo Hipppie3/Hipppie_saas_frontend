@@ -26,15 +26,11 @@ export const AuthProvider = ({ children }) => {
 
 
 const login = async (formData) => {
-  setLoading(true);
   try {
     const response = await api.post('/api/users/login', formData, { withCredentials: true });
-    console.log(response.data)
     await checkAuth();
-    setLoading(false);
     return { success: true };  // ✅ Return success so `Login.jsx` knows it's successful
   } catch (error) {
-    setLoading(false);
     return { success: false, message: "Login failed. Please check your credentials." };  // ✅ Return error message
   }
 };

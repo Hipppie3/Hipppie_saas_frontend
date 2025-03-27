@@ -24,14 +24,6 @@ function Login() {
     }));
   };
 
-  // const handleRegisterInput = (e) => {
-  //   const { name, value } = e.target;
-
-  //   setRegisterData((prevForm) => ({
-  //     ...prevForm,
-  //     [name]: value
-  //   }));
-  // };
 
 const handleLogin = async (e) => {
   e.preventDefault();
@@ -39,7 +31,6 @@ const handleLogin = async (e) => {
   setErrorMessage("");  // ✅ Reset error message before submitting
 
   const response = await login({...formData, domain});  // ✅ Get response from `login()`
-
   if (response.success) {
     navigate('/dashboard', { replace: true });  // ✅ Redirect if successful
   } else {
