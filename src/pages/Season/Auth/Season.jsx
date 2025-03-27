@@ -12,6 +12,7 @@ function Season() {
  const [isModalOpen, setIsModalOpen] = useState(false);
  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
  const [selectedLeagues, setSelectedLeagues] = useState([]);
+ const [loading, setLoading] = useState(true);
  const [message, setMessage] = useState("");
 
  useEffect(() => {
@@ -21,6 +22,8 @@ function Season() {
     setLeagues(res.data.leagues || []);
    } catch (err) {
     console.error("Fetch leagues error:", err);
+   } finally {
+    setLoading(false); // ✅ Only after fetch completes
    }
   };
   fetchLeagues();
@@ -143,7 +146,8 @@ function Season() {
      </tr>
     </thead>
     <tbody>
-     {filteredLeagues.length === 0 ? (
+     {loading ? null : 
+     filteredLeagues.length === 0 ? (
       <tr><td colSpan="5">No leagues available</td></tr>
      ) : (
       filteredLeagues.map((league, i) => (

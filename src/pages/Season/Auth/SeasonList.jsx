@@ -11,6 +11,7 @@ function SeasonList() {
  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
  const [selectedSeasons, setSelectedSeasons] = useState([]);
  const [message, setMessage] = useState("");
+ const [loading, setLoading] = useState(true);
  const navigate = useNavigate();
  
  useEffect(() => {
@@ -20,10 +21,13 @@ function SeasonList() {
     setSeasons(res.data.seasons || []);
    } catch (err) {
     console.error("Error fetching seasons:", err);
+   } finally {
+    setLoading(false); // ✅ Only after fetch completes
    }
   };
   fetchSeasons();
  }, []);
+
 
  const handleCreateSeason = async (e) => {
   e.preventDefault();
@@ -173,7 +177,8 @@ function SeasonList() {
      </tr>
     </thead>
     <tbody>
-     {seasons.length === 0 ? (
+     {loading ? null : 
+     seasons.length === 0 ? (
       <tr><td colSpan="6">No seasons available</td></tr>
      ) : (
       seasons.map((season, i) => (
