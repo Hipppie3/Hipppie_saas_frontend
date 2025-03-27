@@ -50,35 +50,11 @@ const handleLogin = async (e) => {
   }
   setLocalLoading(false);
 };
+  if (import.meta.hot) {
+    console.log("🔥 Vite HMR triggered!");
+  }
 
-
-// const handleRegister = async (e) => {
-//   e.preventDefault();
-//   setLocalLoading(true);
-//   setErrorMessage("");  // ✅ Reset error message before submitting
-
-//   const domainPattern = /^[a-zA-Z0-9.-]+\.(com|net|org)$/;
-//   if (!domainPattern.test(registerData.domain)) {
-//     setErrorMessage("Domain must end in .com, .net, or .org");
-//     setLocalLoading(false);
-//     return;
-//   }
-  
-//   const response = await register(registerData);  // ✅ Get response from `register()`
-//   if (response.success) {
-//     navigate('/dashboard', { replace: true });  // ✅ Redirect if successful
-//   } else {
-//     setErrorMessage(response.message); 
-//     setTimeout(() => {
-//       setErrorMessage("")
-//     }, 3000);
-//   }
-//   setLocalLoading(false);
-// };
-
-//   const toggleSignup = () => {
-//     setToggleLogin((prev) => !prev)
-//   }
+  console.log("🌀 Login component mounted");
 
   return (
     <div className='login_container'>

@@ -12,6 +12,8 @@ function UserSettingsPage() {
  const [message, setMessage] = useState('');
  const [error, setError] = useState('');
  const [isEditMode, setIsEditMode] = useState(false);
+ const [theme, setTheme] = useState(null); // Default or load from user
+
 
  // Fetch user details when the component loads (only if user exists)
  useEffect(() => {
@@ -20,6 +22,7 @@ function UserSettingsPage() {
     try {
      const response = await api.get(`/api/users/${user.id}`, { withCredentials: true });
      setUsername(response.data.user.username);
+     setTheme(response.data.user.theme || 'light');
      setEmail(response.data.user.email);
     } catch (err) {
      setError('Failed to fetch user details');
@@ -40,7 +43,8 @@ function UserSettingsPage() {
    username: username || user.username,
    email: email ? email : null,
    oldPassword: oldPassword || null, // If no old password, send null
-   newPassword,
+   newPassword: newPassword ? newPassword: null,
+   theme,
   };
 
   try {
@@ -86,7 +90,6 @@ function UserSettingsPage() {
        id="username"
        value={username || ''}
        onChange={(e) => setUsername(e.target.value)}
-       required
       />
      ) : (
       <span>{username}</span>
@@ -102,6 +105,7 @@ function UserSettingsPage() {
        value={email || ''}
        onChange={(e) => setEmail(e.target.value)}
       />
+
      ) : (
       <span>{email}</span>
      )}
@@ -128,8 +132,19 @@ function UserSettingsPage() {
         value={newPassword || ''} // Make sure the value is empty
         onChange={(e) => setNewPassword(e.target.value)}
         placeholder="Enter new password"
-        required
        />
+      </div>
+
+      <div>
+       <label htmlFor="theme">Theme: </label>
+       {isEditMode ? (
+        <select id="theme" value={theme} onChange={(e) => setTheme(e.target.value)}>
+         <option value="light">Light</option>
+         <option value="dark">Dark</option>
+        </select>
+       ) : (
+        <span>{theme}</span>
+       )}
       </div>
      </>
     )}

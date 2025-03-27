@@ -16,7 +16,17 @@ body,
  display: flex;
  flex-direction: column;
 }
+/* Default light theme */
+.light-theme {
+ background-color: white;
+ color: black;
+}
 
+/* Dark theme */
+.dark-theme {
+ background-color: black;
+ color: white;
+}
 .app_container {
  display: flex;
  width: 100vw;
@@ -39,10 +49,8 @@ body {
 }
 
 .content_wrapper_public {
- background-color: black;
   flex: 1;
-  /* ✅ Ensures the content takes up the remaining space */
   display: flex;
   overflow-x: hidden;
-  color: white;
+
  }

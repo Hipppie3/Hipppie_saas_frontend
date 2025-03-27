@@ -3,7 +3,7 @@ import { NavLink, useSearchParams } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa'; // Import icons
 import './Navbar.css';
 
-function Navbar() {
+function Navbar({ userForDomain } ) {
   const [searchParams] = useSearchParams();
   const domain = searchParams.get("domain");
   const [isOpen, setIsOpen] = useState(false);
@@ -19,7 +19,7 @@ function Navbar() {
   const hideDropdown = () => setIsDropdownOpen(false)
   
   return (
-    <nav className="navbar_container">
+    <nav className={`navbar_container ${userForDomain?.theme}-theme`}>
       {/* Hamburger Menu Button */}
       <button className="navbar_hamburger" onClick={toggleMenu}>
         {isOpen ? <FaTimes /> : <FaBars />}

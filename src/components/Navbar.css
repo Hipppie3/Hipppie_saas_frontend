@@ -4,17 +4,23 @@
  left: 0;
  width: 100%;
  height: 60px;
- /* Adjust as needed */
- background-color: black;
  display: flex;
  align-items: center;
  justify-content: space-between;
  padding: 0 20px;
  z-index: 1000;
- color: white
-
+}
+/* Light Theme */
+.light-theme {
+ background-color: white;
+ color: black;
 }
 
+/* Dark Theme */
+.dark-theme {
+ background-color: black;
+ color: white;
+}
 .navbar_list {
  display: flex;
  list-style: none;
@@ -29,7 +35,6 @@
 
 .navbar_list a {
  text-decoration: none;
- color: white;
  font-size: 20px;
  padding: 10px 15px;
 }
@@ -43,9 +48,26 @@
  display: none;
  background: none;
  border: none;
- color: black;
  font-size: 24px;
  cursor: pointer;
+}
+/* Dark mode navbar links */
+.navbar_container.dark-theme .navbar_list a {
+ color: white;
+}
+
+/* Light mode navbar links */
+.navbar_container.light-theme .navbar_list a {
+ color: black;
+}
+.navbar_container.dark-theme .navbar_list a:hover {
+  background-color: #222;
+  color: white;
+}
+
+.navbar_container.light-theme .navbar_list a:hover {
+  background-color: #f0f0f0;
+  color: black;
 }
 
 /* Mobile Styles */
@@ -53,7 +75,7 @@
  .navbar_hamburger {
   display: block;
   padding-top: 10px;
-  color: white;
+  color: inherit;
  }
 
  .navbar_list {
@@ -62,7 +84,7 @@
   /* Below the navbar */
   left: 0;
   width: 100%;
-  background-color: black;
+  background-color: inherit;
   flex-direction: column;
   text-align: center;
   display: none;

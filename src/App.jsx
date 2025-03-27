@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route, useSearchParams, useLocation } from 'react-router-dom';
 import './App.css';
 import NProgress from 'nprogress';
@@ -45,6 +45,8 @@ import SingleLeagueToggle from './pages/SingleLeagueToggle/SingleLeagueToggle.js
 import SingleTeamToggle from './pages/SingleTeamToggle/SingleTeamToggle.jsx';
 import SingleSeasonToggle from './pages/SingleSeasonToggle/SingleSeasonToggle';
 import { useAuth } from './context/AuthContext';
+import api from '@api';
+
 
 
 
@@ -52,12 +54,30 @@ import { useAuth } from './context/AuthContext';
 function App() {
   const [searchParams] = useSearchParams();
   const domain = searchParams.get("domain");
+  const [userForDomain, setUserForDomain] = useState(null);
+  const [loadingDomain, setLoadingDomain] = useState(true);
   const location = useLocation();
   const isPublicView = domain || window.location.pathname === "/"; // ✅ Also use UserNavbar for Home
   const isLoginPage = location.pathname === "/login";
   const { loading } = useAuth();
 
+  useEffect(() => {
+    const fetchDomainUser = async () => {
+      if (!domain) return;
+      try {
+        const res = await api.get(`/api/users/domain/${domain}`);
+        setUserForDomain(res.data.user);
+      } catch (err) {
+        console.error("Failed to load domain user:", err);
+      } finally {
+        setLoadingDomain(false);
+      }
+    };
 
+    fetchDomainUser();
+  }, [domain]);
+
+console.log(userForDomain)
   useEffect(() => {
     NProgress.start();
     return () => {
@@ -72,8 +92,10 @@ function App() {
 
   return (
     <div className="app_container">
-      {isPublicView || isLoginPage ? <Navbar /> : <Sidebar />}
-      <div className={isPublicView ? "content_wrapper_public" : "content_wrapper"}>
+      {isPublicView || isLoginPage ? <Navbar userForDomain={userForDomain} /> : <Sidebar />}
+      <div className={isPublicView ? `content_wrapper_public ${userForDomain?.theme}-theme` : "content_wrapper"}>
+
+
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
