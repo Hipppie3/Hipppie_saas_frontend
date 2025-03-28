@@ -152,10 +152,11 @@ padding-left: 3px;
  text-shadow: 0 0 1px rgba(0, 0, 0, 1)
 }
 
-@media (max-width:480px) {
-.teamPublic-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
- }
+@media (max-width: 520px) {
+  .teamPublic-league-name-container,
+  .teamPublic-table-container {
+    width: 90%;
+  }
 }
+
+

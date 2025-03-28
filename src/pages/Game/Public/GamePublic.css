@@ -232,22 +232,6 @@ iframe {
     width: 90%;
     display: table;
     overflow-x: auto;
-    font-size: 8px;
-  }
-
-  .gamePublic-stat-table th,
-  .gamePublic-stat-table td {
-    text-align: center;
-  }
-}
-
-@media (max-width: 320px) {
-
-  .gamePublic-periods-table,
-  .gamePublic-stat-table {
-    width: 80%;
-    display: table;
-    overflow-x: auto;
     font-size: 7px;
   }
 
@@ -256,3 +240,4 @@ iframe {
     text-align: center;
   }
 }
+
