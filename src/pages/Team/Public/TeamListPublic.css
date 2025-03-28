@@ -157,6 +157,8 @@ padding-left: 3px;
   .teamPublic-table-container {
     width: 90%;
   }
+.schedulePublic-league-title select {
+  font-size: 14px !important;
 }
 
-
+}
