@@ -9,11 +9,15 @@
  justify-content: space-between;
  padding: 0 20px;
  z-index: 1000;
-}
+  background-color: rgba(255, 255, 255, 0.15);
+    /* 👈 Light transparent background */
+  }
+
 /* Light Theme */
 .light-theme {
- background-color: white;
- color: black;
+  background-color: transparent;
+  /* 👈 Make it transparent */
+  color: black;
 }
 
 /* Dark Theme */
@@ -77,10 +81,11 @@
 .navbar_container.dark-theme .navbar_list a {
  color: white;
 }
+/* Light Theme */
 
 /* Light mode navbar links */
 .navbar_container.light-theme .navbar_list a {
- color: black;
+ color: rgb(6, 4, 4);
 }
 .navbar_container.dark-theme .navbar_list a:hover {
   background-color: #222;

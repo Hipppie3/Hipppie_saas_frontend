@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import './UserHomepage.css';
 import api from "../utils/api";
 import { useAuth } from "../context/AuthContext";
+import fab from '../Video/fab.mp4'
 
 const UserHomepage = () => {
   const [searchParams] = useSearchParams();
@@ -39,8 +40,24 @@ const UserHomepage = () => {
 
   return (
     <div className="user_homepage">
-      <h1>Welcome to {userForDomain ? userForDomain.username : domain}</h1>
+      {/* Hero Video Section */}
+      <section className="homepage-hero-video">
+        <video autoPlay muted loop playsInline className="homepage-video">
+          <source src={fab} />
+        </video>
+        <div className="hero-overlay">
+          <h1>
+            FAB
+          </h1>
+        </div>
+      </section>
+      <section className="second-section">
+        
+      </section>
+
+      {/* Other homepage sections go here */}
     </div>
+
   );
 };
 
