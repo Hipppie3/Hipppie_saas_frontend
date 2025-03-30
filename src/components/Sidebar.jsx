@@ -61,6 +61,7 @@ console.log(user)
             <ul className="sidebar_list">
               <li><NavLink to="/dashboard" onClick={toggleSidebar} className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>Dashboard</NavLink></li>
               {/* <li><NavLink to="/schedule" onClick={toggleSidebar} className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>Schedule</NavLink></li> */}
+              <li><NavLink to="/scheduleBuilder" onClick={toggleSidebar} className={({ isActive }) => isActive ? "active-class" : "inactive-class"}>Builder</NavLink></li>
             </ul>
 
             {/* Settings at bottom */}

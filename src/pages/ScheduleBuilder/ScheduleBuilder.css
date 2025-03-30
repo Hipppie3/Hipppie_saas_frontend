@@ -1,0 +1,14 @@
+.schedule-builder-container {
+ margin-left: 150px;
+}
+
+.team-list {
+ margin-top: 20px;
+ padding: 10px;
+ border-top: 1px solid #ccc;
+}
+
+.team-list ul {
+ padding-left: 20px;
+ list-style: disc;
+}

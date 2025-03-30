@@ -46,6 +46,7 @@ import SingleTeamToggle from './pages/SingleTeamToggle/SingleTeamToggle.jsx';
 import SingleSeasonToggle from './pages/SingleSeasonToggle/SingleSeasonToggle';
 import { useAuth } from './context/AuthContext';
 import api from '@api';
+import ScheduleBuilder from './pages/ScheduleBuilder/ScheduleBuilder';
 
 
 
@@ -139,6 +140,7 @@ function App() {
           <Route path='/dashboard/singleLeagueToggle/:id' element={<SingleLeagueToggle />} />
           <Route path='/dashboard/singleTeamToggle/:id' element={<SingleTeamToggle />} />
           <Route path='/dashboard/singleSeasonToggle/:id' element={<SingleSeasonToggle />} />
+          <Route path='/scheduleBuilder' element={<ScheduleBuilder />} />
         </Routes>
       </div>
     </div>

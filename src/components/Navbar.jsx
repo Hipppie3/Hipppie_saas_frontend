@@ -26,16 +26,13 @@ function Navbar({ userForDomain } ) {
       </button>
       {domain && 
       <ul className={`navbar_list ${isOpen ? 'open' : ''}`}>
-        <div className="navbar_links_group">
         <li><NavLink to={`/site?domain=${domain}`} className={({ isActive }) => isActive ? "active-class" : "inactive-class"} onClick={closeMenu}>HOME</NavLink></li>
         {/* <li><NavLink to={`/leagueList?domain=${domain}`} className={({ isActive }) => isActive ? "active-class" : "inactive-class"} onClick={closeMenu}>LEAGUES</NavLink></li> */}
         <li><NavLink to={`/teamList?domain=${domain}`} className={({ isActive }) => isActive ? "active-class" : "inactive-class"} onClick={closeMenu}>STANDINGS</NavLink></li>
         <li><NavLink to={`/playerList?domain=${domain}`} className={({ isActive }) => isActive ? "active-class" : "inactive-class"} onClick={closeMenu}>PLAYERS</NavLink></li>
         <li><NavLink to={`/schedule?domain=${domain}`} className={({ isActive }) => isActive ? "active-class" : "inactive-class"} onClick={closeMenu}>SCHEDULE</NavLink></li>
-          </div>
-        <div className="navbar_login_link">
         <li><NavLink to={`/login?domain=${domain}`} className={({ isActive }) => isActive ? "active-class" : "inactive-class"} onClick={closeMenu}>LOGIN</NavLink></li>
-        </div>
+
       </ul>
 }
     </nav>
