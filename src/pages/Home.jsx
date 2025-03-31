@@ -31,18 +31,9 @@ function Home() {
     <div className="home_container">
       {websites.map((website) => (
         <div key={website.id}>
-          <a
-            href={
-              website.domain === "sportinghip.com"
-                ? `/site?domain=${website.domain}` // local preview
-                : `https://${website.domain}`
-            }
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <NavLink to={`/site?domain=${website.domain}`}>
             {website.domain}
-          </a>
-
+          </NavLink>
         </div>
       ))}
     </div>
