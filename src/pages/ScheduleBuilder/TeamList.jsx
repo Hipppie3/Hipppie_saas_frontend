@@ -10,7 +10,6 @@ function TeamList({ teams }) {
     {teams.map((team) => (
      <li key={team.id}>
       <strong>{team.name}</strong>
-      {team.league && <span> — {team.league.name}</span>}
      </li>
     ))}
    </ul>

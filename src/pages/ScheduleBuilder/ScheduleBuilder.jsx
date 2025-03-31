@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './scheduleBuilder.css';
+import './ScheduleBuilder.css';
 import api from '@api';
 import ScheduleForm from './ScheduleForm';
 import TeamList from './TeamList';
@@ -119,7 +119,7 @@ function ScheduleBuilder() {
 
   const fetchTeams = async (leagueId) => {
     try {
-      const response = await api.get(`/api/teams?leagueId=${leagueId}`, { withCredentials: true });
+      const response = await api.get(`/api/teams/teamsByLeague?leagueId=${leagueId}`, { withCredentials: true });
       setTeams(response.data.teams);
     } catch (error) {
       console.error("Error fetching teams");
@@ -128,9 +128,11 @@ function ScheduleBuilder() {
 
   const handleLeagueSelect = async (league) => {
     setSelectedLeague(league);
-    fetchTeams(league.id);
-    fetchSchedules(league.id);
+    setTeams([]); // 🔥 Immediately clear old teams
+    await fetchTeams(league.id);
+    await fetchSchedules(league.id);
   };
+
 
   const handleEdit = (schedule) => {
     setEditSchedule(schedule);
@@ -197,7 +199,9 @@ function ScheduleBuilder() {
       {selectedLeague && schedules.length > 0 && (
         <div className="existing-schedules">
           <h3>Existing Schedules for {selectedLeague.name}</h3>
-          {schedules.map((schedule) => (
+          {schedules
+            .filter((schedule) => schedule.leagueId === selectedLeague.id)
+            .map((schedule) => (
             <div key={schedule.id} className="schedule-block">
               <div className="schedule-header">
                 <h4>{schedule.name} — {schedule.numWeeks} weeks</h4>
