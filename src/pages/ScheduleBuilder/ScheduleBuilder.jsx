@@ -201,6 +201,15 @@ function ScheduleBuilder() {
             <div key={schedule.id} className="schedule-block">
               <div className="schedule-header">
                 <h4>{schedule.name} — {schedule.numWeeks} weeks</h4>
+                <GameBuilder
+                  scheduleId={schedule.id}
+                  onGenerated={() => {
+                    for (let i = 0; i < schedule.numWeeks; i++) {
+                      fetchWeekGames(schedule.id, i);
+                      fetchWeekByes(schedule.id, i);
+                    }
+                  }}
+                />
                 <button onClick={() => handleEdit(schedule)}>Edit Schedule</button>
                 <button onClick={() => handleEditDateTime(schedule)}>Edit Schedule Date/Time</button>
                 <button onClick={() => handleDeleteSchedule(schedule.id)} style={{ color: 'red' }}>
@@ -279,18 +288,6 @@ function ScheduleBuilder() {
                           );
                         })
                         : null}
-
-
-                      <td>
-                        <GameBuilder
-                          scheduleId={schedule.id}
-                          weekIndex={weekIndex}
-                          onGenerated={() => {
-                            fetchWeekGames(schedule.id, weekIndex);
-                            fetchWeekByes(schedule.id, weekIndex); // 👈 this one too
-                          }}
-                        />
-                      </td>
                     </tr>
                   ))}
                 </tbody>

@@ -1,35 +1,29 @@
 import React from 'react';
 import api from '@api';
 
-const GameBuilder = ({ scheduleId, weekIndex, onGenerated }) => {
+const GameBuilder = ({ scheduleId, onGenerated }) => {
  const handleGenerate = async () => {
   const confirmed = window.confirm(
-   `This will overwrite any existing games for Week ${weekIndex + 1}. Continue?`
+   `This will overwrite all existing games for this schedule. Continue?`
   );
-
   if (!confirmed) return;
 
   try {
    const res = await api.post(
-    '/api/games/generate-weekly-games',
-    { scheduleId, weekIndex },
+    '/api/games/generate-full-schedule',
+    { scheduleId },
     { withCredentials: true }
    );
-   alert(res.data.message || 'Games generated!');
+   alert(res.data.message || 'Full schedule generated!');
 
-   // ✅ Refetch games after successful generation
    if (onGenerated) onGenerated();
   } catch (err) {
-   console.error('Error generating games:', err);
-   alert('Failed to generate games');
+   console.error('Error generating full schedule:', err);
+   alert('Failed to generate full schedule');
   }
  };
 
- return (
-  <button onClick={handleGenerate}>
-   Generate Games for Week {weekIndex + 1}
-  </button>
- );
+ return <button onClick={handleGenerate}>Generate Full Schedule</button>;
 };
 
 export default GameBuilder;
