@@ -54,7 +54,7 @@ import ScheduleBuilder from './pages/ScheduleBuilder/ScheduleBuilder';
 
 function App() {
   const [searchParams] = useSearchParams();
-  const domain = searchParams.get("domain");
+  const domain = searchParams.get("domain") || window.location.hostname;
   const [userForDomain, setUserForDomain] = useState(null);
   const [loadingDomain, setLoadingDomain] = useState(true);
   const location = useLocation();
