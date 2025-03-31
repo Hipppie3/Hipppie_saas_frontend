@@ -4,6 +4,7 @@ import api from '@api';
 import ScheduleForm from './ScheduleForm';
 import TeamList from './TeamList';
 import { format, addDays } from 'date-fns';
+import GameBuilder from './GameBuilder';
 
 function ScheduleBuilder() {
  const [selectedLeague, setSelectedLeague] = useState(null);
@@ -14,6 +15,8 @@ function ScheduleBuilder() {
  const [editMode, setEditMode] = useState(false);
  const [editedDates, setEditedDates] = useState([]);
  const [editedTimeSlots, setEditedTimeSlots] = useState([]);
+  const [weeklyGames, setWeeklyGames] = useState({});
+
  
 
  const fetchSchedules = async (leagueId) => {
@@ -24,6 +27,41 @@ function ScheduleBuilder() {
    console.error('Error fetching schedules:', error);
   }
  };
+
+  const fetchWeekGames = async (scheduleId, weekIndex) => {
+    try {
+      const res = await api.get(`/api/games/weekly-games?scheduleId=${scheduleId}&weekIndex=${weekIndex}`, {
+        withCredentials: true,
+      });
+      setWeeklyGames((prev) => ({
+        ...prev,
+        [`${scheduleId}-${weekIndex}`]: res.data.games,
+      }));
+    } catch (err) {
+      console.error('Error fetching games:', err);
+    }
+  };
+  useEffect(() => {
+    if (!schedules.length) return;
+
+    const fetchAllGames = async () => {
+      const requests = [];
+
+      schedules.forEach((schedule) => {
+        for (let i = 0; i < schedule.numWeeks; i++) {
+          const weekKey = `${schedule.id}-${i}`;
+          if (!weeklyGames[weekKey]) {
+            requests.push(fetchWeekGames(schedule.id, i));
+          }
+        }
+      });
+
+      await Promise.all(requests);
+    };
+
+    fetchAllGames();
+  }, [schedules]);
+
 
  const handleUpdateSchedule = async (id) => {
   try {
@@ -126,6 +164,12 @@ function ScheduleBuilder() {
     return new Date(isoString).toISOString().split('T')[0];
   };
 
+  const teamIdToName = {};
+  teams.forEach((team) => {
+    teamIdToName[team.id] = team.name;
+  });
+
+
  return (
   <div className="schedule-builder-container">
    <ScheduleForm onLeagueSelect={handleLeagueSelect} refreshSchedules={fetchSchedules} />
@@ -185,18 +229,39 @@ function ScheduleBuilder() {
                setEditedDates(updatedDates);
               }}
              />
+             
             ) : (
              formatDate(
               schedule.weeklyDates?.[weekIndex] || getWeeklyDate(schedule.startDate, weekIndex)
              )
             )}
            </td>
-
+ 
 
            <td></td>
-           {schedule.sameSlot && schedule.timeSlots
-            ? schedule.timeSlots.map((_, index) => <td key={index}></td>)
-            : null}
+           
+             {schedule.sameSlot && schedule.timeSlots
+               ? schedule.timeSlots.map((_, index) => {
+                 const weekKey = `${schedule.id}-${weekIndex}`;
+                 const games = weeklyGames[weekKey] || [];
+
+                 const formattedSlot = schedule.timeSlots[index].replace(/"/g, '').padStart(5, '0') + ':00';
+                 const game = games.find((g) => g.time === formattedSlot);
+
+                 return (
+                   <td key={index}>
+                     {game
+                       ? `${teamIdToName[game.team1_id] || 'TBD'} vs ${teamIdToName[game.team2_id] || 'BYE'}`
+                       : '—'}
+                   </td>
+                 );
+               })
+               : null}
+
+
+             <td>
+               <GameBuilder scheduleId={schedule.id} weekIndex={weekIndex} onGenerated={() => fetchWeekGames(schedule.id, weekIndex)} />
+             </td>
           </tr>
          ))}
         </tbody>
