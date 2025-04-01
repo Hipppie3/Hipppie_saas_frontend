@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import api from '@api';
+import api from '@api'; // Instead of ../../../utils/api
+import { NavLink } from "react-router-dom";
 import "./Home.css";
 
 function Home() {
@@ -8,33 +9,31 @@ function Home() {
   useEffect(() => {
     const fetchWebsites = async () => {
       try {
+        console.log("Fetching from:", api.defaults.baseURL); // ✅ Debugging
         const response = await api.get("/api/users");
         setWebsites(response.data.users);
+        console.log("Fetched websites:", response.data.users);
       } catch (error) {
-        console.error("Error fetching websites:", error.response?.data || error.message);
+        console.error(
+          "Error fetching websites:",
+          error.response?.data || error.message
+        );
       }
     };
 
     fetchWebsites();
   }, []);
 
-  const handleRedirect = (domain) => {
-    if (domain.includes('.')) {
-      // Custom domain like john.com
-      window.location.href = `https://${domain}`;
-    } else {
-      // Subpath on main domain
-      window.location.href = `https://sportinghip.com/${domain}`;
-    }
-  };
+  console.log("VITE_API_URL from env:", import.meta.env.VITE_API_URL);
+  console.log("API Base URL from axios:", api.defaults.baseURL);
 
   return (
     <div className="home_container">
       {websites.map((website) => (
         <div key={website.id}>
-          <button onClick={() => handleRedirect(website.domain)}>
+          <NavLink to={`/site?domain=${website.domain}`}>
             {website.domain}
-          </button>
+          </NavLink>
         </div>
       ))}
     </div>

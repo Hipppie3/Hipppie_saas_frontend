@@ -53,13 +53,11 @@ import ScheduleBuilder from './pages/ScheduleBuilder/ScheduleBuilder';
 
 
 function App() {
-  const location = useLocation();
   const [searchParams] = useSearchParams();
-  const pathDomain = location.pathname.split('/')[1]; // grabs 'some-domain' from '/some-domain'
   const domain = searchParams.get("domain") || window.location.hostname;
   const [userForDomain, setUserForDomain] = useState(null);
   const [loadingDomain, setLoadingDomain] = useState(true);
-
+  const location = useLocation();
   const { loading, isAuthenticated } = useAuth();
 
   const isPublicView = (domain || location.pathname === "/") && !isAuthenticated;
@@ -108,7 +106,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
-          <Route path='/:domain' element={<UserHomepage />} />
+          <Route path='/site' element={<UserHomepage />} />
           <Route path='/dashboard' element={<Dashboard />} />
 
           <Route path='/userList' element={<UserList />} />
