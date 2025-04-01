@@ -23,7 +23,9 @@ const UserHomepage = () => {
     const fetchDomain = async () => {
       if (!domain) return;
       try {
-        const response = await api.get(`/api/users/domain/${domain}`);
+        const formattedDomain = domain.includes('.') ? domain : `${domain}.com`;
+const response = await api.get(`/api/users/domain/${formattedDomain}`);
+
         setUserForDomain(response.data.user);
       } catch (error) {
         console.error("Error fetching domain:", error.response?.data || error.message);

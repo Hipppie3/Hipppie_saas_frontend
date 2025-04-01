@@ -61,8 +61,6 @@ function App() {
   const { loading, isAuthenticated } = useAuth();
 
   const isPublicView = (domain || location.pathname === "/") && !isAuthenticated;
-
-  
   const isLoginPage = location.pathname === "/login";
 
 
