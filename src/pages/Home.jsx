@@ -29,11 +29,16 @@ function Home() {
 
   return (
     <div className="home_container">
+      <div></div>
       {websites.map((website) => (
         <div key={website.id}>
-          <NavLink to={`/site?domain=${website.domain}`}>
-            {website.domain}
-          </NavLink>
+          <a
+            href={website.domain ? `https://${website.domain}` : `/${website.slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {website.domain || website.slug}
+          </a>
         </div>
       ))}
     </div>

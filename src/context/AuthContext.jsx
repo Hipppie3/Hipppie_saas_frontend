@@ -25,15 +25,29 @@ export const AuthProvider = ({ children }) => {
   };
 
 
-const login = async (formData) => {
-  try {
-    const response = await api.post('/api/users/login', formData, { withCredentials: true });
-    await checkAuth();
-    return { success: true };  // ✅ Return success so `Login.jsx` knows it's successful
-  } catch (error) {
-    return { success: false, message: "Login failed. Please check your credentials." };  // ✅ Return error message
-  }
-};
+  const login = async (formData) => {
+    try {
+      // Automatically extract domain from URL if available
+      const domainFromURL = window.location.search.includes("domain=")
+        ? new URLSearchParams(window.location.search).get("domain")
+        : null;
+
+      const slugFromPath = window.location.pathname.split("/")[1] || null;
+
+      const payload = {
+        ...formData,
+        domain: formData.domain || domainFromURL || undefined,
+        slug: slugFromPath !== "login" ? slugFromPath : undefined
+      };
+
+      const response = await api.post('/api/users/login', payload, { withCredentials: true });
+      await checkAuth();
+      return { success: true };
+    } catch (error) {
+      return { success: false, message: "Login failed. Please check your credentials." };
+    }
+  };
+
 
   const register = async (registerData) => {
     console.log('Registering user:', registerData);  // Log data being sent

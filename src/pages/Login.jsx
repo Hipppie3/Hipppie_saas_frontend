@@ -1,7 +1,7 @@
 import React, { useState, useEffect  } from 'react';
 import { FaUser, FaLock } from "react-icons/fa";  // ✅ Import icons
 
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';  // ✅ Import useAuth
 import './Login.css'
 
@@ -11,7 +11,10 @@ function Login() {
   const [localLoading, setLocalLoading] = useState(false)
   const [toggleLogin, setToggleLogin] = useState(true)
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const domain = searchParams.get("domain");
+  const slugMatch = location.pathname.match(/^\/([a-zA-Z0-9-_]+)/);
+  const slug = slugMatch ? slugMatch[1] : null;
   const [errorMessage, setErrorMessage] = useState("")
   const { login, register, isAuthenticated, loading } = useAuth();  
   const navigate = useNavigate()
@@ -32,22 +35,23 @@ function Login() {
   };
 
 
-const handleLogin = async (e) => {
-  e.preventDefault();
-  setLocalLoading(true);
-  setErrorMessage("");  // ✅ Reset error message before submitting
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLocalLoading(true);
+    setErrorMessage("");
 
-  const response = await login({...formData, domain});  // ✅ Get response from `login()`
-  if (response.success) {
-    navigate('/dashboard', { replace: true });  // ✅ Redirect if successful
-  } else {
-    setErrorMessage(response.message); 
-    setTimeout(() => {
-    setErrorMessage("")
-    }, 3000); 
-  }
-  setLocalLoading(false);
-};
+    const loginPayload = { ...formData };
+    if (domain) loginPayload.domain = domain;
+    else if (slug) loginPayload.slug = slug;
+    const response = await login(loginPayload);
+    if (response.success) {
+      navigate('/dashboard', { replace: true });
+    } else {
+      setErrorMessage(response.message);
+      setTimeout(() => setErrorMessage(""), 3000);
+    }
+    setLocalLoading(false);
+  };
 
   if (loading) return <p></p>;
 

@@ -4,7 +4,7 @@ import './UserSettingsPage.css';
 import { useAuth } from '../context/AuthContext';
 
 function UserSettingsPage() {
- const { user } = useAuth();
+ const { user} = useAuth();
  const [username, setUsername] = useState('');
  const [email, setEmail] = useState('');
  const [oldPassword, setOldPassword] = useState('');
@@ -12,7 +12,7 @@ function UserSettingsPage() {
  const [message, setMessage] = useState('');
  const [error, setError] = useState('');
  const [isEditMode, setIsEditMode] = useState(false);
- const [theme, setTheme] = useState(null);
+ const [theme, setTheme] = useState('');
 
  useEffect(() => {
   if (user?.id) {
@@ -30,6 +30,7 @@ function UserSettingsPage() {
   }
  }, [user?.id]);
 
+
  const handleSubmit = async (e) => {
   e.preventDefault();
   setError('');
@@ -40,9 +41,9 @@ function UserSettingsPage() {
    email: email || null,
    oldPassword: oldPassword || null,
    newPassword: newPassword || null,
-   theme: theme || 'light',
+   theme: theme ?? 'light',
   };
-
+console.log(user.id)
   try {
    const res = await api.put(`/api/users/${user.id}`, updatedUserData, {
     withCredentials: true,
@@ -51,6 +52,7 @@ function UserSettingsPage() {
    setMessage('User updated successfully');
    setUsername(res.data.user.username);
    setEmail(res.data.user.email);
+   setTheme(res.data.user.theme)
    setIsEditMode(false);
   } catch (err) {
    setError(err.response?.data?.error || 'Failed to update user');

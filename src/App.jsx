@@ -1,11 +1,12 @@
+// App.jsx
 import React, { useEffect, useState } from 'react';
-import { Routes, Route, useSearchParams, useLocation } from 'react-router-dom';
+import { Routes, Route, useSearchParams, useLocation, useParams } from 'react-router-dom';
 import './App.css';
 import NProgress from 'nprogress';
 import Navbar from './components/Navbar.jsx';
 import Sidebar from './components/Sidebar.jsx';
 
-import StatAuth from './pages/Stat/StatAuth.jsx'
+import StatAuth from './pages/Stat/StatAuth.jsx';
 import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
 import UserHomepage from './pages/UserHomepage.jsx';
@@ -19,13 +20,10 @@ import TeamList from './pages/Team/TeamList.jsx';
 import Team from './pages/Team/Team.jsx';
 import PlayerList from './pages/Player/PlayerList.jsx';
 import Player from './pages/Player/Player.jsx';
-
 import GamePage from './pages/Game/GamePage.jsx';
-
-import GamePeriod from './pages/GamePeriod/GamePeriod.jsx'
+import GamePeriod from './pages/GamePeriod/GamePeriod.jsx';
 import UserSettings from './pages/UserSettingsPage.jsx';
 import PlayerAttributes from './pages/PlayerAttribute/PlayerAttributes.jsx';
-
 import SchedulePage from './pages/Schedule/SchedulePage.jsx';
 import SeasonList from './pages/AllSeason/SeasonList.jsx';
 import SeasonLeagues from './pages/AllSeason/Leagues/SeasonLeagues.jsx';
@@ -48,39 +46,44 @@ import { useAuth } from './context/AuthContext';
 import api from '@api';
 import ScheduleBuilder from './pages/ScheduleBuilder/ScheduleBuilder';
 
-
-
-
-
 function App() {
+  const { slug } = useParams(); // <-- Needed for slug route
   const [searchParams] = useSearchParams();
-  const domain = searchParams.get("domain") || window.location.hostname;
+  const domainFromQuery = searchParams.get("domain");
+  const domainFromHost = window.location.hostname;
   const [userForDomain, setUserForDomain] = useState(null);
   const [loadingDomain, setLoadingDomain] = useState(true);
   const location = useLocation();
   const { loading, isAuthenticated } = useAuth();
 
-  const isPublicView = (domain || location.pathname === "/") && !isAuthenticated;
+  const isSlugRoute = /^\/[a-zA-Z0-9-_]+$/.test(location.pathname);
+  const isPublicView = (domainFromQuery || isSlugRoute || location.pathname === "/") && !isAuthenticated;
   const isLoginPage = location.pathname === "/login";
 
-
   useEffect(() => {
-    const fetchDomainUser = async () => {
-      if (!domain) return;
+    const fetchUser = async () => {
       try {
-        const res = await api.get(`/api/users/domain/${domain}`);
-        setUserForDomain(res.data.user);
+        if (domainFromQuery || domainFromHost !== "localhost") {
+          const domain = domainFromQuery || domainFromHost;
+          const res = await api.get(`/api/users/domain/${domain}`);
+          setUserForDomain(res.data.user);
+        } else if (isSlugRoute) {
+          const extractedSlug = location.pathname.split("/")[1];
+          const res = await api.get(`/api/users/slug/${extractedSlug}`);
+          setUserForDomain(res.data.user);
+        } else {
+          setUserForDomain(null);
+        }
       } catch (err) {
-        console.error("Failed to load domain user:", err);
+        console.error("Error fetching domain/slug user:", err.response?.data || err.message);
+        setUserForDomain(null);
       } finally {
         setLoadingDomain(false);
       }
     };
 
-    fetchDomainUser();
-  }, [domain]);
-
-  console.count('App rendered');
+    fetchUser();
+  }, [domainFromQuery, domainFromHost, isSlugRoute, location.pathname]);
 
   useEffect(() => {
     NProgress.start();
@@ -89,26 +92,25 @@ function App() {
     };
   }, [location]);
 
-
-  if (loading) {
-    return <p></p>
+  if (loading || loadingDomain) {
+    return <p></p>;
   }
 
   return (
     <div className="app_container">
       {isPublicView || isLoginPage ? <Navbar userForDomain={userForDomain} /> : <Sidebar />}
-      <div className={isPublicView ? `content_wrapper_public ${userForDomain?.theme}-theme` : "content_wrapper"}>
-
-
-
+      <div className={isPublicView ? `content_wrapper_public ${userForDomain?.theme || 'light'}-theme` : "content_wrapper"}>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/:slug/login' element={<Login />} />
           <Route path='/site' element={<UserHomepage />} />
-          <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='/:slug' element={<UserHomepage />} />
 
+          <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/userList' element={<UserList />} />
           <Route path='/user/:id' element={<User />} />
+
           <Route path='/leagueList' element={<LeagueList />} />
           <Route path='/leagues/:id' element={<League />} />
           <Route path='/teamList' element={<TeamList />} />

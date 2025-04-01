@@ -6,13 +6,13 @@ import api from "../utils/api"; // ✅ Import API instance
 function UserList() {
   const { user, deleteUser, register } = useAuth();
   const [users, setUsers] = useState([]);
-  const [userForm, setUserForm] = useState({ username: "", password: "", email: "", domain: "", sportIds: [] });
+  const [userForm, setUserForm] = useState({ username: "", password: "", email: "", domain: "", slug: "", sportIds: [] });
   const [sports, setSports] = useState([])
   const [message, setMessage] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [updateForm, setUpdateForm] = useState({ id: null, username: "", email: "",  domain: "", sportIds: [], removePassword: false, });
+  const [updateForm, setUpdateForm] = useState({ id: null, username: "", email: "",  domain: "", slug: "", sportIds: [], removePassword: false, });
 
   useEffect(() => {
     const getUser = async () => {
@@ -51,6 +51,7 @@ function UserList() {
       email: userForm.email.trim() !== "" ? userForm.email : null,
       password: userForm.password.trim() !== "" ? userForm.password : null,
       domain: userForm.domain.trim() !== "" ? userForm.domain : null,
+      slug: userForm.slug.trim() !== "" ? userForm.slug : null,
       sportIds: userForm.sportIds.map(id => Number(id)),
     };
     try {
@@ -108,6 +109,7 @@ function UserList() {
       username: user.username,
       email: user.email || "",
       domain: user.domain || "",
+      slug: user.slug || "",
       sportIds: user.sports ? user.sports.map(sport => sport.id) : []
     });
     setIsUpdateModalOpen(true);
@@ -120,6 +122,7 @@ function UserList() {
       ...updateForm,
       email: updateForm.email.trim() === "" ? "" : updateForm.email,
       domain: updateForm.domain.trim() === "" ? "" : updateForm.domain,
+      slug: updateForm.slug.trim() === "" ? "" : updateForm.slug,
       sportIds: updateForm.sportIds.map(id => Number(id)),
       removePassword: updateForm.removePassword, // ✅ Send this to the backend
     };
@@ -174,6 +177,10 @@ function UserList() {
                 <input type="text" name="domain" value={userForm.domain} onChange={handleInputChange} />
               </label>
               <label>
+                Slug:
+                <input type="text" name="slug" value={userForm.slug} onChange={handleInputChange} />
+              </label>
+              <label>
                 Select Sports:
                 <select multiple name="sportIds" value={userForm.sportIds} onChange={(e) => {
                   const selectedValues = Array.from(e.target.selectedOptions, option => option.value);
@@ -199,6 +206,7 @@ function UserList() {
             <th>Users</th>
             <th>Email</th>
             <th>Domain</th>
+            <th>Slug</th>
             <th>Sports</th>
             <th></th>
           </tr>
@@ -219,6 +227,7 @@ function UserList() {
               <td>{user.username}</td>
               <td>{user.email}</td>
               <td>{user.domain}</td>
+              <td>{user.slug}</td>
               <td>{user.sports.map(sport => sport.name).join(', ') || 'No Sports'}</td>
 
               <td>
@@ -267,6 +276,15 @@ function UserList() {
                   onChange={(e) => setUpdateForm({ ...updateForm, domain: e.target.value })}
                 />
               </label>
+              <label>
+                Slug:
+                <input
+                  type="text"
+                  name="slug"
+                  value={updateForm.slug || ''}
+                  onChange={(e) => setUpdateForm({ ...updateForm, slug: e.target.value })}
+                />
+              </label>    
               <label>
                 Select Sports:
                 <select multiple name="sportIds" value={updateForm.sportIds || []} onChange={(e) => {
