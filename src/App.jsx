@@ -108,7 +108,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
-          <Route path='/site' element={<UserHomepage />} />
+          <Route path='/:domain' element={<UserHomepage />} />
           <Route path='/dashboard' element={<Dashboard />} />
 
           <Route path='/userList' element={<UserList />} />

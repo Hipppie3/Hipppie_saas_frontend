@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import './UserHomepage.css';
 import api from "../utils/api";
 import { useAuth } from "../context/AuthContext";
 
 const UserHomepage = () => {
-  const [searchParams] = useSearchParams();
-  const domain = searchParams.get("domain");
+  const { domain } = useParams();
   const [userForDomain, setUserForDomain] = useState(null);
   const [loadingDomain, setLoadingDomain] = useState(true);
   const { isAuthenticated, loading: authLoading } = useAuth();
