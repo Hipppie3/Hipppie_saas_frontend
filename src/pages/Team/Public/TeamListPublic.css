@@ -21,11 +21,11 @@
 }
 
 .light-theme .teamPublic-table tbody tr:nth-child(even) {
-  background-color: #ffffff;
+  background-color: #ffffff !important;
 }
 
 .light-theme .teamPublic-table tbody tr:nth-child(odd) {
-  background-color: #e6e6e6;
+  background-color: #e6e6e6 !important;
 }
 
 .light-theme .teamPublic-table td a {

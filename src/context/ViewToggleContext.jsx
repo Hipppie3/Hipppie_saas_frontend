@@ -4,7 +4,7 @@ import api from '@api';
 const ViewToggleContext = createContext();
 
 export const ViewToggleProvider = ({ children }) => {
- const [viewMode, setViewMode] = useState('card');
+ const [viewMode, setViewMode] = useState('table');
 
  useEffect(() => {
   const fetchViewMode = async () => {
