@@ -63,16 +63,22 @@ function App() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        if (domainFromQuery || domainFromHost !== "localhost") {
+        const isLocalhost = domainFromHost === "localhost";
+        const isSaaSRootDomain = domainFromHost.includes("sportinghip.com");
+        const isCustomDomain = !isLocalhost && !isSaaSRootDomain;
+
+        if (domainFromQuery || isCustomDomain) {
           const domain = domainFromQuery || domainFromHost;
           const res = await api.get(`/api/users/domain/${domain}`);
           setUserForDomain(res.data.user);
-        } else if (isSlugRoute) {
-          const extractedSlug = location.pathname.split("/")[1];
-          const res = await api.get(`/api/users/slug/${extractedSlug}`);
-          setUserForDomain(res.data.user);
         } else {
-          setUserForDomain(null);
+          const slugFromPath = location.pathname.split("/")[1];
+          if (slugFromPath) {
+            const res = await api.get(`/api/users/slug/${slugFromPath}`);
+            setUserForDomain(res.data.user);
+          } else {
+            setUserForDomain(null);
+          }
         }
       } catch (err) {
         console.error("Error fetching domain/slug user:", err.response?.data || err.message);
@@ -83,7 +89,7 @@ function App() {
     };
 
     fetchUser();
-  }, [domainFromQuery, domainFromHost, isSlugRoute, location.pathname]);
+  }, [domainFromQuery, domainFromHost, location.pathname]);
 
   useEffect(() => {
     NProgress.start();
