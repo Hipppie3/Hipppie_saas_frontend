@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Routes, Route, useLocation, useParams } from 'react-router-dom';
 import './App.css';
 import NProgress from 'nprogress';
+import { Helmet } from 'react-helmet';
+
 import Navbar from './components/Navbar.jsx';
 import Sidebar from './components/Sidebar.jsx';
 
@@ -101,11 +103,23 @@ function App() {
   if (loading || loadingDomain) {
     return <p></p>;
   }
+  const siteTitle = isCustomDomain
+    ? `${hostname} | SportingHip` // show domain
+    : userForDomain?.slug
+      ? `${userForDomain.slug} | SportingHip` // show slug
+      : "SportingHip";
 
   return (
     <div className="app_container">
       {isPublicView || isLoginPage ? <Navbar userForDomain={userForDomain} /> : <Sidebar />}
       <div className={isPublicView ? `content_wrapper_public ${userForDomain?.theme || 'light'}-theme` : "content_wrapper"}>
+        {userForDomain && (
+          <Helmet>
+            <title>{siteTitle}</title>
+            <meta name="description" content={`Welcome to ${siteTitle}`} />
+          </Helmet>
+        )}
+
         <Routes>
           <Route path='/' element={isCustomDomain ? <UserHomepage /> : <Home />} />
           <Route path='/login' element={isCustomDomain ? <Login /> : <Login />} /> 
