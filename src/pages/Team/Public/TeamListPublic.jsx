@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import api from '@api';
-import { NavLink, useSearchParams } from 'react-router-dom';
+import { NavLink} from 'react-router-dom';
 import './TeamListPublic.css';
 
 function TeamListPublic() {
   const [leagues, setLeagues] = useState([]);
   const [selectedLeague, setSelectedLeague] = useState("");
   const [loading, setLoading] = useState(true);
-  const [searchParams] = useSearchParams();
-  const domain = searchParams.get("domain");
+  const hostname = window.location.hostname.replace(/^www\./, '');
+  const mainDomain = 'sportinghip.com';
+  const isCustomDomain = hostname !== mainDomain;
+  const slug = !isCustomDomain ? window.location.pathname.split("/")[1] : null;
+  const domain = isCustomDomain ? hostname : null;
+
+
 
   useEffect(() => {
     const fetchLeagues = async () => {
       try {
-        const response = await api.get(`/api/leagues/leaguesTeam?domain=${domain}`);
+        const response = await api.get(`/api/leagues/leaguesTeam`, {
+          params: slug ? { slug } : { domain }
+        });
         const filteredLeagues = response.data.leagues.filter(
           (league) => league.season && league.season.isActive && league.teams.length > 0
         );
