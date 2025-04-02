@@ -46,7 +46,10 @@ const UserHomepage = () => {
 
   return (
     <div className="user_homepage">
-      <h1>Welcome to {userForDomain ? userForDomain.username : domain}</h1>
+      <h1>
+        Welcome to {userForDomain?.username || userForDomain?.domain || domain || "our site"}
+      </h1>
+
     </div>
   );
 };
