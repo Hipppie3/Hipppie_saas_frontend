@@ -121,6 +121,7 @@ function App() {
           <Route path='/leagueList' element={<LeagueList />} />
           <Route path='/leagues/:id' element={<League />} />
           <Route path='/teamList' element={<TeamList />} />
+          <Route path='/:slug/teamList' element={<TeamList />} />
           <Route path='/teams/:id' element={<Team />} />
           <Route path='/playerList' element={<PlayerList />} />
           <Route path='/players/:id' element={<Player />} />
