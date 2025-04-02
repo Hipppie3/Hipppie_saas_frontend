@@ -12,7 +12,7 @@ function Login() {
   const location = useLocation();
   const navigate = useNavigate();
   const { login, isAuthenticated, loading } = useAuth();
-
+//updated
   const hostname = window.location.hostname.replace(/^www\./, '');
   const mainDomain = "sportinghip.com";
   const isCustomDomain = hostname !== mainDomain;
