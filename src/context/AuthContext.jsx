@@ -24,6 +24,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   };
 
+
   const login = async (formData) => {
     try {
       // Extract domain from URL query if available
@@ -50,6 +51,22 @@ export const AuthProvider = ({ children }) => {
       return { success: true };
     } catch (error) {
       return { success: false, message: "Login failed. Please check your credentials." };
+    }
+  };
+
+
+  const register = async (registerData) => {
+    console.log('Registering user:', registerData);  // Log data being sent
+    setLoading(true);
+    try {
+      const response = await api.post('/api/users/register', registerData, { withCredentials: true });
+
+      setLoading(false);
+      return { success: true, user: response.data.user }; // ✅ Return user data
+    } catch (error) {
+      console.error('Register Error:', error.response?.data || error.message);
+      setLoading(false);
+      return { success: false, message: error.response?.data?.error || "Registration failed." };
     }
   };
 
