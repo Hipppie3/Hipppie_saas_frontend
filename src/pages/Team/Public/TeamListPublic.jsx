@@ -2,26 +2,25 @@ import React, { useState, useEffect } from 'react';
 import api from '@api';
 import { NavLink} from 'react-router-dom';
 import './TeamListPublic.css';
+import useDomainInfo from '@useDomainInfo';
 
 function TeamListPublic() {
   const [leagues, setLeagues] = useState([]);
   const [selectedLeague, setSelectedLeague] = useState("");
   const [loading, setLoading] = useState(true);
-  const hostname = window.location.hostname.replace(/^www\./, '');
-const mainDomain = 'sportinghip.com';
-const isLocalhost = hostname === 'localhost';
-const isCustomDomain = !isLocalhost && hostname !== mainDomain;
-
-const slug = !isCustomDomain ? window.location.pathname.split("/")[1] : null;
-const domain = isCustomDomain ? hostname : null;
-
-
+ 
+const { slug, domain } = useDomainInfo();
 
 
 
   useEffect(() => {
     const fetchLeagues = async () => {
       try {
+        if (!slug && !domain) {
+  console.warn("No slug or domain available, skipping fetch");
+  return;
+}
+
         const response = await api.get(`/api/leagues/leaguesTeam`, {
           params: slug ? { slug } : { domain }
         });

@@ -1,25 +1,18 @@
 import { useAuth } from "../../context/AuthContext";
 import TeamListAuth from "./Auth/TeamListAuth";
 import TeamListPublic from "./Public/TeamListPublic";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import useDomainInfo from "@useDomainInfo"; // alias you set in Vite
 
 function TeamList() {
   const { isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
-  const hostname = window.location.hostname.replace(/^www\./, '');
-  const mainDomain = "sportinghip.com";
-  const isLocalhost = hostname === "localhost";
-  const isCustomDomain = !isLocalhost && hostname !== mainDomain;
-
-  const slug = !isCustomDomain ? window.location.pathname.split("/")[1] : null;
-  const domain = isCustomDomain ? hostname : null;
-
+  const { slug, domain } = useDomainInfo();
 
   useEffect(() => {
     if (loading) return;
 
-    // ❌ Don't redirect anymore unless both are null
     if (!slug && !domain && !isAuthenticated) {
       navigate("/", { replace: true });
     }
@@ -27,6 +20,5 @@ function TeamList() {
 
   return loading ? <p>Loading...</p> : isAuthenticated ? <TeamListAuth /> : <TeamListPublic slug={slug} domain={domain} />;
 }
-
 
 export default TeamList;

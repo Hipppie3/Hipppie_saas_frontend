@@ -20,6 +20,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@api': '/src/utils/api',  // Resolves the @api alias to the correct path
+        '@useDomainInfo': '/src/hooks/useDomainInfo', // 👈 add this
       },
     },
     define: {

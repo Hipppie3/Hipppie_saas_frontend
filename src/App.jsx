@@ -140,6 +140,7 @@ function App() {
           <Route path='/playerList' element={<PlayerList />} />
           <Route path='/players/:id' element={<Player />} />
           <Route path='/schedule' element={<SchedulePage />} />
+          <Route path='/:slug/schedule' element={<SchedulePage />} />
           <Route path='/games/:id' element={<GamePage />} />
           <Route path='/stats' element={<StatAuth />} />
           <Route path='/gamePeriod' element={<GamePeriod />} />
