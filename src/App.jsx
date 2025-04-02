@@ -107,8 +107,8 @@ function App() {
       {isPublicView || isLoginPage ? <Navbar userForDomain={userForDomain} /> : <Sidebar />}
       <div className={isPublicView ? `content_wrapper_public ${userForDomain?.theme || 'light'}-theme` : "content_wrapper"}>
         <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/login' element={<Login />} />
+          <Route path='/' element={isCustomDomain ? <UserHomepage /> : <Home />} />
+          <Route path='/login' element={isCustomDomain ? <Login /> : <Login />} /> 
           <Route path='/:slug/login' element={<Login />} />
           <Route path='/site' element={<UserHomepage />} />
           <Route path='/:slug' element={<UserHomepage />} />
