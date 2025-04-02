@@ -5,7 +5,11 @@ import './Navbar.css';
 
 function Navbar({ userForDomain }) {
   const [searchParams] = useSearchParams();
-  const domain = searchParams.get("domain") || window.location.hostname;
+  const mainDomain = "sportinghip.com";
+  const hostname = window.location.hostname;
+  const domainFromQuery = searchParams.get("domain");
+  const isCustomDomain = hostname !== mainDomain;
+  const domain = domainFromQuery || (isCustomDomain ? hostname : null);
   const [isOpen, setIsOpen] = useState(false);
 
   const theme = userForDomain?.theme || 'light';

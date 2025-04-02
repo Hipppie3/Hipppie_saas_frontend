@@ -7,10 +7,14 @@ import { useAuth } from "../context/AuthContext";
 const UserHomepage = () => {
   const { slug } = useParams();
   const [searchParams] = useSearchParams();
-  const domain = searchParams.get("domain") || window.location.hostname;
+  const mainDomain = "sportinghip.com";
+  const hostname = window.location.hostname;
+  const domainFromQuery = searchParams.get("domain");
+  const isCustomDomain = hostname !== mainDomain;
   const [userForDomain, setUserForDomain] = useState(null);
   const [loadingDomain, setLoadingDomain] = useState(true);
   const { isAuthenticated, loading: authLoading } = useAuth();
+  const domain = domainFromQuery || (isCustomDomain ? hostname : null);
   const navigate = useNavigate();
 
   // 👇 Redirect if already logged in
@@ -23,16 +27,16 @@ const UserHomepage = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        if (domain) {
+        if (slug) {
+        const res = await api.get(`/api/users/slug/${slug}`);
+        setUserForDomain(res.data.user);
+        }
+        else if (domain) {
           const formattedDomain = domain.includes('.') ? domain : `${domain}.com`;
           const res = await api.get(`/api/users/domain/${formattedDomain}`);
           setUserForDomain(res.data.user);
           console.log("Set userForDomain to:", res.data.user);
-
-        } else if (slug) {
-          const res = await api.get(`/api/users/slug/${slug}`);
-          setUserForDomain(res.data.user);
-        }
+        } 
       } catch (err) {
         console.error("Error fetching user:", err.response?.data || err.message);
         setUserForDomain(null);

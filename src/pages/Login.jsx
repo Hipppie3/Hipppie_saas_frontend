@@ -12,7 +12,11 @@ function Login() {
   const [toggleLogin, setToggleLogin] = useState(true)
   const [searchParams] = useSearchParams();
   const location = useLocation();
-  const domain = searchParams.get("domain") || window.location.hostname;
+  const mainDomain = "sportinghip.com";
+  const hostname = window.location.hostname;
+  const domainFromQuery = searchParams.get("domain");
+  const isCustomDomain = hostname !== mainDomain;
+  const domain = domainFromQuery || (isCustomDomain ? hostname : null);
   const slugMatch = location.pathname.match(/^\/([a-zA-Z0-9-_]+)/);
   const slug = slugMatch ? slugMatch[1] : null;
   const [errorMessage, setErrorMessage] = useState("")
@@ -41,8 +45,8 @@ function Login() {
     setErrorMessage("");
 
     const loginPayload = { ...formData };
-    if (domain) loginPayload.domain = domain;
-    else if (slug) loginPayload.slug = slug;
+    if (slug) loginPayload.slug = slug;
+    else if (domain) loginPayload.domain = domain;
     const response = await login(loginPayload);
     if (response.success) {
       navigate('/dashboard', { replace: true });
