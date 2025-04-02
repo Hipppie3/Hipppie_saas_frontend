@@ -50,6 +50,7 @@ import ScheduleBuilder from './pages/ScheduleBuilder/ScheduleBuilder';
 
 function App() {
   const { slug } = useParams(); // <-- Needed for slug route
+  const hostname = window.location.hostname.replace(/^www\./, '');
   const domainFromHost = window.location.hostname;
   const [userForDomain, setUserForDomain] = useState(null);
   const [loadingDomain, setLoadingDomain] = useState(true);
@@ -104,9 +105,9 @@ function App() {
     return <p></p>;
   }
   const siteTitle = isCustomDomain
-    ? `${hostname} | SportingHip` // show domain
+    ? `${hostname} | SportingHip`
     : userForDomain?.slug
-      ? `${userForDomain.slug} | SportingHip` // show slug
+      ? `${userForDomain.slug.charAt(0).toUpperCase() + userForDomain.slug.slice(1)} | SportingHip`
       : "SportingHip";
 
   return (
