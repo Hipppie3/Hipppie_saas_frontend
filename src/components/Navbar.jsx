@@ -37,7 +37,7 @@ function Navbar({ userForDomain }) {
           </li>
           <li>
             <NavLink
-              to={`${basePath}/teamList`}
+              to={isCustomDomain ? `/teamList` : `/${slug}/teamList`}
               className={({ isActive }) => isActive ? "active-class" : "inactive-class"}
               onClick={closeMenu}
             >

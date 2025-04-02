@@ -37,7 +37,7 @@ function TeamListPublic() {
     };
 
     fetchLeagues();
-  }, [domain]);
+  }, [domain, slug]);
 
 
   const selectedLeagueObj = selectedLeague
