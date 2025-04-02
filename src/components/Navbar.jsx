@@ -10,9 +10,13 @@ function Navbar({ userForDomain }) {
   const slug = userForDomain?.slug;
   const hostname = window.location.hostname;
   const mainDomain = "sportinghip.com";
-  const isCustomDomain = hostname !== mainDomain && hostname !== "www.sportinghip.com";
+  const isLocalhost = hostname === "localhost";
+  const isCustomDomain = !isLocalhost && hostname !== mainDomain && hostname !== "www.sportinghip.com";
 
-  const basePath = isCustomDomain ? "" : `/${slug || ""}`;
+
+  const fallbackSlug = window.location.pathname.split("/")[1];
+  const basePath = isCustomDomain ? "" : `/${slug || fallbackSlug || ""}`;
+
 
   if (!userForDomain) return null;
 

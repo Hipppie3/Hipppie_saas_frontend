@@ -34,11 +34,12 @@ export const AuthProvider = ({ children }) => {
 
       // Extract slug from the path
       const slugFromPath = window.location.pathname.split("/")[1] || null;
-
+      const isLocalhost = window.location.hostname === "localhost";
+      const safeDomain = !isLocalhost && domainFromURL ? domainFromURL : undefined;
       // Construct the payload
       const payload = {
         ...formData,
-        domain: formData.domain || domainFromURL || undefined,  // Assign domain if available
+        domain: safeDomain,  // Assign domain if available
         slug: slugFromPath !== "login" ? slugFromPath : undefined  // Assign slug if available
       };
 

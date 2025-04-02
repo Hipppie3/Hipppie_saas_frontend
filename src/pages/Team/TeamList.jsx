@@ -9,9 +9,12 @@ function TeamList() {
   const navigate = useNavigate();
   const hostname = window.location.hostname.replace(/^www\./, '');
   const mainDomain = "sportinghip.com";
-  const isCustomDomain = hostname !== mainDomain;
+  const isLocalhost = hostname === "localhost";
+  const isCustomDomain = !isLocalhost && hostname !== mainDomain;
+
   const slug = !isCustomDomain ? window.location.pathname.split("/")[1] : null;
   const domain = isCustomDomain ? hostname : null;
+
 
   useEffect(() => {
     if (loading) return;

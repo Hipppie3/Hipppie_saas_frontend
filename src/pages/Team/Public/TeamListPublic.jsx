@@ -8,10 +8,14 @@ function TeamListPublic() {
   const [selectedLeague, setSelectedLeague] = useState("");
   const [loading, setLoading] = useState(true);
   const hostname = window.location.hostname.replace(/^www\./, '');
-  const mainDomain = 'sportinghip.com';
-  const isCustomDomain = hostname !== mainDomain;
-  const slug = !isCustomDomain ? window.location.pathname.split("/")[1] : null;
-  const domain = isCustomDomain ? hostname : null;
+const mainDomain = 'sportinghip.com';
+const isLocalhost = hostname === 'localhost';
+const isCustomDomain = !isLocalhost && hostname !== mainDomain;
+
+const slug = !isCustomDomain ? window.location.pathname.split("/")[1] : null;
+const domain = isCustomDomain ? hostname : null;
+
+
 
 
 

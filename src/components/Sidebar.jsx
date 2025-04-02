@@ -22,13 +22,20 @@ function Sidebar() {
       console.log("Logout Response:", response);
 
       const { domain, slug } = response || {};
+      const isLocalhost = window.location.hostname === "localhost";
 
-      if (domain) {
+      if (domain && !isLocalhost) {
+        // Custom domain (e.g., hipppie3.com)
         window.location.href = `https://${domain}/login`;
       } else if (slug) {
-        window.location.href = `https://sportinghip.com/${slug}/login`;
+        // Slug-based routing (localhost or sportinghip.com)
+        const base = isLocalhost
+          ? `http://localhost:5173/${slug}/login`
+          : `https://sportinghip.com/${slug}/login`;
+        window.location.href = base;
       } else {
-        navigate("/login"); // fallback if you're already on sportinghip.com
+        // Default fallback (e.g., super admin)
+        navigate("/login");
       }
     } catch (error) {
       console.error("Logout Error:", error);
