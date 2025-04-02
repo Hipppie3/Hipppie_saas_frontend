@@ -59,13 +59,14 @@ function App() {
   const isSlugRoute = /^\/[a-zA-Z0-9-_]+$/.test(location.pathname);
   const isPublicView = (domainFromQuery || isSlugRoute || location.pathname === "/") && !isAuthenticated;
   const isLoginPage = location.pathname === "/login";
+  const isLocalhost = domainFromHost === "localhost";
+  const isSaaSRootDomain = ["sportinghip.com", "www.sportinghip.com"].includes(domainFromHost);
+  const isCustomDomain = !isLocalhost && !isSaaSRootDomain;
+
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const isLocalhost = domainFromHost === "localhost";
-        const isSaaSRootDomain = domainFromHost.includes("sportinghip.com");
-        const isCustomDomain = !isLocalhost && !isSaaSRootDomain;
 
         if (domainFromQuery || isCustomDomain) {
           const domain = domainFromQuery || domainFromHost;
