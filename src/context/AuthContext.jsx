@@ -24,43 +24,32 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   };
 
-
   const login = async (formData) => {
     try {
-      // Automatically extract domain from URL if available
+      // Extract domain from URL query if available
       const domainFromURL = window.location.search.includes("domain=")
         ? new URLSearchParams(window.location.search).get("domain")
         : null;
 
+      // Extract slug from the path
       const slugFromPath = window.location.pathname.split("/")[1] || null;
 
+      // Construct the payload
       const payload = {
         ...formData,
-        domain: formData.domain || domainFromURL || undefined,
-        slug: slugFromPath !== "login" ? slugFromPath : undefined
+        domain: formData.domain || domainFromURL || undefined,  // Assign domain if available
+        slug: slugFromPath !== "login" ? slugFromPath : undefined  // Assign slug if available
       };
 
+      // Send POST request with credentials
       const response = await api.post('/api/users/login', payload, { withCredentials: true });
+
+      // Check if login was successful
       await checkAuth();
+
       return { success: true };
     } catch (error) {
       return { success: false, message: "Login failed. Please check your credentials." };
-    }
-  };
-
-
-  const register = async (registerData) => {
-    console.log('Registering user:', registerData);  // Log data being sent
-    setLoading(true);
-    try {
-      const response = await api.post('/api/users/register', registerData, { withCredentials: true });
-
-      setLoading(false);
-      return { success: true, user: response.data.user }; // ✅ Return user data
-    } catch (error) {
-      console.error('Register Error:', error.response?.data || error.message);
-      setLoading(false);
-      return { success: false, message: error.response?.data?.error || "Registration failed." };
     }
   };
 
