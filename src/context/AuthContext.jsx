@@ -27,25 +27,22 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (formData) => {
     try {
-      // Extract domain from URL query if available
-      const domainFromURL = window.location.search.includes("domain=")
-        ? new URLSearchParams(window.location.search).get("domain")
-        : null;
-
-      // Extract slug from the path
+      const hostname = window.location.hostname.replace(/^www\./, '');
+      const isLocalhost = hostname === "localhost";
+      const domainFromURL = new URLSearchParams(window.location.search).get("domain");
       const slugFromPath = window.location.pathname.split("/")[1] || null;
 
-      // Construct the payload
+      const safeDomain = !isLocalhost ? (domainFromURL || hostname) : undefined;
+
       const payload = {
         ...formData,
-        domain: formData.domain || domainFromURL || undefined,  // Assign domain if available
-        slug: slugFromPath !== "login" ? slugFromPath : undefined  // Assign slug if available
+        domain: safeDomain,
+        slug: slugFromPath !== "login" ? slugFromPath : undefined
       };
 
-      // Send POST request with credentials
-      const response = await api.post('/api/users/login', payload, { withCredentials: true });
+      console.log("🚀 Login Payload", payload);
 
-      // Check if login was successful
+      const response = await api.post('/api/users/login', payload, { withCredentials: true });
       await checkAuth();
 
       return { success: true };
