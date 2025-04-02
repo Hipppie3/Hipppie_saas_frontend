@@ -23,17 +23,18 @@ function Sidebar() {
 
       const { domain, slug } = response || {};
 
-      if (slug) {
-        navigate(`/${slug}/login`);
-      } else if (domain) {
-        navigate(`https://${domain}/login`);
+      if (domain) {
+        window.location.href = `https://${domain}/login`;
+      } else if (slug) {
+        window.location.href = `https://sportinghip.com/${slug}/login`;
       } else {
-        navigate("/login"); // fallback
+        navigate("/login"); // fallback if you're already on sportinghip.com
       }
     } catch (error) {
       console.error("Logout Error:", error);
     }
   };
+
 
 
 console.log(user)
