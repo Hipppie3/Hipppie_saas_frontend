@@ -12,7 +12,7 @@ function Login() {
   const [toggleLogin, setToggleLogin] = useState(true)
   const [searchParams] = useSearchParams();
   const location = useLocation();
-  const domain = searchParams.get("domain");
+  const domain = searchParams.get("domain") || window.location.hostname;
   const slugMatch = location.pathname.match(/^\/([a-zA-Z0-9-_]+)/);
   const slug = slugMatch ? slugMatch[1] : null;
   const [errorMessage, setErrorMessage] = useState("")

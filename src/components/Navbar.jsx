@@ -5,7 +5,7 @@ import './Navbar.css';
 
 function Navbar({ userForDomain }) {
   const [searchParams] = useSearchParams();
-  const domain = searchParams.get("domain");
+  const domain = searchParams.get("domain") || window.location.hostname;
   const [isOpen, setIsOpen] = useState(false);
 
   const theme = userForDomain?.theme || 'light';
