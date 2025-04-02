@@ -7,7 +7,7 @@ import { useAuth } from "../context/AuthContext";
 const UserHomepage = () => {
   const { slug } = useParams();
   const [searchParams] = useSearchParams();
-  const domain = searchParams.get("domain");
+  const domain = searchParams.get("domain") || window.location.hostname;
   const [userForDomain, setUserForDomain] = useState(null);
   const [loadingDomain, setLoadingDomain] = useState(true);
   const { isAuthenticated, loading: authLoading } = useAuth();
@@ -27,6 +27,8 @@ const UserHomepage = () => {
           const formattedDomain = domain.includes('.') ? domain : `${domain}.com`;
           const res = await api.get(`/api/users/domain/${formattedDomain}`);
           setUserForDomain(res.data.user);
+          console.log("Set userForDomain to:", res.data.user);
+
         } else if (slug) {
           const res = await api.get(`/api/users/slug/${slug}`);
           setUserForDomain(res.data.user);
@@ -43,6 +45,7 @@ const UserHomepage = () => {
 
 
   if (authLoading || loadingDomain) return null;
+  console.log("Final userForDomain state:", userForDomain);
 
   return (
     <div className="user_homepage">
