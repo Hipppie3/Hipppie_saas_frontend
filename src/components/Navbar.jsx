@@ -13,11 +13,11 @@ function Navbar({ userForDomain }) {
   const isCustomDomain = hostname !== mainDomain && hostname !== "www.sportinghip.com";
 
   const basePath = isCustomDomain ? "" : `/${slug || ""}`;
-  if (!isVisible) return null;
+
   if (!userForDomain) return null;
 
   const isVisible = Boolean(isCustomDomain || slug);
-
+  if (!isVisible) return null;
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
 
