@@ -54,7 +54,7 @@ function App() {
   const location = useLocation();
   const { loading, isAuthenticated } = useAuth();
 
-  const isSlugRoute = /^\/[a-zA-Z0-9-_]+$/.test(location.pathname);
+  const isSlugRoute = /^\/[a-zA-Z0-9-_]+(\/.*)?$/.test(location.pathname);
   const isLocalhost = domainFromHost === "localhost";
   const isSaaSRootDomain = ["sportinghip.com", "www.sportinghip.com"].includes(domainFromHost);
   const isCustomDomain = !isLocalhost && !isSaaSRootDomain;
