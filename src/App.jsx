@@ -105,10 +105,10 @@ function App() {
     return <p></p>;
   }
   const siteTitle = isCustomDomain
-    ? `${hostname} | SportingHip`
+    ? hostname // just the domain
     : userForDomain?.slug
-      ? `${userForDomain.slug.charAt(0).toUpperCase() + userForDomain.slug.slice(1)} | SportingHip`
-      : "SportingHip";
+      ? userForDomain.slug // just the slug
+      : "SportingHip"; // fallback
 
   return (
     <div className="app_container">
