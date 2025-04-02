@@ -18,24 +18,23 @@ function Sidebar() {
   // ✅ Logout Function
   const handleLogout = async () => {
     try {
-      
       const response = await logout();
-      console.log("Logout Response:", response); // Debugging Step
+      console.log("Logout Response:", response);
 
-      // ✅ Directly access domain from response
-      const domain = response?.domain;
+      const { domain, slug } = response || {};
 
-      if (!domain) {
-        console.warn("Domain not found in logout response");
-        navigate("/"); // Default fallback
-        return;
+      if (slug) {
+        navigate(`/${slug}/login`);
+      } else if (domain) {
+        navigate(`https://${domain}/login`);
+      } else {
+        navigate("/login"); // fallback
       }
-
-      navigate(`/login?domain=${domain}`);
     } catch (error) {
       console.error("Logout Error:", error);
     }
   };
+
 
 console.log(user)
   if (loading) return <div>Loading...</div>;
