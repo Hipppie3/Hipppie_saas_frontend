@@ -1,6 +1,6 @@
 // App.jsx
 import React, { useEffect, useState } from 'react';
-import { Routes, Route, useSearchParams, useLocation, useParams } from 'react-router-dom';
+import { Routes, Route, useLocation, useParams } from 'react-router-dom';
 import './App.css';
 import NProgress from 'nprogress';
 import Navbar from './components/Navbar.jsx';
@@ -48,8 +48,6 @@ import ScheduleBuilder from './pages/ScheduleBuilder/ScheduleBuilder';
 
 function App() {
   const { slug } = useParams(); // <-- Needed for slug route
-  const [searchParams] = useSearchParams();
-  const domainFromQuery = searchParams.get("domain");
   const domainFromHost = window.location.hostname;
   const [userForDomain, setUserForDomain] = useState(null);
   const [loadingDomain, setLoadingDomain] = useState(true);
@@ -57,19 +55,20 @@ function App() {
   const { loading, isAuthenticated } = useAuth();
 
   const isSlugRoute = /^\/[a-zA-Z0-9-_]+$/.test(location.pathname);
-  const isPublicView = (domainFromQuery || isSlugRoute || location.pathname === "/") && !isAuthenticated;
-  const isLoginPage = location.pathname === "/login";
   const isLocalhost = domainFromHost === "localhost";
   const isSaaSRootDomain = ["sportinghip.com", "www.sportinghip.com"].includes(domainFromHost);
   const isCustomDomain = !isLocalhost && !isSaaSRootDomain;
+  const isPublicView = (isCustomDomain || isSlugRoute || location.pathname === "/") && !isAuthenticated;
+  const isLoginPage = location.pathname === "/login";
+
 
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
 
-        if (domainFromQuery || isCustomDomain) {
-          const domain = domainFromQuery || domainFromHost;
+        if (isCustomDomain) {
+          const domain = domainFromHost.replace(/^www\./, '');
           const res = await api.get(`/api/users/domain/${domain}`);
           setUserForDomain(res.data.user);
         } else {
@@ -90,7 +89,7 @@ function App() {
     };
 
     fetchUser();
-  }, [domainFromQuery, domainFromHost, location.pathname]);
+  }, [ domainFromHost, location.pathname]);
 
   useEffect(() => {
     NProgress.start();

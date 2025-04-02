@@ -1,25 +1,19 @@
 import React, { useState } from 'react';
-import { NavLink, useSearchParams } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import './Navbar.css';
 
 function Navbar({ userForDomain }) {
-  const [searchParams] = useSearchParams();
-  const mainDomain = "sportinghip.com";
-  const hostname = window.location.hostname;
-  const domainFromQuery = searchParams.get("domain");
-  const isCustomDomain = hostname !== mainDomain;
-  const domain = domainFromQuery || (isCustomDomain ? hostname : null);
   const [isOpen, setIsOpen] = useState(false);
 
   const theme = userForDomain?.theme || 'light';
   const slug = userForDomain?.slug;
-  const hasDomain = Boolean(domain);
-  const hasSlug = Boolean(slug);
-  const isVisible = hasDomain || hasSlug;
+  const hostname = window.location.hostname;
+  const mainDomain = "sportinghip.com";
+  const isCustomDomain = hostname !== mainDomain && hostname !== "www.sportinghip.com";
 
-  const basePath = hasDomain ? `?domain=${domain}` : '';
-  const prefix = hasDomain ? '' : `/${slug || ''}`;
+  const basePath = isCustomDomain ? "" : `/${slug || ""}`;
+  const isVisible = Boolean(isCustomDomain || slug);
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
@@ -34,7 +28,7 @@ function Navbar({ userForDomain }) {
         <ul className={`navbar_list ${isOpen ? 'open' : ''}`}>
           <li>
             <NavLink
-              to={hasDomain ? `/site${basePath}` : `${prefix}`}
+              to={`${basePath}`}
               className={({ isActive }) => isActive ? "active-class" : "inactive-class"}
               onClick={closeMenu}
             >
@@ -43,7 +37,7 @@ function Navbar({ userForDomain }) {
           </li>
           <li>
             <NavLink
-              to={hasDomain ? `/teamList${basePath}` : `${prefix}/teamList`}
+              to={`${basePath}/teamList`}
               className={({ isActive }) => isActive ? "active-class" : "inactive-class"}
               onClick={closeMenu}
             >
@@ -52,7 +46,7 @@ function Navbar({ userForDomain }) {
           </li>
           <li>
             <NavLink
-              to={hasDomain ? `/playerList${basePath}` : `${prefix}/playerList`}
+              to={`${basePath}/playerList`}
               className={({ isActive }) => isActive ? "active-class" : "inactive-class"}
               onClick={closeMenu}
             >
@@ -61,7 +55,7 @@ function Navbar({ userForDomain }) {
           </li>
           <li>
             <NavLink
-              to={hasDomain ? `/schedule${basePath}` : `${prefix}/schedule`}
+              to={`${basePath}/schedule`}
               className={({ isActive }) => isActive ? "active-class" : "inactive-class"}
               onClick={closeMenu}
             >
@@ -70,7 +64,7 @@ function Navbar({ userForDomain }) {
           </li>
           <li>
             <NavLink
-              to={hasDomain ? `/login${basePath}` : `${prefix}/login`}
+              to={`${basePath}/login`}
               className={({ isActive }) => isActive ? "active-class" : "inactive-class"}
               onClick={closeMenu}
             >
