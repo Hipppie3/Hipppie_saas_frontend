@@ -3,7 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { Routes, Route, useLocation, useParams } from 'react-router-dom';
 import './App.css';
 import NProgress from 'nprogress';
+import api from '@api';
 import { Helmet } from 'react-helmet';
+import { useAuth } from './context/AuthContext';
 
 import Navbar from './components/Navbar.jsx';
 import Sidebar from './components/Sidebar.jsx';
@@ -43,10 +45,9 @@ import PlayerToggle from './pages/PlayerToggle/PlayerToggle.jsx';
 import GameToggle from './pages/GameToggle/GameToggle.jsx';
 import SingleLeagueToggle from './pages/SingleLeagueToggle/SingleLeagueToggle.jsx';
 import SingleTeamToggle from './pages/SingleTeamToggle/SingleTeamToggle.jsx';
-import SingleSeasonToggle from './pages/SingleSeasonToggle/SingleSeasonToggle';
-import { useAuth } from './context/AuthContext';
-import api from '@api';
-import ScheduleBuilder from './pages/ScheduleBuilder/ScheduleBuilder';
+import SingleSeasonToggle from './pages/SingleSeasonToggle/SingleSeasonToggle.jsx';
+import BusinessPage from './pages/BusinessPage.jsx'
+import ScheduleBuilder from './pages/ScheduleBuilder/ScheduleBuilder.jsx';
 
 function App() {
   const { slug } = useParams(); // <-- Needed for slug route
@@ -164,6 +165,7 @@ function App() {
           <Route path='/dashboard/singleTeamToggle/:id' element={<SingleTeamToggle />} />
           <Route path='/dashboard/singleSeasonToggle/:id' element={<SingleSeasonToggle />} />
           <Route path='/scheduleBuilder' element={<ScheduleBuilder />} />
+          <Route path='/businessPage' element={<BusinessPage />} />
         </Routes>
       </div>
     </div>

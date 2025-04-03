@@ -85,7 +85,10 @@ console.log(user)
                   <li><NavLink to="/playerAttributes" onClick={toggleSidebar}>Player</NavLink></li>
                   <li><NavLink to="/userSettings" onClick={toggleSidebar}>User </NavLink></li>
                   {user?.role === 'super_admin' && (
+                    <ul>
                     <li><NavLink to="/userList" onClick={toggleSidebar}>Users</NavLink></li>
+                    <li><NavLink to="/businessPage" onClick={toggleSidebar}>Business</NavLink></li>
+                    </ul>
                   )}
                   <li><button className="logout-button" onClick={handleLogout}>Logout</button></li>
                 </ul>
