@@ -1,0 +1,42 @@
+/* For Team List */
+.team-list {
+ margin-top: 20px;
+}
+
+.team-list h3 {
+ font-size: 1.25rem;
+ margin-bottom: 15px;
+}
+
+.team-list ul {
+ list-style: none;
+ padding-left: 0;
+}
+
+.team-list li {
+ padding: 10px;
+ background-color: #ffffff;
+ border-radius: 5px;
+ margin-bottom: 10px;
+ border: 1px solid #ddd;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+}
+
+.team-list li button {
+ background-color: #007bff;
+ color: white;
+ border: none;
+ padding: 5px 10px;
+ cursor: pointer;
+}
+
+.team-list li button:hover {
+ background-color: #0056b3;
+}
+
+input[type="text"]:disabled {
+ background-color: #f9f9f9;
+ border-color: #ddd;
+}

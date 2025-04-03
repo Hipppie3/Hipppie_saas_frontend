@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '@api';
+import './ScheduleForm.css'
 
 function ScheduleForm({ onLeagueSelect, refreshSchedules }) {
  const [name, setName] = useState('');
@@ -7,11 +8,10 @@ function ScheduleForm({ onLeagueSelect, refreshSchedules }) {
  const [numWeeks, setNumWeeks] = useState(8);
  const [gameDays, setGameDays] = useState([]);
  const [sameSlot, setSameSlot] = useState(true);
- const [timeSlots, setTimeSlots] = useState([]); // For same slot every week
- const [weeklyTimeSlots, setWeeklyTimeSlots] = useState([]); // For different time slots each week
+ const [timeSlots, setTimeSlots] = useState([]);
+ const [weeklyTimeSlots, setWeeklyTimeSlots] = useState([]);
  const [leagues, setLeagues] = useState([]);
  const [selectedLeagueId, setSelectedLeagueId] = useState(null);
-
  const allDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
  useEffect(() => {
@@ -45,22 +45,10 @@ function ScheduleForm({ onLeagueSelect, refreshSchedules }) {
  const handleSameSlotChange = (e) => {
   setSameSlot(e.target.checked);
   if (e.target.checked) {
-   setWeeklyTimeSlots([]); // Reset weekly time slots if using same time slot every week
+   setWeeklyTimeSlots([]);
   } else {
-   setTimeSlots([]); // Reset time slots if using different time slots each week
+   setTimeSlots([]);
   }
- };
-
- const handleTimeSlotChange = (e) => {
-  const { value } = e.target;
-  setTimeSlots(value.split(',').map(t => t.trim())); // Input is a comma-separated list
- };
-
- const handleWeeklyTimeSlotChange = (weekIndex, e) => {
-  const { value } = e.target;
-  const updatedWeeklySlots = [...weeklyTimeSlots];
-  updatedWeeklySlots[weekIndex] = value.split(',').map(t => t.trim());
-  setWeeklyTimeSlots(updatedWeeklySlots);
  };
 
  const handleSubmit = async (e) => {
@@ -78,7 +66,7 @@ function ScheduleForm({ onLeagueSelect, refreshSchedules }) {
    };
    const res = await api.post('/api/schedules', payload, { withCredentials: true });
    alert('Schedule created successfully!');
-   refreshSchedules(selectedLeagueId); // ✅ refresh schedule list
+   refreshSchedules(selectedLeagueId);
   } catch (err) {
    console.error('Error creating schedule:', err);
    alert('Failed to create schedule');
@@ -98,7 +86,7 @@ function ScheduleForm({ onLeagueSelect, refreshSchedules }) {
    </select>
 
    <label>Schedule Name:</label>
-   <input value={name} onChange={(e) => setName(e.target.value)} required />
+   <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
 
    <label>Start Date:</label>
    <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required />
@@ -131,13 +119,37 @@ function ScheduleForm({ onLeagueSelect, refreshSchedules }) {
 
    {sameSlot ? (
     <div>
-     <label>Time Slots (e.g., "6:30, 7:20, 8:10"):</label>
-     <input
-      type="text"
-      value={timeSlots.join(', ')}
-      onChange={handleTimeSlotChange}
-      placeholder="Enter time slots separated by commas"
-     />
+     <label>Time Slots:</label>
+     {timeSlots.map((slot, i) => (
+      <div key={i}>
+       <input
+        type="time"
+        value={slot}
+        onChange={(e) => {
+         const updated = [...timeSlots];
+         updated[i] = e.target.value;
+         setTimeSlots(updated);
+        }}
+       />
+
+       <button
+        type="button"
+        onClick={() => {
+         const updated = [...timeSlots];
+         updated.splice(i, 1);
+         setTimeSlots(updated);
+        }}
+       >
+        Remove
+       </button>
+      </div>
+     ))}
+     <button
+      type="button"
+      onClick={() => setTimeSlots([...timeSlots, ''])}
+     >
+      + Add Time Slot
+     </button>
     </div>
    ) : (
     <div>
@@ -145,12 +157,44 @@ function ScheduleForm({ onLeagueSelect, refreshSchedules }) {
      {Array.from({ length: numWeeks }, (_, index) => (
       <div key={index}>
        <label>Week {index + 1} Time Slots:</label>
-       <input
-        type="text"
-        value={weeklyTimeSlots[index]?.join(', ') || ''}
-        onChange={(e) => handleWeeklyTimeSlotChange(index, e)}
-        placeholder="Enter time slots for this week separated by commas"
-       />
+       {(weeklyTimeSlots[index] || []).map((slot, slotIndex) => (
+        <div key={slotIndex}>
+         <input
+          type="time"
+          value={slot}
+          onChange={(e) => {
+           const updated = [...(weeklyTimeSlots[index] || [])];
+           updated[slotIndex] = e.target.value;
+           const newWeekly = [...weeklyTimeSlots];
+           newWeekly[index] = updated;
+           setWeeklyTimeSlots(newWeekly);
+          }}
+         />
+         <button
+          type="button"
+          onClick={() => {
+           const updated = [...(weeklyTimeSlots[index] || [])];
+           updated.splice(slotIndex, 1);
+           const newWeekly = [...weeklyTimeSlots];
+           newWeekly[index] = updated;
+           setWeeklyTimeSlots(newWeekly);
+          }}
+         >
+          Remove
+         </button>
+        </div>
+       ))}
+       <button
+        type="button"
+        onClick={() => {
+         const updated = [...weeklyTimeSlots];
+         if (!updated[index]) updated[index] = [];
+         updated[index].push('');
+         setWeeklyTimeSlots(updated);
+        }}
+       >
+        + Add Time Slot for Week {index + 1}
+       </button>
       </div>
      ))}
     </div>

@@ -1,0 +1,160 @@
+/* General form container styling */
+.schedule-form {
+ background-color: white;
+ padding: 20px;
+ border-radius: 8px;
+ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+ width: 100%;
+ margin: 0 auto;
+ display: flex;
+ flex-direction: column;
+ gap: 20px;
+}
+
+/* Form header */
+.schedule-form h3 {
+ font-size: 1.75rem;
+ color: #333;
+ text-align: center;
+}
+
+/* Label styling */
+.schedule-form label {
+ font-weight: bold;
+ height: 5px;
+ color: #555;
+
+}
+
+/* Input styling */
+.schedule-form input[type="text"],
+.schedule-form input[type="number"],
+.schedule-form input[type="date"],
+.schedule-form select {
+ width: 80%;
+ padding: 10px;
+ margin-bottom: 10px;
+ border-radius: 5px;
+ border: 1px solid #ccc;
+ font-size: 1rem;
+}
+
+.schedule-form input[type="text"]:focus,
+.schedule-form input[type="number"]:focus,
+.schedule-form input[type="date"]:focus,
+.schedule-form select:focus {
+ border-color: #007bff;
+ outline: none;
+}
+
+/* Checkbox group styling */
+.checkbox-group {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 15px;
+ margin-bottom: 10px;
+}
+
+.checkbox-group label {
+ display: inline-block;
+ margin-right: 15px;
+ font-size: 1rem;
+}
+
+.schedule-form input[type="checkbox"] {
+ margin-right: 5px;
+}
+
+/* Time slots section */
+.schedule-form div button {
+ background-color: #dc3545;
+ color: white;
+ border: none;
+ padding: 6px 12px;
+ border-radius: 5px;
+ font-size: 0.9rem;
+ cursor: pointer;
+}
+
+.schedule-form div button:hover {
+ background-color: #c82333;
+}
+
+/* Add time slot button */
+.schedule-form button[type="button"] {
+ background-color: #007bff;
+ color: white;
+ padding: 8px 15px;
+ border-radius: 5px;
+ font-size: 0.9rem;
+ margin-top: 10px;
+ cursor: pointer;
+}
+
+.schedule-form button[type="button"]:hover {
+ background-color: #0056b3;
+}
+
+/* Submit button styling */
+.schedule-form button[type="submit"] {
+ background-color: #28a745;
+ color: white;
+ padding: 8px 15px;
+ font-size: 1rem;
+ border-radius: 5px;
+ cursor: pointer;
+ width: 100%;
+}
+
+.schedule-form button[type="submit"]:hover {
+ background-color: #218838;
+}
+
+/* For the modal buttons */
+.modal-update-cancel-button {
+ display: flex;
+ justify-content: space-between;
+ margin-top: 20px;
+}
+
+.modal-update-cancel-button button {
+ padding: 8px 15px;
+ border-radius: 5px;
+ border: none;
+ cursor: pointer;
+ font-weight: bold;
+ font-size: 0.95rem;
+}
+
+.modal-update-cancel-button button:first-child {
+ background-color: #007bff;
+ color: white;
+}
+
+.modal-update-cancel-button button:last-child {
+ background-color: #ccc;
+ color: #333;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+ .schedule-form {
+  padding: 15px;
+ }
+
+ .schedule-form input[type="text"],
+ .schedule-form input[type="number"],
+ .schedule-form input[type="date"],
+ .schedule-form select {
+  font-size: 0.9rem;
+  padding: 8px;
+ }
+
+ .schedule-form button[type="button"] {
+  font-size: 0.85rem;
+ }
+
+ .schedule-form button[type="submit"] {
+  font-size: 0.95rem;
+ }
+}

@@ -16,6 +16,9 @@ function ScheduleBuilder() {
   const [editedDates, setEditedDates] = useState([]);
   const [editedTimeSlots, setEditedTimeSlots] = useState([]);
   const [weeklyGames, setWeeklyGames] = useState({});
+  const [teamUpdates, setTeamUpdates] = useState({});
+  const [selectedGameId, setSelectedGameId] = useState(null);
+
 
 
 
@@ -191,10 +194,56 @@ function ScheduleBuilder() {
   });
 
 
+  const handleGameClick = async (gameId) => {
+    if (!selectedGameId) {
+      setSelectedGameId(gameId); // first selection
+      return;
+    }
+
+    if (selectedGameId === gameId) {
+      setSelectedGameId(null); // unselect if same game clicked
+      return;
+    }
+
+    try {
+      await api.put('/api/games/swap', {
+        gameId1: selectedGameId,
+        gameId2: gameId,
+      }, { withCredentials: true });
+
+      // refresh all weekly games for that schedule
+      // Find both games from weeklyGames to get scheduleId and weekIndex
+      let found = [];
+      Object.entries(weeklyGames).forEach(([key, games]) => {
+        if (!key.includes('-byes')) {
+          games.forEach((g) => {
+            if (g.id === selectedGameId || g.id === gameId) {
+              const [scheduleId, weekIndex] = key.split('-');
+              found.push({ scheduleId, weekIndex });
+            }
+          });
+        }
+      });
+
+      // Re-fetch games for those weeks
+      for (const entry of found) {
+        await fetchWeekGames(entry.scheduleId, entry.weekIndex);
+      }
+
+      setSelectedGameId(null);
+      alert('Matchups swapped!');
+    } catch (err) {
+      console.error('Swap error:', err);
+      alert('Swap failed.');
+      setSelectedGameId(null);
+    }
+  };
+
   return (
     <div className="schedule-builder-container">
       <ScheduleForm onLeagueSelect={handleLeagueSelect} refreshSchedules={fetchSchedules} />
-      <TeamList teams={teams} />
+      <TeamList teams={teams} refreshTeams={() => fetchTeams(selectedLeague.id)} />
+
 
       {selectedLeague && schedules.length > 0 && (
         <div className="existing-schedules">
@@ -275,23 +324,66 @@ function ScheduleBuilder() {
                           .map((bye) => teamIdToName[bye.teamId])
                           .join(', ') || '—'}
                       </td>
-                      {schedule.sameSlot && schedule.timeSlots
-                        ? schedule.timeSlots.map((_, index) => {
-                          const weekKey = `${schedule.id}-${weekIndex}`;
-                          const games = weeklyGames[weekKey] || [];
+{
+  schedule.sameSlot && schedule.timeSlots
+    ? schedule.timeSlots.map((timeSlot, index) => {
+        const weekKey = `${schedule.id}-${weekIndex}`;
+        const games = weeklyGames[weekKey] || [];
 
-                          const formattedSlot = schedule.timeSlots[index].replace(/"/g, '').padStart(5, '0') + ':00';
-                          const game = games.find((g) => g.time === formattedSlot);
+        // Log the weekly games to verify they are being loaded correctly
+        console.log('Games for this week:', games);
 
-                          return (
-                            <td key={index}>
-                              {game
-                                ? `${teamIdToName[game.team1_id] || 'TBD'} vs ${teamIdToName[game.team2_id] || 'BYE'}`
-                                : '—'}
-                            </td>
-                          );
-                        })
-                        : null}
+        const formatTime = (time) => {
+          // Normalize time to HH:mm format
+          return time.slice(0, 5);
+        };
+
+        // Format the current time slot correctly
+        const formattedSlot = formatTime(timeSlot);  // Initialize formattedSlot with current timeSlot
+        const game = games.find((g) => formatTime(g.time) === formattedSlot);  // Match game time with formattedSlot
+
+        if (!game) {
+          console.log(`No game found for time slot ${formattedSlot} in week ${weekIndex}`);
+        }
+
+      return (
+        <td
+          key={index}
+          onClick={game ? () => handleGameClick(game.id) : undefined}
+          style={{
+            cursor: game ? 'pointer' : 'default',
+            backgroundColor: game && selectedGameId === game.id ? '#ffe58f' : 'transparent',
+          }}
+        >
+
+          {game ? (
+            <>
+              <div>
+                {teamIdToName[game.team1_id] || 'TBD'} vs {teamIdToName[game.team2_id] || 'BYE'}
+              </div>
+              <div className="team-unavailable">
+                <small style={{ fontSize: '0.75rem', color: '#999' }}>
+                  {teams.find(t => t.id === game.team1_id)?.unavailableSlots?.join(', ')}
+                </small>
+                <br />
+                <small style={{ fontSize: '0.75rem', color: '#999' }}>
+                  {teams.find(t => t.id === game.team2_id)?.unavailableSlots?.join(', ')}
+                </small>
+              </div>
+            </>
+          ) : (
+            'No game'
+          )}
+        </td>
+      );
+
+      })
+    : null
+}
+
+
+
+
                     </tr>
                   ))}
                 </tbody>

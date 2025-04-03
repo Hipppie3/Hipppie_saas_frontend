@@ -53,6 +53,8 @@ function SchedulePublic({ slug, domain }) {
 
   if (loading) return null;
 
+
+  
   return (
     <div className="schedulePublic-container">
       <div className='schedulePublic-league-name-container'>
@@ -74,12 +76,27 @@ function SchedulePublic({ slug, domain }) {
               <tr>
                 <th>Date</th>
                 <th>Matchup</th>
+                <th>Time</th>
                 <th>Results</th>
               </tr>
             </thead>
             <tbody>
               {filteredGames
-                .sort((a, b) => new Date(a.date) - new Date(b.date))
+                .sort((a, b) => {
+                  const [hoursA, minutesA] = a.time.split(':').map(Number);
+                  const [hoursB, minutesB] = b.time.split(':').map(Number);
+
+                  const datePartA = new Date(a.date);
+                  const datePartB = new Date(b.date);
+
+                  datePartA.setHours(hoursA, minutesA, 0, 0);
+                  datePartB.setHours(hoursB, minutesB, 0, 0);
+
+                  return datePartA - datePartB;
+                })
+
+
+
                 .map((game) => {
                   const homeTeam = game.homeTeam?.id === game.team1_id ? game.homeTeam : game.awayTeam;
                   const awayTeam = game.awayTeam?.id === game.team2_id ? game.awayTeam : game.homeTeam;
@@ -94,6 +111,7 @@ function SchedulePublic({ slug, domain }) {
                           {homeTeam?.name} vs {awayTeam?.name}
                         </NavLink>
                       </td>
+                      <td>{game.time}</td>
                       <td>{homeScore} - {awayScore}</td>
                     </tr>
                   );
