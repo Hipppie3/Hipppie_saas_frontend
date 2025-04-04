@@ -26,12 +26,12 @@ function Sidebar() {
 
       if (domain && !isLocalhost) {
         // Custom domain (e.g., hipppie3.com)
-        window.location.href = `https://${domain}/login`;
+        window.location.href = `https://${domain}`;
       } else if (slug) {
         // Slug-based routing (localhost or sportinghip.com)
         const base = isLocalhost
-          ? `http://localhost:5173/${slug}/login`
-          : `https://sportinghip.com/${slug}/login`;
+          ? `http://localhost:5173/${slug}`
+          : `https://sportinghip.com/${slug}`;
         window.location.href = base;
       } else {
         // Default fallback (e.g., super admin)
