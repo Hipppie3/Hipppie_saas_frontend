@@ -69,8 +69,12 @@ function App() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
+      if (isAuthenticated) {
+        setLoadingDomain(false); // ✅ skip fetching, you're logged in
+        return;
+      }
 
+      try {
         if (isCustomDomain) {
           const domain = domainFromHost.replace(/^www\./, '');
           const res = await api.get(`/api/users/domain/${domain}`);
@@ -93,7 +97,8 @@ function App() {
     };
 
     fetchUser();
-  }, [ domainFromHost, location.pathname]);
+  }, [domainFromHost, location.pathname, isAuthenticated]);
+
 
   useEffect(() => {
     NProgress.start();
@@ -138,11 +143,15 @@ function App() {
           <Route path='/teamList' element={<TeamList />} />
           <Route path='/:slug/teamList' element={<TeamList />} />
           <Route path='/teams/:id' element={<Team />} />
+          <Route path='/:slug/teams/:id' element={<Team />} />
           <Route path='/playerList' element={<PlayerList />} />
+          <Route path='/:slug/playerList' element={<PlayerList />} />
           <Route path='/players/:id' element={<Player />} />
+          <Route path='/:slug/players/:id' element={<Player />} />
           <Route path='/schedule' element={<SchedulePage />} />
           <Route path='/:slug/schedule' element={<SchedulePage />} />
           <Route path='/games/:id' element={<GamePage />} />
+          <Route path='/:slug/games/:id' element={<GamePage />} />
           <Route path='/stats' element={<StatAuth />} />
           <Route path='/gamePeriod' element={<GamePeriod />} />
           <Route path='/userSettings' element={<UserSettings />} />

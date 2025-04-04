@@ -2,18 +2,20 @@ import React, { useState, useEffect } from "react";
 import api from '@api'; // Instead of ../../../utils/api
 import { NavLink, useParams, useSearchParams } from "react-router-dom";
 import "./PlayerPublic.css";
+import useDomainInfo from '@useDomainInfo';
 
 function PlayerPublic() {
   const [player, setPlayer] = useState(null);
   const [allStats, setAllStats] = useState([]);
-  const [searchParams] = useSearchParams();
-  const domain = searchParams.get("domain");
+  const { domain, slug } = useDomainInfo(); // ✅ Centralized domain/slug
   const { id } = useParams();
 
   useEffect(() => {
     const getPlayer = async () => {
       try {
-        const response = await api.get(`/api/players/${id}?domain=${domain}`, { withCredentials: true });
+        const response = await api.get(`/api/players/${id}`, {
+          params: slug ? { slug } : { domain },
+        });
         setPlayer(response.data.player);
         console.log(response.data)
         setAllStats(response.data.allStats.sort((a, b) => a.order - b.order)); // ✅ Ensure stats are ordered

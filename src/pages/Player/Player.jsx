@@ -3,26 +3,20 @@ import PlayerAuth from './Auth/PlayerAuth';
 import PlayerPublic from './Public/PlayerPublic';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import useDomainInfo from '@useDomainInfo';
 
 function Player() {
   const { isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
-  const [domain, setDomain] = useState(null);
+  const { domain, slug } = useDomainInfo();
 
   useEffect(() => {
     if (loading) return;
 
-    const currentUrl = new URL(window.location.href);
-    const urlDomain = currentUrl.searchParams.get("domain");
-    setDomain(urlDomain);
-
-    // ✅ If no domain, navigate to the previous page or home
-    if (!urlDomain && !isAuthenticated) {
-      const previousPage = document.referrer || "/"; // Default to home if no referrer
-      navigate(previousPage, { replace: true });
+    if (!slug && !domain && !isAuthenticated) {
+      navigate("/", { replace: true });
     }
-  }, [isAuthenticated, loading, navigate]);
+  }, [isAuthenticated, loading, navigate, domain, slug]);
 
   return loading ? <p>Loading...</p> : isAuthenticated ? <PlayerAuth /> : <PlayerPublic domain={domain} />;
 }

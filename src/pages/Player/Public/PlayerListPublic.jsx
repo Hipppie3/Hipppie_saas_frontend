@@ -3,28 +3,30 @@ import "./PlayerListPublic.css";
 import { NavLink, useSearchParams } from "react-router-dom";
 import api from '@api'; // Instead of ../../../utils/api
 import DefaultImg from "../../../images/default_image.png";
+import useDomainInfo from '@useDomainInfo';
 
 function PlayerListPublic() {
   const [players, setPlayers] = useState([]);
-  const [searchParams] = useSearchParams();
-  const domain = searchParams.get("domain");
+  const { domain, slug } = useDomainInfo(); // ✅ Centralized domain/slug
 
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
-        const response = await api.get(`/api/players?domain=${domain}`);
+        const response = await api.get(`/api/players`, {
+          params: slug ? { slug } : { domain },
+        });
         const filteredPlayers = response.data.players.filter(
           (player) => player.league
         );
         setPlayers(filteredPlayers || []);
-        
-        console.log(response.data);
       } catch (error) {
         console.error("Error fetching players:", error);
       }
     };
-    if (domain) fetchPlayers(); // Prevents fetching with an empty domain
-  }, [domain]); // Re-fetch if `domain` changes
+
+    if (domain || slug) fetchPlayers();
+  }, [domain, slug]);
+
 
   return (
     <div className="playerList_public">
@@ -34,7 +36,7 @@ function PlayerListPublic() {
         <div className="public-player-container">
           {players.map((player) => (
             <div key={player.id} className="player-public-card">
-              <NavLink to={`/players/${player.id}${domain ? `?domain=${domain}` : ""}`} className="player-link">
+              <NavLink to={`${slug ? `/${slug}/players/${player.id}` : `/players/${player.id}${domain ? `?domain=${domain}` : ""}`}`} className="player-link">
                 <img
                   src={player.image ? player.image : DefaultImg}  // Check for valid image URL
                   alt={player.firstName}

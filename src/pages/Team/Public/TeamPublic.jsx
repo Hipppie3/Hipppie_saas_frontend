@@ -2,22 +2,26 @@ import React, { useState, useEffect } from 'react';
 import './TeamPublic.css';
 import { NavLink, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import api from '@api'; // Instead of ../../../utils/api
+import useDomainInfo from '@useDomainInfo';
 
 
 function TeamPublic() {
   const [team, setTeam] = useState(null);
   const { id } = useParams();
-  const [searchParams] = useSearchParams();
-  const domain = searchParams.get("domain");
+  const { domain, slug } = useDomainInfo();
   const [error, setError] = useState("");
   const [playersAttr, setPlayersAttr] = useState([])
   const [loading, setLoading] = useState(true); // 1. Add loading state
+  
   const navigate = useNavigate();
 
   useEffect(() => {
     const getTeam = async () => {
       try {
-        const response = await api.get(`/api/teams/${id}/teamPublic?domain=${domain}`, { withCredentials: true });
+        const response = await api.get(`/api/teams/${id}/teamPublic`, {
+          params: slug ? { slug } : { domain },
+        });
+
         setTeam(response.data.team);
         setPlayersAttr(response.data.team.players);
       } catch (error) {
@@ -61,7 +65,8 @@ function TeamPublic() {
               <tr
                 key={index}
                 className="clickable-row"
-                onClick={() => navigate(`/games/${game.id}?domain=${domain}`)}
+                  onClick={() => navigate(`/games/${game.id}${domain ? `?domain=${domain}` : slug ? `?slug=${slug}` : ""}`)}
+
               >
                 <td>
                   {new Date(game.date).toLocaleDateString("en-US", {
@@ -99,7 +104,7 @@ function TeamPublic() {
               team.players.map((player) => (
                 <tr key={player.id}>
                   <td>
-                    <NavLink to={`/players/${player.id}${domain ? `?domain=${domain}` : ""}`}>
+                     <NavLink to={`${slug ? `/${slug}/players/${player.id}` : `/players/${player.id}${domain ? `?domain=${domain}` : ""}`}`} >
                       {player.firstName.trim()}
                     </NavLink>
                   </td>

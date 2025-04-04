@@ -3,12 +3,14 @@ import api from '@api';
 import { NavLink } from 'react-router-dom';
 import './SchedulePublic.css';
 import { format } from 'date-fns';
+import useDomainInfo from '@useDomainInfo';
 
-function SchedulePublic({ slug, domain }) {
+function SchedulePublic() {
   const [games, setGames] = useState([]);
   const [leagues, setLeagues] = useState([]);
   const [selectedLeague, setSelectedLeague] = useState("");
   const [loading, setLoading] = useState(true);
+  const { slug, domain } = useDomainInfo(); // inside SchedulePublic
 
   useEffect(() => {
     if (!slug && !domain) {
@@ -107,7 +109,8 @@ function SchedulePublic({ slug, domain }) {
                     <tr key={game.id}>
                       <td>{format(new Date(game.date), 'MMMM d, yyyy')}</td>
                       <td>
-                        <NavLink to={`/games/${game.id}${domain ? `?domain=${domain}` : ""}`}>
+                        <NavLink to={`${slug ? `/${slug}/games/${game.id}` : `/games/${game.id}${domain ? `?domain=${domain}` : ""}`}`} className="player-link">
+
                           {homeTeam?.name} vs {awayTeam?.name}
                         </NavLink>
                       </td>

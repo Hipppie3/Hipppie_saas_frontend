@@ -70,11 +70,13 @@ function Home() {
 
             {selectedState === state && (
               <div className="city-dropdown">
-                {states[state].map((city) => (
-                  <button key={city} className="city-button">
-                    {city}
-                  </button>
-                ))}
+                {states[state].map((city) =>
+                  city?.trim() ? (
+                    <button key={city} className="city-button">
+                      {city}
+                    </button>
+                  ) : null
+                )}
               </div>
             )}
           </div>
