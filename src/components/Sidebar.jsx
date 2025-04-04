@@ -35,7 +35,7 @@ function Sidebar() {
         window.location.href = base;
       } else {
         // Default fallback (e.g., super admin)
-        navigate("/login");
+        navigate("/");
       }
     } catch (error) {
       console.error("Logout Error:", error);
