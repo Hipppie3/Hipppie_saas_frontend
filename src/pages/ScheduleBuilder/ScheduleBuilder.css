@@ -6,6 +6,11 @@
  border-radius: 8px;
  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
  width: 100%;
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ align-items: center;
+ border: 1px solid red
 }
 
 .schedule-builder-container h3 {
@@ -20,7 +25,7 @@
 }
 
 /* Modal styling */
-.modal {
+.schedule-builder-modal {
  position: fixed;
  top: 0;
  left: 0;
@@ -34,7 +39,7 @@
  z-index: 1000;
 }
 
-.modal-content {
+.schedule-builder-modal-content {
  background-color: white;
  padding: 30px;
  border-radius: 8px;
@@ -43,19 +48,19 @@
  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.modal h3 {
+.schedule-builder-modal h3 {
  font-size: 1.75rem;
  margin-bottom: 10px;
  color: #333;
 }
 
-.modal-update-cancel-button {
+.schedule-builder-modal-update-cancel-button {
  display: flex;
  justify-content: space-between;
  margin-top: 20px;
 }
 
-.modal-update-cancel-button button {
+.schedule-builder-modal-update-cancel-button button {
  padding: 8px 15px;
  border-radius: 5px;
  border: none;
@@ -63,45 +68,58 @@
  font-weight: bold;
 }
 
-.modal-update-cancel-button button:first-child {
+.schedule-builder-modal-update-cancel-button button:first-child {
  background-color: #007bff;
  color: white;
 }
 
-.modal-update-cancel-button button:last-child {
+.schedule-builder-modal-update-cancel-button button:last-child {
  background-color: #ccc;
  color: #333;
 }
-
+.existing-schedules {
+ width: 80%;
+ display: flex;
+ flex-direction: column;
+}
+.schedule-header {
+ margin-top: 1rem;
+ align-items: center;
+ text-align: center;
+}
 /* Table Styling */
-table {
+.schedule-builder-table {
  width: 100%;
  border-collapse: collapse;
  margin-top: 20px;
 }
 
-table th,
-table td {
+.schedule-builder-edit-button {
+ margin-top: 1rem;
+ margin-left: 1rem;
+}
+.schedule-builder-table th,
+.schedule-builder-table td {
  padding: 12px;
  text-align: left;
  border-bottom: 1px solid #ddd;
 }
 
-table th {
+.schedule-builder-table th {
  background-color: #007bff;
  color: white;
  font-weight: bold;
 }
 
-table tbody tr:hover {
+.schedule-builder-table tbody tr:hover {
  background-color: #f1f1f1;
 }
 
 /* Input field styling */
-input[type="text"],
-input[type="date"],
-input[type="time"],
-select {
+.schedule-builder-table input[type="text"],
+.schedule-builder-table input[type="date"],
+.schedule-builder-table input[type="time"],
+.schedule-builder-table select {
  width: 100%;
  padding: 8px 12px;
  margin-bottom: 10px;
@@ -110,10 +128,10 @@ select {
  font-size: 1rem;
 }
 
-input[type="text"]:focus,
-input[type="date"]:focus,
-input[type="time"]:focus,
-select:focus {
+.schedule-builder-table input[type="text"]:focus,
+.schedule-builder-table input[type="date"]:focus,
+.schedule-builder-table input[type="time"]:focus,
+.schedule-builder-table select:focus {
  outline: none;
  border-color: #007bff;
 }
@@ -128,7 +146,7 @@ select:focus {
 }
 
 /* Buttons */
-button {
+.schedule-builder-table button {
  padding: 10px 15px;
  border-radius: 5px;
  border: none;
@@ -138,17 +156,44 @@ button {
  color: white;
 }
 
-button:hover {
+.schedule-builder-table button:hover {
  background-color: #218838;
 }
 
-button:disabled {
+.schedule-builder-table button:disabled {
  background-color: #ccc;
  cursor: not-allowed;
 }
 
-button+button {
+.schedule-builder-table button+button {
  margin-left: 10px;
+}
+
+
+
+.team-game-counts {
+ margin-top: 30px;
+ background: #fff;
+ padding: 20px;
+ border-radius: 8px;
+ width: 100%;
+ max-width: 800px;
+ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.team-game-counts h4 {
+ margin-bottom: 10px;
+ font-size: 1.2rem;
+ color: #333;
+}
+
+.team-game-counts ul {
+ list-style: none;
+ padding-left: 0;
+}
+
+.team-game-counts li {
+ padding: 4px 0;
 }
 
  @media (max-width: 768px) {

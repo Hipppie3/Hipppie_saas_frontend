@@ -247,7 +247,7 @@ function ScheduleBuilder() {
 
       {selectedLeague && schedules.length > 0 && (
         <div className="existing-schedules">
-          <h3>Existing Schedules for {selectedLeague.name}</h3>
+
           {schedules
             .filter((schedule) => schedule.leagueId === selectedLeague.id)
             .map((schedule) => (
@@ -263,14 +263,14 @@ function ScheduleBuilder() {
                     }
                   }}
                 />
-                <button onClick={() => handleEdit(schedule)}>Edit Schedule</button>
-                <button onClick={() => handleEditDateTime(schedule)}>Edit Schedule Date/Time</button>
-                <button onClick={() => handleDeleteSchedule(schedule.id)} style={{ color: 'red' }}>
+                <button className='schedule-builder-edit-button' onClick={() => handleEdit(schedule)}>Edit Schedule</button>
+                  <button className='schedule-builder-edit-button'  onClick={() => handleEditDateTime(schedule)}>Edit Schedule Date/Time</button>
+                  <button className='schedule-builder-edit-button'  onClick={() => handleDeleteSchedule(schedule.id)} style={{ color: 'red' }}>
                   Delete Schedule
                 </button>
               </div>
-
-              <table>
+            
+              <table className='schedule-builder-table'>
                 <thead>
                   <tr>
                     <th>#</th>
@@ -380,17 +380,13 @@ function ScheduleBuilder() {
       })
     : null
 }
-
-
-
-
                     </tr>
                   ))}
                 </tbody>
               </table>
 
               {editMode && editSchedule?.id === schedule.id && (
-                <div className="modal-update-cancel-button">
+                <div className="schedule-builder-modal-update-cancel-button">
                   <button onClick={() => handleSaveDateTimeUpdate(schedule)}>Save Date/Time</button>
                   <button onClick={() => setEditMode(false)}>Cancel</button>
                 </div>
@@ -401,8 +397,8 @@ function ScheduleBuilder() {
       )}
 
       {showEditModal && editSchedule && (
-        <div className="modal">
-          <div className="modal-content">
+        <div className="schedule-builder-modal">
+          <div className="schedule-builder-modal-content">
             <h3>Edit Schedule</h3>
             <label>Name:</label>
             <input
@@ -425,13 +421,41 @@ function ScheduleBuilder() {
               onChange={(e) => setEditSchedule({ ...editSchedule, numWeeks: parseInt(e.target.value) })}
             />
 
-            <div className="modal-update-cancel-button">
+            <div className="schedule-builder-modal-update-cancel-button">
               <button onClick={() => handleUpdateSchedule(editSchedule.id)}>Update</button>
               <button onClick={() => setShowEditModal(false)}>Cancel</button>
             </div>
           </div>
         </div>
       )}
+
+
+
+      {/* Team Game Counts */}
+      <div className="team-game-counts">
+        <h4>Games Per Team</h4>
+        <ul>
+          {teams.map((team) => {
+            let count = 0;
+            Object.values(weeklyGames).forEach((games) => {
+              if (Array.isArray(games)) {
+                games.forEach((game) => {
+                  if (game.team1_id === team.id || game.team2_id === team.id) {
+                    count++;
+                  }
+                });
+              }
+            });
+
+            return (
+              <li key={team.id}>
+                {team.name}: {count} {count === 1 ? 'game' : 'games'}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
     </div>
   );
 }

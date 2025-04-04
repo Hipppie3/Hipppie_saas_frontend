@@ -1,6 +1,11 @@
 /* For Team List */
 .team-list {
  margin-top: 20px;
+ width: 80%;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+
 }
 
 .team-list h3 {
@@ -15,9 +20,6 @@
 
 .team-list li {
  padding: 10px;
- background-color: #ffffff;
- border-radius: 5px;
- margin-bottom: 10px;
  border: 1px solid #ddd;
  display: flex;
  justify-content: space-between;
@@ -28,8 +30,9 @@
  background-color: #007bff;
  color: white;
  border: none;
- padding: 5px 10px;
+ padding: 2px 10px;
  cursor: pointer;
+ margin-left: 3px;
 }
 
 .team-list li button:hover {
@@ -39,4 +42,17 @@
 input[type="text"]:disabled {
  background-color: #f9f9f9;
  border-color: #ddd;
+}
+
+.team-columns {
+ display: flex;
+ gap: 20px;
+ width: 100%;
+ justify-content: space-between;
+}
+
+.team-columns ul {
+ flex: 1;
+ list-style: none;
+ padding-left: 0;
 }

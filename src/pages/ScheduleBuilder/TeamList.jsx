@@ -24,40 +24,76 @@ function TeamList({ teams, refreshTeams }) {
  return (
   <div className="team-list">
    <h3>Teams in this League</h3>
-   <ul>
-    {teams.map((team) => (
-     <li key={team.id}>
-      <strong>{team.name}</strong>
-      <div>
-       {editingTeamId === team.id ? (
-        <>
-         <input
-          type="text"
-          value={newUnavailable}
-          onChange={(e) => setNewUnavailable(e.target.value)}
-          placeholder="e.g., 18:00, 19:00"
-         />
-         <button onClick={() => handleUpdateUnavailable(team.id)}>Save</button>
-         <button onClick={() => setEditingTeamId(null)}>Cancel</button>
-        </>
-       ) : (
-        <>
-         <small style={{ marginLeft: '10px', color: '#555' }}>
-          Unavailable: {team.unavailableSlots?.join(', ') || 'None'}
-         </small>
-         <button style={{ marginLeft: '10px' }} onClick={() => {
-          setEditingTeamId(team.id);
-          setNewUnavailable(team.unavailableSlots?.join(', ') || '');
-         }}>
-          Edit
-         </button>
-        </>
-       )}
-      </div>
-     </li>
-    ))}
-   </ul>
+   <div className="team-columns">
+    <ul>
+     {teams.filter((_, i) => i % 2 === 0).map((team) => (
+      <li key={team.id}>
+       <strong>{team.name}</strong>
+       <div>
+        {editingTeamId === team.id ? (
+         <>
+          <input
+           type="text"
+           value={newUnavailable}
+           onChange={(e) => setNewUnavailable(e.target.value)}
+           placeholder="e.g., 18:00, 19:00"
+          />
+          <button onClick={() => handleUpdateUnavailable(team.id)}>Save</button>
+          <button onClick={() => setEditingTeamId(null)}>Cancel</button>
+         </>
+        ) : (
+         <>
+          <small style={{ marginLeft: '10px', color: '#555' }}>
+           Unavailable: {team.unavailableSlots?.join(', ') || 'None'}
+          </small>
+          <button style={{ marginLeft: '10px' }} onClick={() => {
+           setEditingTeamId(team.id);
+           setNewUnavailable(team.unavailableSlots?.join(', ') || '');
+          }}>
+           Edit
+          </button>
+         </>
+        )}
+       </div>
+      </li>
+     ))}
+    </ul>
+    <ul>
+     {teams.filter((_, i) => i % 2 === 1).map((team) => (
+      <li key={team.id}>
+       <strong>{team.name}</strong>
+       <div>
+        {editingTeamId === team.id ? (
+         <>
+          <input
+           type="text"
+           value={newUnavailable}
+           onChange={(e) => setNewUnavailable(e.target.value)}
+           placeholder="e.g., 18:00, 19:00"
+          />
+          <button onClick={() => handleUpdateUnavailable(team.id)}>Save</button>
+          <button onClick={() => setEditingTeamId(null)}>Cancel</button>
+         </>
+        ) : (
+         <>
+          <small style={{ marginLeft: '10px', color: '#555' }}>
+           Unavailable: {team.unavailableSlots?.join(', ') || 'None'}
+          </small>
+          <button style={{ marginLeft: '10px' }} onClick={() => {
+           setEditingTeamId(team.id);
+           setNewUnavailable(team.unavailableSlots?.join(', ') || '');
+          }}>
+           Edit
+          </button>
+         </>
+        )}
+       </div>
+      </li>
+     ))}
+    </ul>
+   </div>
   </div>
+
  );
 }
 

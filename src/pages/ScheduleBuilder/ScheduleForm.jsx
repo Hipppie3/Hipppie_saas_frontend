@@ -119,7 +119,7 @@ function ScheduleForm({ onLeagueSelect, refreshSchedules }) {
 
    {sameSlot ? (
     <div>
-     <label>Time Slots:</label>
+     <label></label>
      {timeSlots.map((slot, i) => (
       <div key={i}>
        <input
@@ -133,6 +133,7 @@ function ScheduleForm({ onLeagueSelect, refreshSchedules }) {
        />
 
        <button
+        className="schedule-form-cancel-button"
         type="button"
         onClick={() => {
          const updated = [...timeSlots];
@@ -140,11 +141,12 @@ function ScheduleForm({ onLeagueSelect, refreshSchedules }) {
          setTimeSlots(updated);
         }}
        >
-        Remove
+        Cancel
        </button>
       </div>
      ))}
      <button
+      className="schedule-form-add-slot-button"
       type="button"
       onClick={() => setTimeSlots([...timeSlots, ''])}
      >

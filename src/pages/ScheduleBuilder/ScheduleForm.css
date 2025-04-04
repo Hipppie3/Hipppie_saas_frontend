@@ -4,11 +4,11 @@
  padding: 20px;
  border-radius: 8px;
  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
- width: 100%;
+ width: 80%;
  margin: 0 auto;
  display: flex;
  flex-direction: column;
- gap: 20px;
+
 }
 
 /* Form header */
@@ -16,14 +16,6 @@
  font-size: 1.75rem;
  color: #333;
  text-align: center;
-}
-
-/* Label styling */
-.schedule-form label {
- font-weight: bold;
- height: 5px;
- color: #555;
-
 }
 
 /* Input styling */
@@ -35,17 +27,12 @@
  padding: 10px;
  margin-bottom: 10px;
  border-radius: 5px;
- border: 1px solid #ccc;
+ border: 1px solid #ed0505;
  font-size: 1rem;
+ 
 }
 
-.schedule-form input[type="text"]:focus,
-.schedule-form input[type="number"]:focus,
-.schedule-form input[type="date"]:focus,
-.schedule-form select:focus {
- border-color: #007bff;
- outline: none;
-}
+
 
 /* Checkbox group styling */
 .checkbox-group {
@@ -65,30 +52,27 @@
  margin-right: 5px;
 }
 
-/* Time slots section */
-.schedule-form div button {
- background-color: #dc3545;
- color: white;
+
+.schedule-form-cancel-button {
+ background-color: rgb(255, 0, 0);
+ margin-top: 4px;
+ padding: 4px;
+ font-size: 0.9rem;
+ cursor: pointer;
  border: none;
+ margin-left: 4px;
+}
+.schedule-form-add-slot-button {
+ margin-top: 4px;
+ background-color: rgb(110, 166, 227);
  padding: 6px 12px;
  border-radius: 5px;
  font-size: 0.9rem;
  cursor: pointer;
+ border: none
 }
-
 .schedule-form div button:hover {
  background-color: #c82333;
-}
-
-/* Add time slot button */
-.schedule-form button[type="button"] {
- background-color: #007bff;
- color: white;
- padding: 8px 15px;
- border-radius: 5px;
- font-size: 0.9rem;
- margin-top: 10px;
- cursor: pointer;
 }
 
 .schedule-form button[type="button"]:hover {
@@ -103,7 +87,8 @@
  font-size: 1rem;
  border-radius: 5px;
  cursor: pointer;
- width: 100%;
+ width: 20%;
+ margin-top: 1rem;
 }
 
 .schedule-form button[type="submit"]:hover {

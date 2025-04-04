@@ -17,7 +17,7 @@ function Home() {
         const stateMap = {};
         data.forEach((biz) => {
           const stateList = biz.state?.split(",").map((s) => s.trim()) || [];
-          const city = biz.city || "Unknown";
+          const city = biz.city ;
 
           stateList.forEach((state) => {
             if (!stateMap[state]) stateMap[state] = new Set();
@@ -40,10 +40,19 @@ function Home() {
     fetchBusinesses();
   }, []);
 
-  const getFilteredBusinesses = () => {
-    if (!selectedState) return businesses;
-    return businesses.filter((b) => b.state?.includes(selectedState));
+  const groupBySport = () => {
+    const grouped = {};
+    businesses
+      .filter((b) => !selectedState || b.state?.includes(selectedState))
+      .forEach((biz) => {
+        const sport = biz.sport?.toLowerCase() || "other";
+        if (!grouped[sport]) grouped[sport] = [];
+        grouped[sport].push(biz);
+      });
+    return grouped;
   };
+
+  const groupedBusinesses = groupBySport();
 
   return (
     <div className="home_container">
@@ -77,25 +86,30 @@ function Home() {
           <p>{selectedState ? selectedState : "Welcome to SportingHip"}</p>
         </section>
 
-        <div className="website_list_container">
-          
-          {getFilteredBusinesses().map((biz) => (
-            <section key={biz.id} className="website_card">
-              <h5>Basketball Leagues</h5>
-              <div className="website_name">
-              {biz.website && (
-                <a
-                  href={biz.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {biz.name}
-                </a>
-              )}
+        <div className="website_card_group_container">
+          {Object.entries(groupedBusinesses).map(([sport, list]) => (
+            <div key={sport} className="website_card_group">
+              <h5>{sport.charAt(0).toUpperCase() + sport.slice(1)} Leagues</h5>
+              <div className="website_card_list">
+                {list.map((biz) => (
+                  <div key={biz.id} className="website_card_item">
+                    {biz.website && (
+                      <a
+                        href={biz.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="website_link"
+                      >
+                        {biz.name}
+                      </a>
+                    )}
+                  </div>
+                ))}
               </div>
-            </section>
+            </div>
           ))}
         </div>
+
       </div>
     </div>
   );
