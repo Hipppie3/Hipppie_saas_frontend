@@ -36,7 +36,10 @@ function PlayerListPublic() {
         <div className="public-player-container">
           {players.map((player) => (
             <div key={player.id} className="player-public-card">
-              <NavLink to={`${slug ? `/${slug}/players/${player.id}` : `/players/${player.id}${domain ? `?domain=${domain}` : ""}`}`} className="player-link">
+              <NavLink
+                to={slug ? `/${slug}/players/${player.id}` : `/players/${player.id}`}
+                className="player-link"
+              >
                 <img
                   src={player.image ? player.image : DefaultImg}  // Check for valid image URL
                   alt={player.firstName}
