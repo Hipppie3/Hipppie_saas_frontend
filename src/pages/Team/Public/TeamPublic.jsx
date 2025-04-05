@@ -109,7 +109,7 @@ function TeamPublic() {
               team.players.map((player) => (
                 <tr key={player.id}>
                   <td>
-                     <NavLink to={`${slug ? `/${slug}/players/${player.id}` : `/players/${player.id}${domain ? `?domain=${domain}` : ""}`}`} >
+                     <NavLink to={slug ? `/${slug}/players/${player.id}` : `/players/${player.id}`} >
                       {player.firstName.trim()}
                     </NavLink>
                   </td>
