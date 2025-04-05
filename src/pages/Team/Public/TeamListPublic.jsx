@@ -96,7 +96,7 @@ console.log(leagues)
                   <tr key={team.id}>
                     <td>{index + 1}</td>
                     <td>
-                      <NavLink to={`/${slug || ""}/teams/${team.id}${domain ? `?domain=${domain}` : ""}`}>
+                      <NavLink to={slug ? `/${slug}/players/${player.id}` : `/players/${player.id}`}>
                         {team.name}
                       </NavLink>
                     </td>
