@@ -35,10 +35,15 @@ function TeamPublic() {
   }, [id, domain]);
 
   const uniqueAttributes = Array.from(
-    new Set(playersAttr.flatMap((player) => player.attributeValues.map((att) => att.attribute.attribute_name)))
+    new Set(playersAttr.flatMap((player) =>
+      player.attributeValues
+        .filter(att => att.attribute.is_visible !== false)
+        .map(att => att.attribute.attribute_name)
+    ))
   );
 
 
+console.log(playersAttr)
   if (loading) return null;
   if (error) return <div>{error}</div>;
 
@@ -117,10 +122,14 @@ function TeamPublic() {
                   {/* ✅ Display attribute values in the correct order */}
                   {uniqueAttributes.map((attrName, index) => {
                     const attributeValue = player.attributeValues.find(
-                      (att) => att.attribute.attribute_name === attrName
+                      (att) => att.attribute.attribute_name === attrName &&
+                        att.attribute.is_visible !== false // ✅ filter again here
                     );
-                    return <td key={index}>{attributeValue && attributeValue.value.trim() !== "" ? attributeValue.value : "-"}</td>;
-
+                    return (
+                      <td key={index}>
+                        {attributeValue && attributeValue.value.trim() !== "" ? attributeValue.value : "-"}
+                      </td>
+                    );
                   })}
                 </tr>
               ))
