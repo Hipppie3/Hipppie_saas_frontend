@@ -65,8 +65,13 @@ function TeamPublic() {
               <tr
                 key={index}
                 className="clickable-row"
-                  onClick={() => navigate(`/games/${game.id}${domain ? `?domain=${domain}` : slug ? `?slug=${slug}` : ""}`)}
-
+                  onClick={() =>
+                    navigate(
+                      slug
+                        ? `/${slug}/games/${game.id}`
+                        : `/games/${game.id}`
+                    )
+                  }
               >
                 <td>
                   {new Date(game.date).toLocaleDateString("en-US", {

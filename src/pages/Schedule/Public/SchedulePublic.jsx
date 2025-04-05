@@ -109,8 +109,13 @@ function SchedulePublic() {
                     <tr key={game.id}>
                       <td>{format(new Date(game.date), 'MMMM d, yyyy')}</td>
                       <td>
-                        <NavLink to={`${slug ? `/${slug}/games/${game.id}` : `/games/${game.id}${domain ? `?domain=${domain}` : ""}`}`} className="player-link">
-
+                        <NavLink
+                          to={slug
+                            ? `/${slug}/games/${game.id}`
+                            : `/games/${game.id}`
+                          }
+                          className="player-link"
+                        >
                           {homeTeam?.name} vs {awayTeam?.name}
                         </NavLink>
                       </td>
